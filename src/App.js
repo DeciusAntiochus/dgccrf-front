@@ -1,21 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import PouchDB from 'pouchdb';
 import Menu from './containers/menu';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+
 var db = new PouchDB('my_database');
 var remoteCouch = 'http://Admin:pass@127.0.0.1:5984/test';
-var opts = {live: true};
-db.replicate.to(remoteCouch, opts, console.log);
-db.replicate.from(remoteCouch, opts, console.log);
-
+var opts = { live: true };
+db.replicate.to(remoteCouch, opts);
+db.replicate.from(remoteCouch, opts);
 
 export class App extends React.Component {
   render() {
     return (
-      <Menu/>
+      <Router>
+        <Route exact path="/menu" component={Menu} />
+        <Redirect to="/menu"></Redirect>
+      </Router>
     );
   }
 }
-
-
