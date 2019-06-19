@@ -21,11 +21,12 @@ export class AddDocs extends React.Component {
     }).on('change', this.updateTodos.bind(this));
 
     var opts = {
-        live: true, 
+        live: true,
+        retry:true, 
         filter: 'filter/by_agent',
         query_params: { "agent": this.props.user },
     };
-    this.db.replicate.to(remoteCouch, {live:true}, console.log);
+    this.db.replicate.to(remoteCouch, {live:true,retry:true}, console.log);
     this.db.replicate.from(remoteCouch, opts, console.log);
     this.updateTodos();
 
