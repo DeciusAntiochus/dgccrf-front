@@ -1,24 +1,24 @@
-import React from 'react';
-import './App.css';
-import PouchDB from 'pouchdb';
-
+import React from "react";
+import "./App.css";
+import PouchDB from "pouchdb";
 
 export class AddDocs extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-      text : '',
-      list:[]
-    }
+      text: "",
+      list: []
+    };
 
-    this.db = new PouchDB('my_database');
-    var remoteCouch = 'http://Admin:pass@172.17.64.137:5984/test';
+    this.db = new PouchDB("my_database");
+    var remoteCouch = "http://Admin:password@172.17.64.136:5984/test";
 
-    this.db.changes({
-      since: 'now',
-      live: true
-    }).on('change', this.updateTodos.bind(this));
+    this.db
+      .changes({
+        since: "now",
+        live: true
+      })
+      .on("change", this.updateTodos.bind(this));
 
     var opts = {
         live: true,
@@ -34,14 +34,13 @@ export class AddDocs extends React.Component {
     this.addTodo = this.addTodo.bind(this);
   }
 
-
-  updateTodos(){
-    this.db.allDocs({include_docs: true, descending: true}, (err, doc) => {
-      this.setState({list:doc.rows.map(row=>row.doc)});
+  updateTodos() {
+    this.db.allDocs({ include_docs: true, descending: true }, (err, doc) => {
+      this.setState({ list: doc.rows.map(row => row.doc) });
     });
   }
 
-  addTodo(text,user) {
+  addTodo(text, user) {
     var todo = {
       _id: new Date().toISOString(),
       text: text,
@@ -49,22 +48,24 @@ export class AddDocs extends React.Component {
     };
     this.db.put(todo, function callback(err, result) {
       if (!err) {
-        console.log('Successfully posted a todo!');
+        console.log("Successfully posted a todo!");
       }
     });
   }
-  
+
   render() {
     return (
       <div>
-        <input onChange = {(e)=>this.setState({text:e.target.value})} placeholder="Text"/> 
-        <button onClick={()=>this.addTodo(this.state.text,this.props.user)}>Ajouter</button>
-        <button onClick={()=>this.getTodos()}>refresh</button>
-        <div>
-          {JSON.stringify(this.state.list)}
-        </div>
+        <input
+          onChange={e => this.setState({ text: e.target.value })}
+          placeholder="Text"
+        />
+        <button onClick={() => this.addTodo(this.state.text, this.props.user)}>
+          Ajouter
+        </button>
+        <button onClick={() => this.getTodos()}>refresh</button>
+        <div>{JSON.stringify(this.state.list)}</div>
       </div>
     );
   }
 }
-
