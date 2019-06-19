@@ -4,6 +4,7 @@ import PouchDB from 'pouchdb';
 import Menu from './containers/menu';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
+import NavBarComponent from './containers/navbar/navbar.container';
 
 var db = new PouchDB('my_database');
 var remoteCouch = 'http://Admin:pass@127.0.0.1:5984/test';
@@ -15,6 +16,7 @@ export class App extends React.Component {
   render() {
     return (
       <Router>
+        <NavBarComponent />
         <Route exact path="/menu" component={Menu} />
         <Redirect to="/menu"></Redirect>
       </Router>
