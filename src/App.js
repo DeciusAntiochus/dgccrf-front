@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+<<<<<<< HEAD
 import {AddDocs} from './AddDocs';
 
 export class App extends React.Component{
@@ -24,3 +25,17 @@ export class App extends React.Component{
   }
 }
 
+=======
+import PouchDB from 'pouchdb';
+var db = new PouchDB('my_database');
+var remoteCouch = 'http://Admin:pass@127.0.0.1:5984/test';
+var opts = { live: true };
+db.replicate.to(remoteCouch, opts, console.log);
+db.replicate.from(remoteCouch, opts, console.log);
+
+export class App extends React.Component {
+  render() {
+    return <div></div>;
+  }
+}
+>>>>>>> 3be8429e973c5dbfac173014c5140122d6950526
