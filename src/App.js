@@ -2,8 +2,10 @@ import React from 'react';
 import './App.css';
 import PouchDB from 'pouchdb';
 import Menu from './containers/menu';
+import Dossiers from './containers/mes-dossiers';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
+import MonDossier from './containers/dossier';
 
 var db = new PouchDB('my_database');
 var remoteCouch = 'http://Admin:pass@127.0.0.1:5984/test';
@@ -16,8 +18,11 @@ export class App extends React.Component {
     return (
       <Router>
         <Route exact path="/menu" component={Menu} />
+        <Route exact path="/mes-dossiers" component={Dossiers} />
+        <Route exact path="/dossier/:id" component={MonDossier} />
         <Redirect to="/menu"></Redirect>
       </Router>
+
     );
   }
 }
