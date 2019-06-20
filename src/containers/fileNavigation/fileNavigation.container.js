@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Icon, Button } from 'semantic-ui-react';
 
 export default class FileNavigationComponent extends React.Component {
   constructor(props) {
@@ -13,22 +13,31 @@ export default class FileNavigationComponent extends React.Component {
 
   render() {
     return (
-      <Menu color="grey" inverted widths={3}>
+      <Menu fixed="bottom" color="grey" inverted widths={3} icon="labeled">
         <Menu.Item
           name="Trame"
           active={this.state.activeItem === 'home'}
           onClick={this.handleItemClick}
-        />
-        <Menu.Item
+        >
+          <Icon name="list ul" />
+          Trame
+        </Menu.Item>
+        <Button
+          as={Menu.Item}
           name="Photo"
+          circular
           active={this.state.activeItem === 'messages'}
           onClick={this.handleItemClick}
-        />
+        >
+          <Icon name="photo" /> Photo{' '}
+        </Button>
         <Menu.Item
           name="Documents"
           active={this.state.activeItem === 'friends'}
           onClick={this.handleItemClick}
-        />
+        >
+          <Icon name="file" /> Documents{' '}
+        </Menu.Item>
       </Menu>
     );
   }
