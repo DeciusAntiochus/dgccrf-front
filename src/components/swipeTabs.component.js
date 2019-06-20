@@ -21,14 +21,12 @@ class SwipeTabsComponent extends React.Component {
             panes: props.tabs.map(({ menuItem, component }) => ({
                 menuItem,
                 render: () => (
-                    <Swipeable
+                    <Swipeable style={{ height: "100%", width: "90vh" }}
                         onSwipedRight={() => this.setState({ activeIndex: this.state.activeIndex > 0 ? this.state.activeIndex - 1 : 0 })}
                         onSwipedLeft={() => this.setState({ activeIndex: this.state.activeIndex < (this.state.panes.length - 1) ? this.state.activeIndex + 1 : (this.state.panes.length - 1) })}
                         {...swipeConfig}
                     >
-                        <div style={{ flex: "1", minHeight: "80vh" }}>
-                            {component}
-                        </div>
+                        {component}
                     </Swipeable>
                 )
             }))

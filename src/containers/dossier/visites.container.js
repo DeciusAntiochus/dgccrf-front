@@ -34,7 +34,7 @@ export default class VisitesComponent extends React.Component {
                 <Grid.Column style={{ maxWidth: "90vw", margin: "1em" }}>
                     <List divided relaxed>
                         {this.state.visitesList.map(visite => (
-                            <List.Item as={Link} key={visite.id} to={"visite/" + visite.id} >
+                            <List.Item as={Link} key={visite.id} to={"/visite/" + visite.id} >
                                 <List.Content>
                                     <List.Header >{visite.enterprise}</List.Header>
                                     <List.Description >{moment(visite.date).format("DD/MM/YYYY")}</List.Description>
