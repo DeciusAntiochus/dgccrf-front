@@ -30,10 +30,10 @@ export default class VisitesComponent extends React.Component {
         return (
             <Grid
                 textAlign="center"
-                style={{ minHeight: '100vh' }}
+                style={{ display: "flex" }}
                 verticalAlign="top"
             >
-                <Grid.Row textAlign="center" display="flex">
+                <Grid.Row textAlign="right" display="flex">
                     <Grid.Column width={16}>
                         <Link to="/nouvelle-visite">
                             <Icon name="plus" />
