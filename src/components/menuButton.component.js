@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 class MenuButtonComponent extends React.Component {
   render() {
     return (
-      <Grid.Row>
+      <Grid.Row style={{ padding: '20px' }}>
         <Button
           as={Link}
           to={this.props.link}
