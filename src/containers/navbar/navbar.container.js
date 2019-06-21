@@ -1,20 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Menu, Container, Dropdown, Icon } from 'semantic-ui-react';
+import { Menu, Dropdown, Icon, Responsive } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router/esm/react-router';
 
 class NavBarComponent extends React.Component {
   render() {
     return (
-      <Menu fixed="top" color="blue" inverted>
-        <Container>
+      <div>
+        <Menu
+          as={Responsive}
+          minWidth={500}
+          fixed="top"
+          color="blue"
+          inverted
+          icon="labeled"
+        >
           <Menu.Item as="a" onClick={() => this.props.history.goBack()}>
-            <Icon name="angle left" />
+            <Icon style={{ margin: '0' }} name="angle left" />
             Retour
           </Menu.Item>
+          <Menu.Item as={Link} to="/mes-dossiers">
+            <Icon name="file" /> Mes Dossiers
+          </Menu.Item>
+          <Menu.Item style={{ flex: '1', verticalAlign: 'middle' }}>
+            <p style={{ fontSize: '20px' }}>Nom de la page</p>
+          </Menu.Item>
           <Menu.Menu position="right">
-            <Dropdown item simple text="Menu">
+            <Menu.Item as={Link} to="/entreprises">
+              <Icon name="building outline" />
+              Entreprises
+            </Menu.Item>
+            <Menu.Item as={Link} to="/preferences">
+              <Icon name="setting"></Icon>Préférences
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+        <Menu
+          as={Responsive}
+          maxWidth={500}
+          fixed="top"
+          color="blue"
+          inverted
+          size="large"
+        >
+          <Menu.Item as="a" onClick={() => this.props.history.goBack()}>
+            <Icon style={{ margin: '0' }} name="angle left" />
+          </Menu.Item>
+          <Menu.Item style={{ flex: '1' }}>
+            <p style={{ flex: '1', textAlign: 'center' }}>Nom de la page</p>
+          </Menu.Item>
+          <Menu.Menu position="right">
+            <Dropdown item simple icon="list layout">
               <Dropdown.Menu>
                 <Dropdown.Item as={Link} to="/mes-dossiers">
                   <Icon name="file" /> Mes Dossiers
@@ -29,8 +66,8 @@ class NavBarComponent extends React.Component {
               </Dropdown.Menu>
             </Dropdown>
           </Menu.Menu>
-        </Container>
-      </Menu>
+        </Menu>
+      </div>
     );
   }
 }
