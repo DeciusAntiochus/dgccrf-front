@@ -1,11 +1,11 @@
 import React from 'react';
-import { Menu, Icon, Button } from 'semantic-ui-react';
+import { Menu, Icon, Button, Grid } from 'semantic-ui-react';
 
 export default class FileNavigationComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: 'home'
+      activeItem: 'trame'
     };
   }
 
@@ -13,32 +13,53 @@ export default class FileNavigationComponent extends React.Component {
 
   render() {
     return (
-      <Menu fixed="bottom" color="grey" inverted widths={3} icon="labeled">
-        <Menu.Item
-          name="Trame"
-          active={this.state.activeItem === 'home'}
-          onClick={this.handleItemClick}
+      <Grid textAlign="center">
+        <Menu
+          style={{ zIndex: '0', backgroundColor: 'grey' }}
+          fixed="bottom"
+          fluid
+          inverted
+          widths={2}
+          icon="labeled"
         >
-          <Icon name="list ul" />
-          Trame
-        </Menu.Item>
+          <Menu.Item
+            name="trame"
+            color="blue"
+            active={this.state.activeItem === 'trame'}
+            onClick={this.handleItemClick}
+          >
+            <Icon name="list ul" />
+            Trame
+          </Menu.Item>
+          <Menu.Item
+            name="documents"
+            color="blue"
+            active={this.state.activeItem === 'documents'}
+            onClick={this.handleItemClick}
+          >
+            <Icon name="file" /> Documents{' '}
+          </Menu.Item>
+        </Menu>
         <Button
-          as={Menu.Item}
-          name="Photo"
+          name="photo"
+          style={{
+            zIndex: '1',
+            bottom: '0',
+            position: 'absolute',
+            marginBottom: '-12.345px'
+          }}
+          className="photoButton"
           circular
-          active={this.state.activeItem === 'messages'}
+          size="massive"
+          color={this.state.activeItem === 'photo' ? 'blue' : 'grey'}
           onClick={this.handleItemClick}
         >
-          <Icon name="photo" /> Photo{' '}
+          <div style={{ flexDirection: 'column' }}>
+            <Icon name="photo" />
+            <p>Photo</p>
+          </div>
         </Button>
-        <Menu.Item
-          name="Documents"
-          active={this.state.activeItem === 'friends'}
-          onClick={this.handleItemClick}
-        >
-          <Icon name="file" /> Documents{' '}
-        </Menu.Item>
-      </Menu>
+      </Grid>
     );
   }
 }

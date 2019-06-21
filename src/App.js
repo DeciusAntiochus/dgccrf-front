@@ -18,7 +18,6 @@ export class App extends React.Component {
     return (
       <Router>
         <NavBar />
-        <FileNavigation />
         <Route exact path="/menu" component={Menu} />
         <Redirect to="/menu"></Redirect>
       </Router>
