@@ -1,6 +1,6 @@
 import React from 'react';
 import TrameComponent from './trame';
-import { Grid, Card, Header, Container } from 'semantic-ui-react';
+import { Grid, Card, Container } from 'semantic-ui-react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { EventEmitter } from 'events';
