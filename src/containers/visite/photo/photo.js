@@ -17,6 +17,10 @@ import 'react-activity/dist/react-activity.css';
 import { Icon } from 'semantic-ui-react';
 import { Button } from '@material-ui/core';
 
+import Jimp from 'jimp';
+
+import { Buffer } from 'buffer';
+
 const SlideAnimation = keyframes`${slideInUp}`;
 
 const SlideDiv = styled.div`
@@ -48,9 +52,35 @@ export default class Photo extends Component {
     this.setState({ loaded: true });
   };
 
-  onTakePhoto(dataUri) {
-    // Do stuff with the dataUri photo...
+  getFileSize = dataUri => {
     console.log(dataUri);
+    const size = dataUri.length * (3 / 4) - 2;
+    return size;
+  };
+
+  reSizeImage = dataUri =>
+    new Promise((resolve, reject) => {
+      Jimp.read(
+        Buffer.from(dataUri.replace(/^data:image\/png;base64,/, ''), 'base64')
+      ).then(img => {
+        const n = img.quality(90);
+        n.getBase64(Jimp.MIME_JPEG, (err, res) => {
+          // console.log(this.getFileSize(res));
+          resolve(res);
+        });
+      });
+    });
+
+  async onTakePhoto(dataUri) {
+    // Do stuff with the dataUri photo...
+
+    let size = this.getFileSize(dataUri);
+    let img = dataUri;
+    while (size > 100000) {
+      img = await this.reSizeImage(dataUri);
+      size = this.getFileSize(img);
+    }
+    console.log(this.getFileSize(img));
   }
 
   render() {

@@ -7,6 +7,7 @@ import { EventEmitter } from 'events';
 
 import FileNavigationComponent from '../fileNavigation';
 import Photo from './photo/photo';
+import Documents from './documents/documents.container';
 
 export default class Visite extends React.Component {
   constructor(props, context) {
@@ -103,7 +104,7 @@ export default class Visite extends React.Component {
               ) : this.state.activeTab === 1 ? (
                 <Photo setActiveTab={this.setActiveTab} />
               ) : (
-                <div>salut</div>
+                <Documents />
               )}
             </Card>
           </Container>
