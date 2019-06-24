@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, List } from 'semantic-ui-react';
+import { Grid, List, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -28,7 +28,14 @@ export default class VisitesComponent extends React.Component {
   }
   render() {
     return (
-      <Grid textAlign="center" verticalAlign="top">
+      <Grid textAlign="center" style={{ display: 'flex' }} verticalAlign="top">
+        <Grid.Row textAlign="right" display="flex">
+          <Grid.Column width={16}>
+            <Link to="/nouvelle-visite">
+              <Icon name="plus" />
+            </Link>
+          </Grid.Column>
+        </Grid.Row>
         <Grid.Row>
           <Grid.Column>
             <List divided relaxed style={{ flex: 1 }}>

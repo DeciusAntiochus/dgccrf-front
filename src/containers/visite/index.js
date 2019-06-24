@@ -1,8 +1,6 @@
 import React from 'react';
 import TrameComponent from './trame';
 import { Grid, Card, Header, Container } from 'semantic-ui-react';
-import SwipeableViews from 'react-swipeable-views';
-import { Swipeable } from 'react-swipeable';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { EventEmitter } from 'events';
@@ -22,9 +20,9 @@ export default class Visite extends React.Component {
     this.setActiveTab = this.setActiveTab.bind(this);
   }
 
-  handleChange = (event, value) => {
+  handleChangeIndex = index => {
     this.setState({
-      activeIndex: value
+      activeIndex: index
     });
   };
 

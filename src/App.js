@@ -6,6 +6,7 @@ import Dossiers from './containers/mes-dossiers';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import MonDossier from './containers/dossier';
+import CreateVisite from './containers/dossier/createVisite';
 import MaVisite from './containers/visite';
 
 // var db = new PouchDB('dbdgccrf');
@@ -34,7 +35,7 @@ export class App extends React.Component {
           <Route exact path="/mes-dossiers" component={Dossiers} />
           <Route exact path="/dossier/:id" component={MonDossier} />
           <Route exact path="/visite/:id" component={MaVisite} />
-
+          <Route exact path="/nouvelle-visite" component={CreateVisite} />
           {/* <Redirect to="/menu"></Redirect> */}
         </Router>
       </div>
