@@ -8,13 +8,13 @@ import { Redirect } from 'react-router-dom';
 import MonDossier from './containers/dossier';
 import MaVisite from './containers/visite';
 
-var db = new PouchDB('dbdgccrf');
-var remoteCouch = 'http://Admin:password@172.17.64.136:5984/test';
-const opts = {
-  live: true
-};
-db.replicate.to(remoteCouch, opts);
-db.replicate.from(remoteCouch, opts);
+// var db = new PouchDB('dbdgccrf');
+// var remoteCouch = 'http://Admin:password@172.17.64.136:5984/test';
+// const opts = {
+//   live: true
+// };
+// db.replicate.to(remoteCouch, opts);
+// db.replicate.from(remoteCouch, opts);
 import NavBar from './containers/navbar';
 
 // var db = new PouchDB('my_database');
@@ -29,10 +29,12 @@ export class App extends React.Component {
       <div style={{ overflow: 'hidden', height: '100vh' }}>
         <Router>
           <NavBar />
+
           <Route exact path="/menu" component={Menu} />
           <Route exact path="/mes-dossiers" component={Dossiers} />
           <Route exact path="/dossier/:id" component={MonDossier} />
           <Route exact path="/visite/:id" component={MaVisite} />
+
           {/* <Redirect to="/menu"></Redirect> */}
         </Router>
       </div>

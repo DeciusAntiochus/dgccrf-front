@@ -12,7 +12,7 @@ class NavBarComponent extends React.Component {
           as={Responsive}
           minWidth={500}
           fixed="top"
-          color="blue"
+          style={{ position: 'relative', backgroundColor: '#3C4586' }}
           inverted
           icon="labeled"
         >
@@ -40,6 +40,7 @@ class NavBarComponent extends React.Component {
           as={Responsive}
           maxWidth={500}
           fixed="top"
+          style={{ position: 'relative', backgroundColor: '#3C4586' }}
           color="blue"
           inverted
           size="large"

@@ -7,20 +7,30 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { EventEmitter } from 'events';
 
+import FileNavigationComponent from '../fileNavigation';
+import Photo from './photo/photo';
+
 export default class Visite extends React.Component {
   constructor(props, context) {
     super(props, context);
     this._emitter = new EventEmitter();
     this.state = {
-      activeIndex: 0
+      activeIndex: 0,
+      activeTab: 0
     };
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
+    this.setActiveTab = this.setActiveTab.bind(this);
   }
 
   handleChange = (event, value) => {
     this.setState({
       activeIndex: value
     });
+  };
+
+  setActiveTab = index => {
+    console.log(index);
+    this.setState({ activeTab: index });
   };
 
   handleChangeIndex = index => {
@@ -30,20 +40,12 @@ export default class Visite extends React.Component {
   };
 
   render() {
-    let swipeConfig = {
-      delta: 10, // min distance(px) before a swipe starts
-      preventDefaultTouchmoveEvent: true, // preventDefault on touchmove, *See Details*
-      trackTouch: true, // track touch input
-      trackMouse: true, // track mouse input
-      rotationAngle: 0 // set a rotation angle
-    };
     return (
       <div
         style={{
           display: 'flex',
           height: '100%',
-          backgroundColor: '#f2f2f2',
-          padding: 20
+          backgroundColor: '#f2f2f2'
         }}
       >
         <div
@@ -57,20 +59,21 @@ export default class Visite extends React.Component {
             <Card
               fluid
               style={{
-                height: '90vh',
+                height: '80vh',
                 backgroundColor: '#f2f2f2',
                 borderRadius: 5,
                 boxShadow: '0px 0px 0px 0px #f2f2f2'
               }}
             >
-              <Grid
-                centered
-                style={{
-                  flex: 1,
-                  flexDirection: 'column'
-                }}
-              >
-                <Grid.Row style={{ flex: 1 }}>
+              {this.state.activeTab === 0 ? (
+                <Grid
+                  centered
+                  style={{
+                    flex: 1,
+                    flexDirection: 'column'
+                  }}
+                >
+                  {/* <Grid.Row style={{ flex: 1 }}>
                   <Header
                     textAlign="center"
                     size="huge"
@@ -78,29 +81,38 @@ export default class Visite extends React.Component {
                   >
                     VISITE
                   </Header>
-                </Grid.Row>
-                <Grid.Row style={{ flex: 1 }}>
-                  <Tabs
-                    value={this.state.activeIndex}
-                    fullWidth
-                    onChange={this.handleChange}
-                  >
-                    <Tab label="Avant" />
-                    <Tab label="Pendant" />
-                    <Tab label="Après" />
-                  </Tabs>
-                </Grid.Row>
-                <Grid.Row style={{ flex: 10 }}>
-                  <Grid.Column width={16} centered>
-                    <TrameComponent
-                      index={this.state.activeIndex}
-                      handleChangeIndex={this.handleChangeIndex}
-                    />
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
+                </Grid.Row> */}
+                  <Grid.Row style={{ flex: 1 }}>
+                    <Tabs
+                      value={this.state.activeIndex}
+                      fullWidth
+                      onChange={this.handleChange}
+                    >
+                      <Tab label="Avant" />
+                      <Tab label="Pendant" />
+                      <Tab label="Après" />
+                    </Tabs>
+                  </Grid.Row>
+                  <Grid.Row style={{ flex: 10 }}>
+                    <Grid.Column width={16} centered>
+                      <TrameComponent
+                        index={this.state.activeIndex}
+                        handleChangeIndex={this.handleChangeIndex}
+                      />
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              ) : this.state.activeTab === 1 ? (
+                <Photo setActiveTab={this.setActiveTab} />
+              ) : (
+                <div>salut</div>
+              )}
             </Card>
           </Container>
+          <FileNavigationComponent
+            setActiveTab={this.setActiveTab}
+            activeItem={this.state.activeTab}
+          />
         </div>
       </div>
     );

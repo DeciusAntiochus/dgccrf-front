@@ -28,11 +28,7 @@ export default class VisitesComponent extends React.Component {
   }
   render() {
     return (
-      <Grid
-        textAlign="center"
-        style={{ minHeight: '100vh' }}
-        verticalAlign="top"
-      >
+      <Grid textAlign="center" verticalAlign="top">
         <Grid.Row>
           <Grid.Column>
             <List divided relaxed style={{ flex: 1 }}>

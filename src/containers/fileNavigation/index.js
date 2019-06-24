@@ -3,6 +3,6 @@ import FileNavigationComponent from './fileNavigation.container';
 
 export default class FileNavigation extends React.Component {
   render() {
-    return <FileNavigationComponent />;
+    return <FileNavigationComponent {...this.props} />;
   }
 }
