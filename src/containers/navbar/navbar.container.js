@@ -20,7 +20,6 @@ class NavBarComponent extends React.Component {
           style={{ position: 'relative', backgroundColor: '#3C4586' }}
           inverted
           icon="labeled"
-          style={{ position: 'static' }}
         >
           <Menu.Item as="a" onClick={() => this.props.history.goBack()}>
             <Icon style={{ margin: '0' }} name="angle left" />
