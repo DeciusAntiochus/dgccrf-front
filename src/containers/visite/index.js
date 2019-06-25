@@ -21,8 +21,14 @@ export default class Visite extends React.Component {
     this.setActiveTab = this.setActiveTab.bind(this);
   }
 
-  handleChangeIndex = (index, value) => {
+  handleChangeIndex = value => {
     console.log(value);
+    this.setState({
+      activeIndex: value
+    });
+  };
+
+  handleChange = (event, value) => {
     this.setState({
       activeIndex: value
     });
@@ -80,7 +86,7 @@ export default class Visite extends React.Component {
                     <Tabs
                       value={this.state.activeIndex}
                       fullWidth
-                      onChange={this.handleChangeIndex}
+                      onChange={this.handleChange}
                     >
                       <Tab label="Avant" />
                       <Tab label="Pendant" />
