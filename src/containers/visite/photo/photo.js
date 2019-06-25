@@ -81,6 +81,7 @@ export default class Photo extends Component {
       size = this.getFileSize(img);
     }
     console.log(this.getFileSize(img));
+    console.log(img);
   }
 
   render() {
