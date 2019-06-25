@@ -1,8 +1,21 @@
 import React from 'react';
 import { Card, Grid, Container } from 'semantic-ui-react';
+import { PropTypes } from 'prop-types';
 import EntrepriseAttribute from '../../components/entrepriseAttribute.component';
+import { changeNameOfPage } from '../navbar/actions';
+import { connect } from 'react-redux';
 
-export default class EntrepriseViewComponent extends React.Component {
+function mapStateToProps() {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeNameOfPage: newName => dispatch(changeNameOfPage(newName))
+  };
+}
+
+class EntrepriseViewComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +29,11 @@ export default class EntrepriseViewComponent extends React.Component {
       codePostal: '34000'
     };
   }
+
+  componentDidMount() {
+    this.props.changeNameOfPage('Entreprise ' + this.state.enseigne);
+  }
+
   render() {
     return (
       <Container style={{ margin: '5rem' }}>
@@ -64,3 +82,12 @@ export default class EntrepriseViewComponent extends React.Component {
     );
   }
 }
+
+EntrepriseViewComponent.propTypes = {
+  changeNameOfPage: PropTypes.func.isRequired
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EntrepriseViewComponent);

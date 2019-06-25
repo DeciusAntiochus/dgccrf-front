@@ -1,8 +1,24 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import MenuButtonComponent from '../../components/menuButton.component';
+import { PropTypes } from 'prop-types';
+import { changeNameOfPage } from '../navbar/actions';
+import { connect } from 'react-redux';
 
-export default class MenuComponent extends React.Component {
+function mapStateToProps() {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeNameOfPage: newName => dispatch(changeNameOfPage(newName))
+  };
+}
+
+class MenuComponent extends React.Component {
+  componentDidMount() {
+    this.props.changeNameOfPage('Menu');
+  }
   render() {
     return (
       <Grid
@@ -34,3 +50,12 @@ export default class MenuComponent extends React.Component {
     );
   }
 }
+
+MenuComponent.propTypes = {
+  changeNameOfPage: PropTypes.func.isRequired
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MenuComponent);
