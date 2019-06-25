@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Grid, GridRow, GridColumn, Icon, Label } from 'semantic-ui-react';
+import { Form, Grid, GridRow, GridColumn, Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 export default class CreateVisiteComponent extends React.Component {
     constructor(props) {
@@ -32,7 +33,7 @@ export default class CreateVisiteComponent extends React.Component {
                                 {
                                     this.state.addedActions.map((addedAction, actionIndex) => (
 
-                                        <GridRow key={addedAction} style={{ display: "flex", alignItems: "center", padding: "0", margin: "0.2em" }}>
+                                        <GridRow key={addedAction} style={{ display: "flex", alignItems: "center", padding: "0", margin: "0" }}>
                                             <GridColumn width={14} style={{ margin: 0, padding: 0 }} >
 
                                                 <Form.Select fluid placeholder="Action" label={actionIndex == 0 ? "Actions associées" : undefined}
@@ -45,7 +46,7 @@ export default class CreateVisiteComponent extends React.Component {
                                                     }} />
 
                                             </GridColumn>
-                                            <GridColumn width={1} style={{ padding: 0, marginLeft: "0.3em" }}
+                                            <GridColumn width={1} style={{ padding: 0, marginLeft: "0" }}
                                             >
                                                 {actionIndex !== 0 &&
                                                     <Icon color="red" name="minus" size="big" style={{ cursor: "pointer" }}
@@ -62,26 +63,41 @@ export default class CreateVisiteComponent extends React.Component {
                                     )}
                             </Grid>
 
-                            <div style={{ width: "100%", textAlign: "center", marginTop: "0.5em" }}
+                            <div style={{ width: "100%", textAlign: "center", marginTop: "0.5em", cursor: "pointer" }}
                                 onClick={() => {
                                     let newActions = this.state.addedActions.map(el => el);
                                     newActions.push(undefined);
                                     this.setState({ addedActions: newActions })
                                 }}>
 
-                                <Icon name="circle plus" size="big" color="green"
-                                    style={{ cursor: "pointer" }}
-                                />
+                                <Icon name="circle plus" size="big" color="green" />
 
                             </div>
 
-                            <Form.Group style={{ width: "100%", backgroundColor: "yellow" }}
-                            >
-                                <Form.Select fluid placeholder="Trâme" label="Trâme associée"
-                                    style={{ width: "100%" }}
-                                    options={this.state.trameList.map(trame => ({ key: trame, text: trame, value: trame }))}
-                                    onChange={(e, { value }) => this.setState({ trame: value })
-                                    } />
+                            <Form.Group style={{ margin: 0 }}>
+                                <Grid style={{ width: "100%", margin: 0 }} verticalAlign="bottom">
+                                    <GridRow style={{ display: "flex" }}>
+                                        <Grid.Column width={14} style={{ padding: 0 }}>
+                                            <Form.Select fluid placeholder="Trâme" label="Trâme associée"
+                                                style={{ width: "100%" }}
+                                                options={this.state.trameList.map(trame => ({ key: trame, text: trame, value: trame }))}
+                                                onChange={(e, { value }) => this.setState({ trame: value })
+                                                } />
+                                        </Grid.Column>
+
+                                        <Grid.Column width={1} style={{ padding: 0 }}>
+                                            <Link to="/nouvelle-trame">
+                                                <div style={{ width: "100%", textAlign: "center", cursor: "pointer", paddingBottom: "0.3em" }}>
+                                                    <Icon name="plus" size="big" />
+                                                </div>
+                                            </Link>
+                                        </Grid.Column>
+                                    </GridRow>
+                                </Grid>
+
+
+
+
                             </Form.Group>
 
 
