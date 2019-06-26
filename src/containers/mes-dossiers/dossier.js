@@ -1,6 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon, Grid, Segment, Header } from 'semantic-ui-react';
+import {
+  Button,
+  Icon,
+  Grid,
+  Segment,
+  Header,
+  Responsive
+} from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import './dossier.css';
@@ -22,7 +29,9 @@ class Dossier extends React.Component {
             <Grid>
               <Grid.Row verticalAlign="middle" style={{ padding: 0 }}>
                 <Grid.Column width={3} style={{ backgroundColor: '#f2f2f2' }}>
-                  <Icon name="folder" color="yellow" size="huge"></Icon>
+                  <Responsive minWidth={600}>
+                    <Icon name="folder" color="yellow" size="huge"></Icon>
+                  </Responsive>
                 </Grid.Column>
                 <Grid.Column width={8} textAlign="left">
                   <Header as="h2">{this.props.name}</Header>
