@@ -2,8 +2,21 @@
 import React from 'react';
 import { Form, Grid, GridRow, GridColumn, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
+import { changeNameOfPage } from '../navbar/actions';
+import { connect } from 'react-redux';
 
-export default class CreateVisiteComponent extends React.Component {
+function mapStateToProps() {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeNameOfPage: newName => dispatch(changeNameOfPage(newName))
+  };
+}
+
+class CreateVisiteComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,6 +24,9 @@ export default class CreateVisiteComponent extends React.Component {
       trameList: ['Trame 1', 'Trame 2'],
       addedActions: [undefined]
     };
+  }
+  componentDidMount() {
+    this.props.changeNameOfPage('Création de visite');
   }
 
   render() {
@@ -158,3 +174,12 @@ export default class CreateVisiteComponent extends React.Component {
     );
   }
 }
+
+CreateVisiteComponent.propTypes = {
+  changeNameOfPage: PropTypes.func.isRequired
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateVisiteComponent);

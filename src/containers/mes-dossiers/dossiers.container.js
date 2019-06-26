@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import MenuButton from '../../components/menuButton.component';
+import { PropTypes } from 'prop-types';
 import { changeNameOfPage } from '../navbar/actions';
 import { connect } from 'react-redux';
 
@@ -30,6 +31,11 @@ class DossierComponent extends React.Component {
       ]
     };
   }
+
+  componentDidMount() {
+    this.props.changeNameOfPage('Mes Dossiers');
+  }
+
   render() {
     return (
       <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="top">
@@ -47,6 +53,10 @@ class DossierComponent extends React.Component {
     );
   }
 }
+
+DossierComponent.propTypes = {
+  changeNameOfPage: PropTypes.func.isRequired
+};
 
 export default connect(
   mapStateToProps,
