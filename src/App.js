@@ -11,6 +11,7 @@ import CreateTrame from './containers/dossier/trameCreation.container';
 import MaVisite from './containers/visite';
 
 
+
 // var db = new PouchDB('dbdgccrf');
 // var remoteCouch = 'http://Admin:password@172.17.64.136:5984/test';
 // const opts = {
@@ -19,17 +20,15 @@ import MaVisite from './containers/visite';
 // db.replicate.to(remoteCouch, opts);
 // db.replicate.from(remoteCouch, opts);
 import NavBar from './containers/navbar';
+import pouchDbService from './services/PouchDB.service';
 
-// var db = new PouchDB('my_database');
-// var remoteCouch = 'http://Admin:pass@127.0.0.1:5984/test';
-// var opts = { live: true };
-// db.replicate.to(remoteCouch, opts);
-// db.replicate.from(remoteCouch, opts);
 
 export class App extends React.Component {
   render() {
     return (
       <div style={{ overflow: 'hidden', height: '100vh' }}>
+
+        {JSON.stringify(pouchDbService.getAllDocs())}
         <Router>
           <NavBar />
           <Switch>
