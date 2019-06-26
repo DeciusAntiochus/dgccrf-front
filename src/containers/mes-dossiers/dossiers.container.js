@@ -1,10 +1,13 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import MenuButton from '../../components/menuButton.component';
+import dossierService from '../../services/PouchDB.service';
 
 export default class DossierComponent extends React.Component {
   constructor(props) {
     super(props);
+    dossierService.getAllDocs().then(console.log);
+    dossierService.onChanges(() => dossierService.getAllDocs().then(console.log))
     this.state = {
       taskList: [{
         name: "TN 20131441",
