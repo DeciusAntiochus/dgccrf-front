@@ -10,6 +10,9 @@ const postReducer = (state = initialState, action) => {
     case 'CHANGE_NAME': {
       return { ...state, nameOfPage: action.payload.newName };
     }
+    case 'CHANGE_BACK_URL': {
+      return { ...state, backPage: action.payload.backUrl };
+    }
     default:
       return state;
   }

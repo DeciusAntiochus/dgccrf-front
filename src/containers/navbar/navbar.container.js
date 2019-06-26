@@ -6,7 +6,10 @@ import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router/esm/react-router';
 
 function mapPropsToState(state) {
-  return { nameOfPage: state.navbarReducer.nameOfPage };
+  return {
+    nameOfPage: state.navbarReducer.nameOfPage,
+    backPage: state.navbarReducer.backPage
+  };
 }
 
 class NavBarComponent extends React.Component {
@@ -21,7 +24,10 @@ class NavBarComponent extends React.Component {
           inverted
           icon="labeled"
         >
-          <Menu.Item as="a" onClick={() => this.props.history.goBack()}>
+          <Menu.Item
+            as="a"
+            onClick={() => this.props.history.push(this.props.backPage)}
+          >
             <Icon style={{ margin: '0' }} name="angle left" />
             Retour
           </Menu.Item>
@@ -82,9 +88,11 @@ class NavBarComponent extends React.Component {
 
 NavBarComponent.propTypes = {
   history: PropTypes.shape({
-    goBack: PropTypes.func
+    goBack: PropTypes.func,
+    push: PropTypes.func
   }),
-  nameOfPage: PropTypes.string.isRequired
+  nameOfPage: PropTypes.string.isRequired,
+  backPage: PropTypes.string.isRequired
 };
 
 export default connect(mapPropsToState)(withRouter(NavBarComponent));

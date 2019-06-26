@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import MenuButtonComponent from '../../components/menuButton.component';
 import { PropTypes } from 'prop-types';
-import { changeNameOfPage } from '../navbar/actions';
+import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
 import { connect } from 'react-redux';
 
 function mapStateToProps() {
@@ -11,13 +11,15 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    changeNameOfPage: newName => dispatch(changeNameOfPage(newName))
+    changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
+    changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl))
   };
 }
 
 class MenuComponent extends React.Component {
   componentDidMount() {
     this.props.changeNameOfPage('Menu');
+    this.props.changeBackUrl('Menu');
   }
   render() {
     return (
@@ -54,7 +56,8 @@ class MenuComponent extends React.Component {
 }
 
 MenuComponent.propTypes = {
-  changeNameOfPage: PropTypes.func.isRequired
+  changeNameOfPage: PropTypes.func.isRequired,
+  changeBackUrl: PropTypes.func.isRequired
 };
 
 export default connect(
