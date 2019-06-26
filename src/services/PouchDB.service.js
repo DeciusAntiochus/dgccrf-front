@@ -11,9 +11,20 @@ class pouchDbService {
         this.db.replicate.from(pouchDbUrl, opts);
     }
 
-    getAllDocs() {
-        return this.db.allDocs({ include_docs: true, descending: true });
+    //call the callback on db changes
+    onChanges(cb) {
+        this.db.changes({
+            since: 'now',
+            live: true
+        }).on('change', cb);
     }
+
+    //getAllDocsOfTheDB
+    getAllDocs() {
+        return this.db.allDocs({ include_docs: true, descending: true })
+            .then(table => table.rows.map(item => item.doc));
+    }
+
 }
 
 export default new pouchDbService(config.couchDb.url_dossiers);
