@@ -24,11 +24,17 @@ import pouchDbService from './services/PouchDB.service';
 
 
 export class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { list: [] };
+    setInterval(() => pouchDbService.getAllDocs().then(d => this.setState({ list: d })), 1000);
+  }
+
   render() {
     return (
       <div style={{ overflow: 'hidden', height: '100vh' }}>
 
-        {JSON.stringify(pouchDbService.getAllDocs())}
+        {JSON.stringify(this.state.list)}
         <Router>
           <NavBar />
           <Switch>

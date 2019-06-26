@@ -3,8 +3,16 @@ import config from '../config';
 
 class pouchDbService {
     constructor(pouchDbUrl) {
-        this.db = new PouchDB('my_database');
-        var opts = { live: true, retry: true };
+        this.db = new PouchDB('my_ddd', {
+            ajax: {
+                withCredentials: false
+            }
+        });
+        var opts = {
+            live: true, retry: true, ajax: {
+                withCredentials: false
+            }
+        };
         this.db.replicate.to(pouchDbUrl, opts);
         this.db.replicate.from(pouchDbUrl, opts);
         console.log('ok')
