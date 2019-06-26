@@ -1,33 +1,18 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 import React, { Component } from 'react';
-
 import Camera, { FACING_MODES } from 'react-html5-camera-photo';
-
 import 'react-html5-camera-photo/build/css/index.css';
-
 import './photo.css';
-
-import styled, { keyframes } from 'styled-components';
-import { slideInUp } from 'react-animations';
-
 import FullScreen from 'react-full-screen';
-
 import { Spinner } from 'react-activity';
-
 import 'react-activity/dist/react-activity.css';
-import { Icon } from 'semantic-ui-react';
 import { Button } from '@material-ui/core';
-
 import Jimp from 'jimp';
-
 import { Buffer } from 'buffer';
+import { PropTypes } from 'prop-types';
 
-const SlideAnimation = keyframes`${slideInUp}`;
-
-const SlideDiv = styled.div`
-  animation: 1s ${SlideAnimation};
-`;
-
-export default class Photo extends Component {
+class Photo extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -59,7 +44,7 @@ export default class Photo extends Component {
   };
 
   reSizeImage = dataUri =>
-    new Promise((resolve, reject) => {
+    new Promise(resolve => {
       Jimp.read(
         Buffer.from(dataUri.replace(/^data:image\/png;base64,/, ''), 'base64')
       ).then(img => {
@@ -133,3 +118,9 @@ export default class Photo extends Component {
     );
   }
 }
+
+Photo.propTypes = {
+  setActiveTab: PropTypes.func.isRequired
+};
+
+export default Photo;

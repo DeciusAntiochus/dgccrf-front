@@ -1,7 +1,8 @@
 import React from 'react';
 import { Menu, Icon, Button, Grid } from 'semantic-ui-react';
+import { PropTypes } from 'prop-types';
 
-export default class FileNavigationComponent extends React.Component {
+class FileNavigationComponent extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -68,3 +69,10 @@ export default class FileNavigationComponent extends React.Component {
     );
   }
 }
+
+FileNavigationComponent.propTypes = {
+  activeItem: PropTypes.number.isRequired,
+  setActiveTab: PropTypes.func.isRequired
+};
+
+export default FileNavigationComponent;

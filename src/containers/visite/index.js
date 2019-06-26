@@ -4,12 +4,24 @@ import { Grid, Card, Container } from 'semantic-ui-react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { EventEmitter } from 'events';
-
 import FileNavigationComponent from '../fileNavigation';
 import Photo from './photo/photo';
 import Documents from './documents/documents.container';
+import { PropTypes } from 'prop-types';
+import { changeNameOfPage } from '../navbar/actions';
+import { connect } from 'react-redux';
 
-export default class Visite extends React.Component {
+function mapStateToProps() {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeNameOfPage: newName => dispatch(changeNameOfPage(newName))
+  };
+}
+
+class Visite extends React.Component {
   constructor(props, context) {
     super(props, context);
     this._emitter = new EventEmitter();
@@ -20,9 +32,11 @@ export default class Visite extends React.Component {
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
     this.setActiveTab = this.setActiveTab.bind(this);
   }
+  componentDidMount() {
+    this.props.changeNameOfPage('Visite *Nom de la visite*');
+  }
 
   handleChangeIndex = value => {
-    console.log(value);
     this.setState({
       activeIndex: value
     });
@@ -35,7 +49,6 @@ export default class Visite extends React.Component {
   };
 
   setActiveTab = index => {
-    console.log(index);
     this.setState({ activeTab: index });
   };
 
@@ -118,3 +131,12 @@ export default class Visite extends React.Component {
     );
   }
 }
+
+Visite.propTypes = {
+  changeNameOfPage: PropTypes.func.isRequired
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Visite);

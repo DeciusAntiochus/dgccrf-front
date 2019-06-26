@@ -1,12 +1,30 @@
 import React from 'react';
 import { Form, Grid, GridRow, GridColumn, Icon } from 'semantic-ui-react';
+import { PropTypes } from 'prop-types';
+import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
+import { connect } from 'react-redux';
 
-export default class TrameCreationComponent extends React.Component {
+function mapStateToProps() {
+    return {};
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
+        changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl))
+    };
+}
+
+class TrameCreationComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             taskList: []
-        }
+        };
+    }
+    componentDidMount() {
+        this.props.changeNameOfPage('Création de trame');
+        this.props.changeBackUrl('/nouvelle-visite');
     }
 
     render() {
@@ -69,3 +87,13 @@ export default class TrameCreationComponent extends React.Component {
         )
     }
 }
+
+TrameCreationComponent.propTypes = {
+    changeNameOfPage: PropTypes.func.isRequired,
+    changeBackUrl: PropTypes.func.isRequired
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TrameCreationComponent);
