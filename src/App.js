@@ -20,21 +20,13 @@ import MaVisite from './containers/visite';
 // db.replicate.to(remoteCouch, opts);
 // db.replicate.from(remoteCouch, opts);
 import NavBar from './containers/navbar';
-import pouchDbService from './services/PouchDB.service';
 
 
 export class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { list: [] };
-    setInterval(() => pouchDbService.getAllDocs().then(d => this.setState({ list: d })), 1000);
-  }
 
   render() {
     return (
       <div style={{ overflow: 'hidden', height: '100vh' }}>
-
-        {JSON.stringify(this.state.list)}
         <Router>
           <NavBar />
           <Switch>

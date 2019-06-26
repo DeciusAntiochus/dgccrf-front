@@ -1,5 +1,5 @@
 export default {
     couchDb: {
-        url: "http://Admin:dtymoney91190@dty-dgccrf.centralesupelec.fr/testdb",
+        url_dossiers: "http://Admin:dtymoney91190@dty-dgccrf.centralesupelec.fr/dossiers",
     }
 }
