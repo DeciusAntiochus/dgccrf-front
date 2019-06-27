@@ -28,11 +28,11 @@ class MonDossier extends React.Component {
         tabs={[
           {
             menuItem: 'Infos',
-            component: <InfosComponent />
+            component: <InfosComponent {...this.props} />
           },
           {
             menuItem: 'Visites',
-            component: <VisitesComponent />
+            component: <VisitesComponent {...this.props} />
           },
           {
             menuItem: 'Documents',
