@@ -8,6 +8,9 @@ import { connect } from 'react-redux';
 import { Grid, Container } from 'semantic-ui-react';
 import { Tabs, Tab } from '@material-ui/core';
 
+import './swipeable.css';
+import dossierService from '../../services/dossier.service';
+
 function mapStateToProps() {
   return {};
 }
@@ -23,13 +26,32 @@ class MonDossier extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      activeIndex: 0
+      activeIndex: 0,
+      dossier: null
     };
+  }
+
+  handleChange = (event, value) => {
+    this.setState({
+      activeIndex: value
+    });
+  };
+  handleChangeIndex = value => {
+    this.setState({
+      activeIndex: value
+    });
+  };
+
+  loadDossier(dossier) {
+    this.setState({ dossier: dossier });
   }
 
   componentDidMount() {
     this.props.changeNameOfPage('Dossier ' + this.props.match.params.id);
     this.props.changeBackUrl('/mes-dossiers');
+    dossierService
+      .getDossierById(this.props.match.params.id)
+      .then(res => this.loadDossier(res));
   }
   render() {
     return (
@@ -39,28 +61,27 @@ class MonDossier extends React.Component {
           display: 'flex',
           width: '100%',
           height: '100%',
-          justifyContent: 'center',
-          backgroundColor: '#f2f2f2'
+          justifyContent: 'center'
         }}
       >
-        <Container style={{ overflow: 'hidden' }}>
+        <Container
+          style={{
+            overflow: 'hidden',
+            height: '100%',
+            width: '100%'
+          }}
+        >
           <Grid
             centered
             style={{
+              height: '100%',
+              width: '100%',
               flex: 1,
               flexDirection: 'column',
-              flexWrap: 'nowrap'
+              flexWrap: 'nowrap',
+              overflow: 'hidden'
             }}
           >
-            {/* <Grid.Row style={{ flex: 1 }}>
-                  <Header
-                    textAlign="center"
-                    size="huge"
-                    style={{ padding: 20, color: '#3C4586' }}
-                  >
-                    VISITE
-                  </Header>
-                </Grid.Row> */}
             <Grid.Row style={{ flex: 1 }}>
               <Tabs
                 value={this.state.activeIndex}
@@ -76,21 +97,25 @@ class MonDossier extends React.Component {
               style={{ flex: 10, overflowY: 'auto' }}
               className="hidescrollbar"
             >
-              <Grid.Column width={16} centered>
+              <Grid.Column width={16}>
                 <div
                   style={{
                     display: 'flex',
                     width: '100%',
                     height: '100%',
                     justifyContent: 'center',
-                    backgroundColor: 'blue'
+
+                    overflow: 'hidden'
                   }}
                 >
                   <SwipeableViews
-                    slideStyle={{ height: '100%', backgroundColor: 'red' }}
+                    style={{ height: '100%' }}
+                    slideStyle={{ height: '100%' }}
                     slideClassName="hidescrollbar"
+                    index={this.state.activeIndex}
+                    onChangeIndex={this.handleChangeIndex}
                   >
-                    <InfosComponent />
+                    <InfosComponent dossier={this.state.dossier} />
                     <VisitesComponent {...this.props} />
                   </SwipeableViews>
                 </div>

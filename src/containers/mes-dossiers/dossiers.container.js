@@ -31,8 +31,12 @@ class DossierComponent extends React.Component {
   handleSearchChange = (e, { value }) => {
     const results = this.state.dossiers.filter(dossier => {
       return (
-        dossier.DOSSIER_LIBELLE.toLowerCase().includes(value.toLowerCase()) ||
-        dossier.DOSSIER_OBJ_TRAVAIL.includes(value.toLowerCase())
+        dossier.DOSSIER_LIBELLE &&
+        (dossier.DOSSIER_LIBELLE.toLowerCase().includes(value.toLowerCase()) ||
+          dossier.DOSSIER_OBJ_TRAVAIL.includes(value.toLowerCase()) ||
+          dossier.DOSSIER_IDENT.toString()
+            .toLowerCase()
+            .includes(value.toString().toLowerCase()))
       );
     });
 

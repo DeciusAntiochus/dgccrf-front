@@ -27,7 +27,8 @@ export default class Trame extends React.Component {
           display: 'flex',
           width: '100%',
           height: '100%',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          overflow: 'hidden'
         }}
       >
         <SwipeableViews
