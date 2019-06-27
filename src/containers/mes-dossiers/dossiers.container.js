@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import MenuButton from '../../components/menuButton.component';
-import dossierService from '../../services/PouchDB.service';
+import dossierService from '../../services/dossier.service';
 import { PropTypes } from 'prop-types';
 import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
 import { connect } from 'react-redux';
