@@ -5,20 +5,25 @@ import propTypes from 'prop-types';
 class EntrepriseAttribute extends React.Component {
   render() {
     return (
-      <Grid.Row stretched>
-        <Grid.Column>
+      <Grid.Row>
+        <Grid.Column verticalAlign="middle">
+          <Icon
+            circular
+            name={this.props.icon}
+            className="mybutton"
+            style={{
+              marginRight: '10px',
+              color: 'white',
+              backgroundColor: '#3C4586'
+            }}
+          ></Icon>
+        </Grid.Column>
+        <Grid.Column verticalAlign="middle" width={6}>
           <div style={{ fontSize: '15px' }}>
-            <Icon
-              circular
-              inverted
-              color="blue"
-              name={this.props.icon}
-              style={{ marginRight: '10px' }}
-            ></Icon>
             <span style={{ fontWeight: 'bold' }}>{this.props.name}</span>
           </div>
         </Grid.Column>
-        <Grid.Column verticalAlign="middle">
+        <Grid.Column verticalAlign="middle" width={9}>
           <p
             style={{
               fontSize: '15px'

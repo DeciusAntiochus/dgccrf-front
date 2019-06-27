@@ -44,7 +44,7 @@ class EntrepriseViewComponent extends React.Component {
             <Card.Header textAlign="center">Entreprise</Card.Header>
           </Card.Content>
           <Card.Content>
-            <Grid columns={2}>
+            <Grid>
               <EntrepriseAttribute
                 name="Enseigne :"
                 icon="building"
