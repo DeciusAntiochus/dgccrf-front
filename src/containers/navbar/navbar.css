@@ -1,0 +1,9 @@
+.responsiveHeight {
+  height: 71px;
+}
+
+@media (max-width: 500px) {
+  .responsiveHeight {
+    height: 46.84px;
+  }
+}

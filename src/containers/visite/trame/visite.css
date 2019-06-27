@@ -1,5 +1,6 @@
 .hidescrollbar {
   overflow: -moz-scrollbar-none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .hidescrollbar::-webkit-scrollbar {
@@ -8,7 +9,7 @@
 
 @media screen and (min-width: 700px) {
   .responsivepadding {
-    margin-left: 50px !important;
-    margin-right: 50px !important;
+    margin-left: 50px;
+    margin-right: 50px;
   }
 }

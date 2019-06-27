@@ -19,8 +19,8 @@ function mapDispatchToProps(dispatch) {
 
 class MonDossier extends React.Component {
   componentDidMount() {
-    this.props.changeNameOfPage('Dossier *Nom du dossier*');
-    this.props.changeBackUrl('/mes-dossierss');
+    this.props.changeNameOfPage('Dossier ' + this.props.match.params.id);
+    this.props.changeBackUrl('/mes-dossiers');
   }
   render() {
     return (

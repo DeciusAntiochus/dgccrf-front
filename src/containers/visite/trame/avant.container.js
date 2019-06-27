@@ -13,6 +13,77 @@ export default class Avant extends Component {
           documentToFill: null
         },
         {
+          title: 'Vérifier les contrôles précédents'.toUpperCase(),
+          status: 'done',
+          documentToFill: null
+        },
+        {
+          title: 'Vérifier les contrôles précédents'.toUpperCase(),
+          status: 'done',
+          documentToFill: null
+        },
+        {
+          title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
+        },
+
+        {
+          title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
+        },
+        {
+          title: 'Vérifier les contrôles précédents'.toUpperCase(),
+          status: 'done',
+          documentToFill: null
+        },
+        {
+          title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
+        },
+        {
+          title: 'Vérifier les contrôles précédents'.toUpperCase(),
+          status: 'done',
+          documentToFill: null
+        },
+        {
+          title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
+        },
+        {
+          title: 'Vérifier les contrôles précédents'.toUpperCase(),
+          status: 'done',
+          documentToFill: null
+        },
+        {
+          title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
+        },
+        {
+          title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
+        },
+        {
+          title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
+        },
+        {
+          title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
+        },
+        {
+          title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
+        },
+        {
           title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
           status: 'problem',
           documentToFill: 'PVprelevement.pdf'

@@ -10,12 +10,15 @@ import {
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
+import moment from 'moment';
+
 import './dossier.css';
 
 class Dossier extends React.Component {
   render() {
+    console.log(this.props.dossier);
     return (
-      <Grid.Row style={{ padding: '20px' }}>
+      <Grid.Row style={{ padding: 10, overflow: 'auto' }}>
         <Segment
         // to={this.props.link}
         // icon
@@ -28,16 +31,53 @@ class Dossier extends React.Component {
           <Link to={this.props.link}>
             <Grid>
               <Grid.Row verticalAlign="middle" style={{ padding: 0 }}>
-                <Grid.Column width={3} style={{ backgroundColor: '#f2f2f2' }}>
+                <Grid.Column
+                  width={3}
+                  style={{
+                    backgroundColor: '#f2f2f2',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100%'
+                  }}
+                >
                   <Responsive minWidth={600}>
                     <Icon name="folder" color="yellow" size="huge"></Icon>
                   </Responsive>
+                  <Responsive maxWidth={599}>
+                    <Icon name="folder" color="yellow" size="large"></Icon>
+                  </Responsive>
                 </Grid.Column>
-                <Grid.Column width={8} textAlign="left">
-                  <Header as="h2">{this.props.name}</Header>
+                <Grid.Column width={7} textAlign="left">
+                  <Grid.Row>
+                    <Header as="h4">
+                      {this.props.dossier.DOSSIER_LIBELLE}
+                    </Header>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Header as="h6">
+                      {this.props.dossier.DOSSIER_OBJ_TRAVAIL}
+                    </Header>
+                  </Grid.Row>
                 </Grid.Column>
-                <Grid.Column width={5}>
-                  <Header as="h3">Salut</Header>
+                <Grid.Column width={6}>
+                  <Grid.Row>
+                    <Header as="h6" style={{ fontWeight: 'normal' }}>
+                      {this.props.dossier.ACDG_LIBELLE}
+                    </Header>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Header as="h6">
+                      {this.props.dossier.DOSSIER_ATTRIBUTAIRES}
+                    </Header>
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Header as="h6">
+                      {moment(this.props.dossier.DOSSIER_DATE_LIMITE).format(
+                        'DD/MM/YYYY'
+                      )}
+                    </Header>
+                  </Grid.Row>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
@@ -52,7 +92,8 @@ Dossier.propTypes = {
   link: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired
+  icon: PropTypes.string.isRequired,
+  dossier: PropTypes.element
 };
 
 export default Dossier;
