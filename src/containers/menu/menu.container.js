@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Container } from 'semantic-ui-react';
 import MenuButtonComponent from '../../components/menuButton.component';
 import { PropTypes } from 'prop-types';
 import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
@@ -23,8 +23,8 @@ class MenuComponent extends React.Component {
   }
   render() {
     return (
-      <div style={{ height: '100%' }}>
-        <Grid style={{ height: '100%' }} verticalAlign="middle" columns="equal">
+      <Container>
+        <Grid verticalAlign="middle" columns="equal">
           <Grid.Row>
             <Grid.Column></Grid.Column>
             <Grid.Column computer={6} tablet={8} mobile={16}>
@@ -50,7 +50,7 @@ class MenuComponent extends React.Component {
             <Grid.Column></Grid.Column>
           </Grid.Row>
         </Grid>
-      </div>
+      </Container>
     );
   }
 }

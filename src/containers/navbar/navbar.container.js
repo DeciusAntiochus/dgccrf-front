@@ -5,6 +5,7 @@ import { Menu, Dropdown, Icon, Responsive } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router/esm/react-router';
 
+import './navbar.css';
 function mapPropsToState(state) {
   return {
     nameOfPage: state.navbarReducer.nameOfPage,
@@ -15,12 +16,20 @@ function mapPropsToState(state) {
 class NavBarComponent extends React.Component {
   render() {
     return (
-      <div>
+      <div
+        className="responsiveHeight"
+        style={{
+          flexGrow: 0,
+          flexShrink: 1,
+          flexBasis: 'auto',
+          overflow: 'hidden'
+        }}
+      >
         <Menu
           as={Responsive}
           minWidth={500}
           fixed="top"
-          style={{ position: 'relative', backgroundColor: '#3C4586' }}
+          style={{ position: 'fixed', backgroundColor: '#3C4586' }}
           inverted
           icon="labeled"
         >
@@ -51,7 +60,7 @@ class NavBarComponent extends React.Component {
           as={Responsive}
           maxWidth={500}
           fixed="top"
-          style={{ position: 'relative', backgroundColor: '#3C4586' }}
+          style={{ position: 'fixed', backgroundColor: '#3C4586' }}
           color="blue"
           inverted
           size="large"

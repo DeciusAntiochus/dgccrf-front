@@ -10,6 +10,7 @@
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "pouchdb": "^7.1.1",
+    "pouchdb-find": "^7.1.1",
     "react": "^16.8.6",
     "react-activity": "^1.2.2",
     "react-animations": "^1.0.0",

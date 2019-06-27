@@ -1,10 +1,16 @@
 import React from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Grid, List, Container, Card, Search } from 'semantic-ui-react';
+
+import Dossier from './dossier';
 import MenuButton from '../../components/menuButton.component';
-import dossierService from '../../services/PouchDB.service';
+import dossierService from '../../services/dossier.service';
 import { PropTypes } from 'prop-types';
 import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
 import { connect } from 'react-redux';
+
+import './dossier.css';
+
+import _ from 'lodash';
 
 function mapStateToProps() {
   return {};
@@ -18,43 +24,126 @@ function mapDispatchToProps(dispatch) {
 }
 
 class DossierComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    dossierService.getAllDocs().then(console.log);
-    dossierService.onChanges(() => dossierService.getAllDocs().then(console.log))
-    this.state = {
-      taskList: [
-        {
-          name: 'TN 20131441',
-          id: '19920a3dd'
-        },
-        {
-          name: 'TR 20145323',
-          id: '127226rf3'
-        }
-      ]
-    };
+  loadDossiers(dossiers) {
+    this.setState({ dossiers: dossiers, results: dossiers });
   }
 
+  handleSearchChange = (e, { value }) => {
+    const results = this.state.dossiers.filter(dossier => {
+      return (
+        dossier.DOSSIER_LIBELLE.toLowerCase().includes(value.toLowerCase()) ||
+        dossier.DOSSIER_OBJ_TRAVAIL.includes(value.toLowerCase())
+      );
+    });
+
+    this.setState({ results: results });
+  };
+
   componentDidMount() {
+    dossierService.getAllDocs().then(res => this.loadDossiers(res));
+    dossierService.onChanges(() =>
+      dossierService.getAllDocs().then(res => this.loadDossiers(res))
+    );
     this.props.changeNameOfPage('Mes Dossiers');
     this.props.changeBackUrl('/menu');
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      dossiers: [],
+      results: []
+    };
+  }
+
   render() {
     return (
-      <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="top">
-        <Grid.Column style={{ maxWidth: '90vw', margin: '1em' }}>
-          {this.state.taskList.map(task => (
-            <MenuButton
-              key={task.id}
-              name={task.name}
-              link={'dossier/' + task.id}
-              color="white"
+      <Card
+        fluid
+        style={{
+          flexGrow: 1,
+          width: '100%',
+          margin: 0,
+          backgroundColor: '#f2f2f2',
+          borderRadius: 5,
+          boxShadow: '0px 0px 0px 0px #f2f2f2',
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          height: '100%'
+        }}
+      >
+        <div
+          style={{
+            position: 'fixed',
+            zIndex: 10,
+            width: '100%',
+            textAlign: 'center',
+            backgroundColor: '#f2f2f2',
+            padding: 10,
+
+            display: 'flex',
+            justifyContent: 'center',
+            verticalAlign: 'middle'
+          }}
+        >
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+
+              fontWeight: 'bold'
+            }}
+          >
+            {this.state.dossiers.length} dossiers trouvés.
+          </div>
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+            <Search
+              size="tiny"
+              open={false}
+              onSearchChange={_.debounce(this.handleSearchChange, 500)}
             />
-          ))}
-        </Grid.Column>
-      </Grid>
+          </div>
+
+          <div
+            style={{
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'center',
+
+              alignItems: 'center'
+            }}
+          >
+            {this.state.results.length} résultats.
+          </div>
+        </div>
+
+        <div
+          className="responsivemargin"
+          style={{
+            backgroundColor: '#f2f2f2'
+          }}
+        >
+          <List>
+            {this.state.results.map(task => (
+              <List.Item key={task.id}>
+                <div className="responsivepadding">
+                  <Dossier
+                    icon="folder"
+                    iconcolor="yellow"
+                    key={task.id}
+                    dossier={task}
+                    link={'dossier/' + task.DOSSIER_IDENT}
+                    color="white"
+                  />
+                </div>
+              </List.Item>
+            ))}
+          </List>
+        </div>
+      </Card>
     );
   }
 }

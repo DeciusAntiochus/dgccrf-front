@@ -55,77 +55,74 @@ export default class DossierComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <List
-          className="responsivepadding"
-          relaxed
-          style={{
-            textAlign: 'left',
-            flex: 1
-          }}
-        >
-          {this.props.taskList.map((task, i) => (
-            <div
-              key={i}
-              style={{
-                borderRadius: 3,
-                borderBottom: '3px solid #c0c1c4',
+      <List
+        className="responsivepadding"
+        relaxed
+        style={{
+          textAlign: 'left'
+        }}
+      >
+        {this.props.taskList.map((task, i) => (
+          <div
+            key={i}
+            style={{
+              borderRadius: 3,
+              borderBottom: '3px solid #c0c1c4',
 
-                margin: 15,
-                boxShadow: '6px 1px 12px 2px #cfcfcf'
+              margin: 15,
+              boxShadow: '6px 1px 12px 2px #cfcfcf'
+            }}
+          >
+            <List.Item
+              style={{
+                borderTopLeftRadius: 3,
+                borderTopRightRadius: 3,
+                padding: 15,
+                backgroundColor: '#4286f4'
               }}
+              key={task.title}
+              to={'visite/' + task.id}
+              onClick={() => task.documentToFill && this.handleClick(i)}
             >
-              <List.Item
+              <div
                 style={{
-                  borderTopLeftRadius: 3,
-                  borderTopRightRadius: 3,
-                  padding: 15,
-                  backgroundColor: '#4286f4'
+                  display: 'flex',
+                  width: '100%'
                 }}
-                key={task.title}
-                to={'visite/' + task.id}
-                onClick={() => task.documentToFill && this.handleClick(i)}
               >
+                <div style={{ flex: 1 }}>
+                  {this.getIconFromStatus(task.status)}
+                </div>
+                <div style={{ flex: 8, color: 'white' }}>{task.title}</div>
                 <div
                   style={{
-                    display: 'flex',
-                    width: '100%'
+                    flex: 1,
+                    textAlign: 'right'
                   }}
                 >
-                  <div style={{ flex: 1 }}>
-                    {this.getIconFromStatus(task.status)}
-                  </div>
-                  <div style={{ flex: 8, color: 'white' }}>{task.title}</div>
-                  <div
-                    style={{
-                      flex: 1,
-                      textAlign: 'right'
-                    }}
-                  >
-                    {task.documentToFill &&
-                      (this.state.activeDropdowns.includes(i) ? (
-                        <List.Icon
-                          name="caret up"
-                          style={{ color: 'white' }}
-                        ></List.Icon>
-                      ) : (
-                        <List.Icon
-                          name="caret down"
-                          style={{ color: 'white' }}
-                        ></List.Icon>
-                      ))}
-                  </div>
+                  {task.documentToFill &&
+                    (this.state.activeDropdowns.includes(i) ? (
+                      <List.Icon
+                        name="caret up"
+                        style={{ color: 'white' }}
+                      ></List.Icon>
+                    ) : (
+                      <List.Icon
+                        name="caret down"
+                        style={{ color: 'white' }}
+                      ></List.Icon>
+                    ))}
                 </div>
-              </List.Item>
-              <List.Item>
-                {this.state.activeDropdowns.includes(i) && (
-                  <div style={{ padding: 15 }}>{task.documentToFill}</div>
-                )}
-              </List.Item>
-            </div>
-          ))}
-        </List>
-      </div>
+              </div>
+            </List.Item>
+            <List.Item>
+              {this.state.activeDropdowns.includes(i) && (
+                <div style={{ padding: 15 }}>{task.documentToFill}</div>
+              )}
+            </List.Item>
+          </div>
+        ))}
+      </List>
     );
   }
 }
