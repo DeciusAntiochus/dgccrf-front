@@ -1,8 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Menu, Dropdown, Icon, Responsive } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router/esm/react-router';
+
+function mapPropsToState(state) {
+  return {
+    nameOfPage: state.navbarReducer.nameOfPage,
+    backPage: state.navbarReducer.backPage
+  };
+}
 
 class NavBarComponent extends React.Component {
   render() {
@@ -16,7 +24,10 @@ class NavBarComponent extends React.Component {
           inverted
           icon="labeled"
         >
-          <Menu.Item as="a" onClick={() => this.props.history.goBack()}>
+          <Menu.Item
+            as="a"
+            onClick={() => this.props.history.push(this.props.backPage)}
+          >
             <Icon style={{ margin: '0' }} name="angle left" />
             Retour
           </Menu.Item>
@@ -24,7 +35,7 @@ class NavBarComponent extends React.Component {
             <Icon name="file" /> Mes Dossiers
           </Menu.Item>
           <Menu.Item style={{ flex: '1', verticalAlign: 'middle' }}>
-            <p style={{ fontSize: '20px' }}>Nom de la page</p>
+            <p style={{ fontSize: '20px' }}>{this.props.nameOfPage}</p>
           </Menu.Item>
           <Menu.Menu position="right">
             <Menu.Item as={Link} to="/entreprises">
@@ -49,7 +60,9 @@ class NavBarComponent extends React.Component {
             <Icon style={{ margin: '0' }} name="angle left" />
           </Menu.Item>
           <Menu.Item style={{ flex: '1' }}>
-            <p style={{ flex: '1', textAlign: 'center' }}>Nom de la page</p>
+            <p style={{ flex: '1', textAlign: 'center' }}>
+              {this.props.nameOfPage}
+            </p>
           </Menu.Item>
           <Menu.Menu position="right">
             <Dropdown item simple icon="list layout">
@@ -75,8 +88,11 @@ class NavBarComponent extends React.Component {
 
 NavBarComponent.propTypes = {
   history: PropTypes.shape({
-    goBack: PropTypes.func
-  })
+    goBack: PropTypes.func,
+    push: PropTypes.func
+  }),
+  nameOfPage: PropTypes.string.isRequired,
+  backPage: PropTypes.string.isRequired
 };
 
-export default withRouter(NavBarComponent);
+export default connect(mapPropsToState)(withRouter(NavBarComponent));

@@ -13,6 +13,8 @@
     "react-activity": "^1.2.2",
     "react-animations": "^1.0.0",
     "react-dom": "^16.8.6",
+    "react-redux": "^7.1.0",
+    "redux": "^4.0.1",
     "react-flex": "^2.2.8",
     "react-full-screen": "^0.2.4",
     "react-html5-camera-photo": "^1.4.3",

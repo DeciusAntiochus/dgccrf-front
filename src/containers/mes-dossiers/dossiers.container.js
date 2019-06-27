@@ -2,10 +2,30 @@ import React from 'react';
 import { Grid } from 'semantic-ui-react';
 
 import Dossier from './dossier';
+import MenuButton from '../../components/menuButton.component';
+import dossierService from '../../services/PouchDB.service';
+import { PropTypes } from 'prop-types';
+import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
+import { connect } from 'react-redux';
 
-export default class DossierComponent extends React.Component {
+function mapStateToProps() {
+  return {};
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
+    changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl))
+  };
+}
+
+class DossierComponent extends React.Component {
   constructor(props) {
     super(props);
+    dossierService.getAllDocs().then(console.log);
+    dossierService.onChanges(() =>
+      dossierService.getAllDocs().then(console.log)
+    );
     this.state = {
       taskList: [
         {
@@ -31,6 +51,12 @@ export default class DossierComponent extends React.Component {
       ]
     };
   }
+
+  componentDidMount() {
+    this.props.changeNameOfPage('Mes Dossiers');
+    this.props.changeBackUrl('/menu');
+  }
+
   render() {
     return (
       <Grid textAlign="center" style={{ height: '100vh' }} verticalAlign="top">
@@ -50,3 +76,13 @@ export default class DossierComponent extends React.Component {
     );
   }
 }
+
+DossierComponent.propTypes = {
+  changeNameOfPage: PropTypes.func.isRequired,
+  changeBackUrl: PropTypes.func.isRequired
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DossierComponent);
