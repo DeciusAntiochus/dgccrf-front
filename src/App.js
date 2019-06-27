@@ -14,7 +14,6 @@ import EntrepriseView from './containers/entreprise';
 import EntrepriseViewComponent from './containers/entreprise/entrepriseView.container';
 import './containers/navbar/navbar.css';
 
-
 export class App extends React.Component {
   render() {
     return (
@@ -33,11 +32,11 @@ export class App extends React.Component {
             style={{ position: 'absolute', height: '100%', width: '100%' }}
           >
             <Switch>
-              <Route exact path="/entreprises" component={EntrepriseView} />
+              <Route exact path="/etablissements" component={EntrepriseView} />
               <Route
-              exact
-              path="/etablissement/:id"
-              component={EntrepriseViewComponent}
+                exact
+                path="/etablissement/:id"
+                component={EntrepriseViewComponent}
               />
               <Route exact path="/menu" component={Menu} />
               <Route exact path="/mes-dossiers" component={Dossiers} />
