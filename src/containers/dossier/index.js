@@ -91,7 +91,7 @@ class MonDossier extends React.Component {
                     slideClassName="hidescrollbar"
                   >
                     <InfosComponent />
-                    <VisitesComponent />
+                    <VisitesComponent {...this.props} />
                   </SwipeableViews>
                 </div>
               </Grid.Column>

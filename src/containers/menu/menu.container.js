@@ -23,7 +23,7 @@ class MenuComponent extends React.Component {
   }
   render() {
     return (
-     <Container>
+      <Container>
         <Grid verticalAlign="middle" columns="equal">
           <Grid.Row>
             <Grid.Column></Grid.Column>
@@ -50,7 +50,7 @@ class MenuComponent extends React.Component {
             <Grid.Column></Grid.Column>
           </Grid.Row>
         </Grid>
-      </Container>>
+      </Container>
     );
   }
 }
