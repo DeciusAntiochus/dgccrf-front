@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu, Icon, Button, Grid } from 'semantic-ui-react';
 import { PropTypes } from 'prop-types';
+import './fileNavigation.css';
 
 class FileNavigationComponent extends React.Component {
   constructor(props) {
@@ -11,27 +12,29 @@ class FileNavigationComponent extends React.Component {
     return (
       <Grid textAlign="center">
         <Menu
-          style={{ zIndex: '0', backgroundColor: 'grey' }}
+          style={{ zIndex: '0', backgroundColor: 'white' }}
           fixed="bottom"
           fluid
-          inverted
+          borderless
           widths={2}
-          icon="labeled"
         >
           <Menu.Item
-            style={{ zIndex: -1 }}
+            style={{
+              zIndex: -1
+            }}
+            className="myMenuItem"
             name="trame"
-            color="blue"
             active={this.props.activeItem === 0}
             onClick={() => this.props.setActiveTab(0)}
           >
-            <Icon name="list ul" />
-            Trame
+            <div style={{ flexDirection: 'column', marginRight: '50px' }}>
+              <Icon name="list" size="large" color="white" />
+              <p style={{ marginTop: '5px', color: 'white' }}>Trame</p>
+            </div>
           </Menu.Item>
           <Menu.Item
             style={{
               zIndex: 2,
-
               bottom: '0',
               position: 'absolute',
               marginBottom: '-30px',
@@ -47,7 +50,7 @@ class FileNavigationComponent extends React.Component {
               }}
             >
               <Button
-                color={this.props.activeItem === 1 ? 'red' : 'gray'}
+                color={this.props.activeItem === 1 ? 'white' : '#3C4586'}
                 style={{ fontSize: 40, zIndex: 2, margin: 0 }}
                 circular
                 size="massive"
@@ -57,12 +60,16 @@ class FileNavigationComponent extends React.Component {
           </Menu.Item>
           <Menu.Item
             style={{ zIndex: -1 }}
+            className="myMenuItem"
             name="documents"
-            color="blue"
+            color="#3C4586"
             active={this.props.activeItem === 2}
             onClick={() => this.props.setActiveTab(2)}
           >
-            <Icon name="file" /> Documents{' '}
+            <div style={{ flexDirection: 'column', marginLeft: '50px' }}>
+              <Icon name="file" size="large" />
+              <p style={{ marginTop: '5px' }}>Documents</p>
+            </div>
           </Menu.Item>
         </Menu>
       </Grid>
