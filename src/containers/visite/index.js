@@ -11,6 +11,8 @@ import { PropTypes } from 'prop-types';
 import { changeNameOfPage } from '../navbar/actions';
 import { connect } from 'react-redux';
 
+import './trame/visite.css';
+
 function mapStateToProps() {
   return {};
 }
@@ -58,6 +60,7 @@ class Visite extends React.Component {
         style={{
           display: 'flex',
           height: '100%',
+
           backgroundColor: '#f2f2f2'
         }}
       >
@@ -72,8 +75,8 @@ class Visite extends React.Component {
             <Card
               fluid
               style={{
-                height: '80vh',
                 backgroundColor: '#f2f2f2',
+                background: 'none',
                 borderRadius: 5,
                 boxShadow: '0px 0px 0px 0px #f2f2f2'
               }}
@@ -83,7 +86,8 @@ class Visite extends React.Component {
                   centered
                   style={{
                     flex: 1,
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    flexWrap: 'nowrap'
                   }}
                 >
                   {/* <Grid.Row style={{ flex: 1 }}>
@@ -106,7 +110,10 @@ class Visite extends React.Component {
                       <Tab label="Après" />
                     </Tabs>
                   </Grid.Row>
-                  <Grid.Row style={{ flex: 10 }}>
+                  <Grid.Row
+                    style={{ flex: 10, overflowY: 'auto' }}
+                    className="hidescrollbar"
+                  >
                     <Grid.Column width={16} centered>
                       <TrameComponent
                         index={this.state.activeIndex}

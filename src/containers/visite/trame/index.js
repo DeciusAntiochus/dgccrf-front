@@ -34,6 +34,8 @@ export default class Trame extends React.Component {
           className="hidescrollbar"
           index={this.props.index}
           onChangeIndex={this.props.handleChangeIndex}
+          slideStyle={{ height: '60vh' }}
+          slideClassName="hidescrollbar"
         >
           <Avant />
           <Pendant />
