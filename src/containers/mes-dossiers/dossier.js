@@ -1,13 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Button,
-  Icon,
-  Grid,
-  Segment,
-  Header,
-  Responsive
-} from 'semantic-ui-react';
+import { Icon, Grid, Segment, Header, Responsive } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 import moment from 'moment';
@@ -16,7 +9,6 @@ import './dossier.css';
 
 class Dossier extends React.Component {
   render() {
-    console.log(this.props.dossier);
     return (
       <Grid.Row style={{ padding: 10, overflow: 'auto' }}>
         <Segment

@@ -19,3 +19,15 @@
     margin-top: 58px;
   }
 }
+
+@media (min-width: 500px) {
+  .marginNavbar {
+    padding-top: 71px !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .marginNavbar {
+    padding-top: 46.84px !important;
+  }
+}

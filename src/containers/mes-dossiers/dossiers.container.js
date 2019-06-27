@@ -8,6 +8,8 @@ import { PropTypes } from 'prop-types';
 import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
 import { connect } from 'react-redux';
 
+import './dossier.css';
+
 import _ from 'lodash';
 
 function mapStateToProps() {
@@ -65,10 +67,10 @@ class DossierComponent extends React.Component {
           backgroundColor: '#f2f2f2',
           borderRadius: 5,
           boxShadow: '0px 0px 0px 0px #f2f2f2',
-          overflow: 'auto',
           display: 'flex',
           alignItems: 'center',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          height: '100%'
         }}
       >
         <div
@@ -77,8 +79,9 @@ class DossierComponent extends React.Component {
             zIndex: 10,
             width: '100%',
             textAlign: 'center',
-            padding: 10,
             backgroundColor: '#f2f2f2',
+            padding: 10,
+
             display: 'flex',
             justifyContent: 'center',
             verticalAlign: 'middle'
@@ -117,7 +120,12 @@ class DossierComponent extends React.Component {
           </div>
         </div>
 
-        <div className="responsivemargin" style={{ position: 'relative' }}>
+        <div
+          className="responsivemargin"
+          style={{
+            backgroundColor: '#f2f2f2'
+          }}
+        >
           <List>
             {this.state.results.map(task => (
               <List.Item key={task.id}>
