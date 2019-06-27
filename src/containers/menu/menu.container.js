@@ -23,8 +23,8 @@ class MenuComponent extends React.Component {
   }
   render() {
     return (
-      <Container>
-        <Grid verticalAlign="middle" columns="equal">
+      <Container style={{ width: '100%', height: '100%' }}>
+        <Grid style={{ height: '100%' }} verticalAlign="middle" columns="equal">
           <Grid.Row>
             <Grid.Column></Grid.Column>
             <Grid.Column computer={6} tablet={8} mobile={16}>
