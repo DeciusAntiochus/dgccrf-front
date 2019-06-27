@@ -38,9 +38,9 @@ class NavBarComponent extends React.Component {
             <p style={{ fontSize: '20px' }}>{this.props.nameOfPage}</p>
           </Menu.Item>
           <Menu.Menu position="right">
-            <Menu.Item as={Link} to="/entreprises">
+            <Menu.Item as={Link} to="/etablissements">
               <Icon name="building outline" />
-              Entreprises
+              Établissements
             </Menu.Item>
             <Menu.Item as={Link} to="/preferences">
               <Icon name="setting"></Icon>Préférences
@@ -70,9 +70,9 @@ class NavBarComponent extends React.Component {
                 <Dropdown.Item as={Link} to="/mes-dossiers">
                   <Icon name="file" /> Mes Dossiers
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/entreprises">
+                <Dropdown.Item as={Link} to="/etablissements">
                   <Icon name="building outline" />
-                  Entreprises
+                  Établissements
                 </Dropdown.Item>
                 <Dropdown.Item as={Link} to="/preferences">
                   <Icon name="setting"></Icon>Préférences

@@ -32,8 +32,8 @@ class EntrepriseViewComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.props.changeNameOfPage('Entreprise ' + this.state.enseigne);
-    this.props.changeBackUrl('/menu');
+    this.props.changeNameOfPage('Établissement ' + this.state.enseigne);
+    this.props.changeBackUrl('/etablissements');
   }
 
   render() {

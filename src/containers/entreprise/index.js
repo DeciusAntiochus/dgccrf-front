@@ -1,8 +1,8 @@
 import React from 'react';
-import EntrepriseViewComponent from './entrepriseView.container';
+import EntrepriseSearch from './entrepriseSearch.container';
 
 export default class EntrepriseView extends React.Component {
   render() {
-    return <EntrepriseViewComponent />;
+    return <EntrepriseSearch />;
   }
 }
