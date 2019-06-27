@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
 import { connect } from 'react-redux';
+import visitesService from '../../services/visite.service';
+import dossierService from '../../services/dossier.service';
 
 function mapStateToProps() {
   return {};
@@ -25,10 +27,28 @@ class CreateVisiteComponent extends React.Component {
       trameList: ['Trame 1', 'Trame 2'],
       addedActions: [undefined]
     };
+    this.onSubmit = this.onSubmit.bind(this);
   }
+
   componentDidMount() {
     this.props.changeNameOfPage('Création de visite');
     this.props.changeBackUrl('/mes-dossiers');
+    dossierService.getAllActionCode().then(actionList => this.setState({ actionList }))
+  }
+
+
+  onSubmit() {
+    console.log(this.state.addedActions.includes(undefined))
+    if (this.state.addedActions.includes(undefined)) {
+      return window.alert("Veuillez spécifier un code action ou retirer les champs actions inutiles.")
+    }
+    visitesService.postControlesByVisite({
+      ETOB_RAISON_SOCIALE: this.state.enterpise,
+      ETOB_SIRET: this.state.SIRET,
+      trame: this.state.trame
+    }, this.state.addedActions)
+      .then(console.log)
+      .then(() => window.alert("La visite a bien été ajoutée."))
   }
 
   render() {
@@ -36,7 +56,7 @@ class CreateVisiteComponent extends React.Component {
       <Grid style={{ margin: 'auto', textAlign: 'left' }} centered>
         <GridRow>
           <GridColumn width={14}>
-            <Form onSubmit={() => alert(this.state)}>
+            <Form onSubmit={this.onSubmit}>
               <Form.Group widths="equal">
                 <Form.Input
                   fluid
