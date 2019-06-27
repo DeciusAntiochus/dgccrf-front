@@ -11,8 +11,9 @@ import CreateTrame from './containers/dossier/trameCreation.container';
 import MaVisite from './containers/visite';
 import NavBar from './containers/navbar';
 import EntrepriseView from './containers/entreprise';
-
+import EntrepriseViewComponent from './containers/entreprise/entrepriseView.container';
 import './containers/navbar/navbar.css';
+
 
 export class App extends React.Component {
   render() {
@@ -33,6 +34,11 @@ export class App extends React.Component {
           >
             <Switch>
               <Route exact path="/entreprises" component={EntrepriseView} />
+              <Route
+              exact
+              path="/etablissement/:id"
+              component={EntrepriseViewComponent}
+              />
               <Route exact path="/menu" component={Menu} />
               <Route exact path="/mes-dossiers" component={Dossiers} />
               <Route exact path="/dossier/:id" component={MonDossier} />

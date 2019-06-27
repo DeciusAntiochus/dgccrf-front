@@ -35,8 +35,8 @@ class MenuComponent extends React.Component {
                 icon="file"
               />
               <MenuButtonComponent
-                link="/entreprises"
-                name="Entreprises"
+                link="/etablissements"
+                name="Établissements"
                 color="blue"
                 icon="building outline"
               />
