@@ -15,7 +15,7 @@ export default class VisitesComponent extends React.Component {
 
     componentDidMount() {
         let dossierId = this.props.match.params.id;
-        visitesService.getVisitesByDossier(dossierId).then(data => this.setState({ visitesDic: data }));
+        visitesService.getVisitesByDossier(dossierId).then(data => this.setState({ visitesList: data }));
         visitesService.onChanges(() => visitesService.getVisitesByDossier(dossierId).then(data => this.setState({ visitesDic: data })))
     }
 

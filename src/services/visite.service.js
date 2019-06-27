@@ -1,6 +1,7 @@
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 import config from '../config';
+import { SSL_OP_CISCO_ANYCONNECT } from 'constants';
 PouchDB.plugin(PouchDBFind);
 
 class pouchDbVisiteService {
@@ -8,9 +9,9 @@ class pouchDbVisiteService {
         this.db = new PouchDB('controles');
 
         var opts = {
-            live: true, retry: true,
+            live: true, retry: true
         };
-        this.db.replicate.to(pouchDbUrl, opts);
+        this.db.replicate.to(pouchDbUrl, { live: true, retry: true });
         this.db.replicate.from(pouchDbUrl, opts);
         this.db.createIndex({
             index: { fields: ['DOSSIER_IDENT'] }
@@ -32,7 +33,7 @@ class pouchDbVisiteService {
     }
 
     getControlesByDossier(dossierID) {
-        return this.db.find({ selector: { DOSSIER_IDENT: dossierID.toString() } })
+        return this.db.find({ selector: { DOSSIER_IDENT: parseInt(dossierID) } })
             .then(table => table.docs);
     }
 
