@@ -6,7 +6,7 @@ class EntrepriseAttribute extends React.Component {
   render() {
     return (
       <Grid.Row>
-        <Grid.Column verticalAlign="middle">
+        <Grid.Column verticalAlign="middle" mobile={3} width={1}>
           <Icon
             circular
             name={this.props.icon}
@@ -18,12 +18,25 @@ class EntrepriseAttribute extends React.Component {
             }}
           ></Icon>
         </Grid.Column>
-        <Grid.Column verticalAlign="middle" width={6}>
+        <Grid.Column
+          verticalAlign="middle"
+          width={5}
+          tablet={5}
+          computer={5}
+          mobile={13}
+        >
           <div style={{ fontSize: '15px' }}>
             <span style={{ fontWeight: 'bold' }}>{this.props.name}</span>
           </div>
         </Grid.Column>
-        <Grid.Column verticalAlign="middle" width={9}>
+        <Grid.Column only="mobile" mobile={3}></Grid.Column>
+        <Grid.Column
+          verticalAlign="middle"
+          width={7}
+          tablet={5}
+          computer={5}
+          mobile={13}
+        >
           <p
             style={{
               fontSize: '15px'
