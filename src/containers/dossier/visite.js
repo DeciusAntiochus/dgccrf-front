@@ -33,7 +33,7 @@ export default class Visite extends Component {
                 >
                   <Responsive minWidth={600}>
                     <Icon name="search" color="grey" size="large"></Icon>
-                    <Icon name="circle" color="red" size="large"></Icon>
+                    <div style={{ backgroundColor: 'red' }}></div>
                   </Responsive>
                   <Responsive maxWidth={599}>
                     <Icon name="search" color="grey" size="small"></Icon>

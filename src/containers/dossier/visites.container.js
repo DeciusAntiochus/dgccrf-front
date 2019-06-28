@@ -36,14 +36,14 @@ export default class VisitesComponent extends React.Component {
           <Link to="/nouvelle-visite">
             <Button style={{ padding: 5 }} icon basic color="blue">
               <div>
-                <Icon name="plus" size="big" />
+                <Icon name="plus" size="large" />
                 Créer une visite
               </div>
             </Button>
           </Link>
         </Container>
 
-        <Container style={{ paddingTop: 30 }}>
+        <Container style={{ paddingTop: 40 }}>
           {this.state.visitesList.map((visite, i) => (
             <Visite visite={visite} key={i} />
           ))}
