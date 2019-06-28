@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, List, Icon, Container } from 'semantic-ui-react';
+import { Grid, List, Icon, Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import visitesService from '../../services/visite.service';
@@ -34,9 +34,12 @@ export default class VisitesComponent extends React.Component {
           style={{ backgroundColor: '#f2f2f2', position: 'fixed', zIndex: 10 }}
         >
           <Link to="/nouvelle-visite">
-            <div>
-              <Icon name="plus" size="big" />
-            </div>
+            <Button style={{ padding: 5 }} icon basic color="blue">
+              <div>
+                <Icon name="plus" size="big" />
+                Créer une visite
+              </div>
+            </Button>
           </Link>
         </Container>
 
