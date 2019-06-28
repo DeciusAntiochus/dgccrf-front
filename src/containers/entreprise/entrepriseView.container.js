@@ -38,10 +38,10 @@ class EntrepriseViewComponent extends React.Component {
 
   render() {
     return (
-      <Container style={{ margin: '5rem' }}>
+      <Container style={{ padding: '1rem' }}>
         <Card centered raised fluid>
           <Card.Content>
-            <Card.Header textAlign="center">Entreprise</Card.Header>
+            <Card.Header textAlign="center">Établissement</Card.Header>
           </Card.Content>
           <Card.Content>
             <Grid>
