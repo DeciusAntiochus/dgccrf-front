@@ -6,7 +6,13 @@ class EntrepriseAttribute extends React.Component {
   render() {
     return (
       <Grid.Row>
-        <Grid.Column verticalAlign="middle" mobile={3} width={1}>
+        <Grid.Column
+          verticalAlign="middle"
+          mobile={3}
+          tablet={1}
+          computer={1}
+          width={1}
+        >
           <Icon
             circular
             name={this.props.icon}
