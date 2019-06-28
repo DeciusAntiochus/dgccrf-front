@@ -10,6 +10,7 @@ import { Tabs, Tab } from '@material-ui/core';
 
 import './swipeable.css';
 import dossierService from '../../services/dossier.service';
+import DocumentsComponent from './documents.container';
 
 function mapStateToProps() {
   return {};
@@ -93,34 +94,22 @@ class MonDossier extends React.Component {
                 <Tab label="Documents" />
               </Tabs>
             </Grid.Row>
-            <Grid.Row
-              style={{ flex: 10, overflowY: 'auto' }}
+            <Container
+              style={{ flex: 10, overflow: 'hidden' }}
               className="hidescrollbar"
             >
-              <Grid.Column width={16}>
-                <div
-                  style={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
-                    justifyContent: 'center',
-
-                    overflow: 'hidden'
-                  }}
-                >
-                  <SwipeableViews
-                    style={{ height: '100%' }}
-                    slideStyle={{ height: '100%' }}
-                    slideClassName="hidescrollbar"
-                    index={this.state.activeIndex}
-                    onChangeIndex={this.handleChangeIndex}
-                  >
-                    <InfosComponent dossier={this.state.dossier} />
-                    <VisitesComponent {...this.props} />
-                  </SwipeableViews>
-                </div>
-              </Grid.Column>
-            </Grid.Row>
+              <SwipeableViews
+                style={{ height: '100%' }}
+                slideStyle={{ height: '100%', overflow: 'auto' }}
+                slideClassName="hidescrollbar"
+                index={this.state.activeIndex}
+                onChangeIndex={this.handleChangeIndex}
+              >
+                <InfosComponent dossier={this.state.dossier} />
+                <VisitesComponent {...this.props} />
+                <DocumentsComponent {...this.props} />
+              </SwipeableViews>
+            </Container>
           </Grid>
         </Container>
       </div>
@@ -130,7 +119,8 @@ class MonDossier extends React.Component {
 
 MonDossier.propTypes = {
   changeNameOfPage: PropTypes.func.isRequired,
-  changeBackUrl: PropTypes.func.isRequired
+  changeBackUrl: PropTypes.func.isRequired,
+  match: PropTypes.any
 };
 
 export default connect(
