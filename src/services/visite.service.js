@@ -64,9 +64,10 @@ class pouchDbVisiteService {
             visitesDic[controle.VISITE_IDENT].push(controle)
         }
         let visitesList = Object.keys(visitesDic).map(async VISITE_IDENT => ({
-            visiteData: await this.visiteDB.find({ selector: { VISITE_IDENT } }),
+            visiteData: await this.visiteDB.find({ selector: { VISITE_IDENT: VISITE_IDENT } }).then(table => table.docs[0]),
             controles: visitesDic[VISITE_IDENT]
         }))
+        console.log(await Promise.all(visitesList))
         return await Promise.all(visitesList);
     }
 
