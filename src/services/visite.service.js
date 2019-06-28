@@ -67,7 +67,7 @@ class pouchDbVisiteService {
             visiteData: await this.visiteDB.find({ selector: { VISITE_IDENT } }),
             controles: visitesDic[VISITE_IDENT]
         }))
-        return await visitesList;
+        return await Promise.all(visitesList);
     }
 
     postControlesByVisite(visiteInfos, controlesActionList) {
