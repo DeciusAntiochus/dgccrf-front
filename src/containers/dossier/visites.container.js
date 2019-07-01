@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, List, Icon, Container, Button } from 'semantic-ui-react';
+import { Grid, List, Icon, Container, Button, Search } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import visitesService from '../../services/visite.service';
@@ -29,26 +29,40 @@ export default class VisitesComponent extends React.Component {
   render() {
     console.log(this.state.visitesList);
     return (
-      <Container>
-        <Container
-          style={{ backgroundColor: '#f2f2f2', position: 'fixed', zIndex: 10 }}
+      <div>
+        <div
+          style={{
+            backgroundColor: '#f2f2f2',
+            position: 'fixed',
+            zIndex: 10,
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            height: 70
+          }}
         >
-          <Link to="/nouvelle-visite">
-            <Button style={{ padding: 5 }} icon basic color="blue">
-              <div>
-                <Icon name="plus" size="large" />
-                Créer une visite
-              </div>
-            </Button>
-          </Link>
-        </Container>
+          <div style={{ flex: 1, maxWidth: 200 }}>
+            <Search input={{ fluid: true }} />
+          </div>
+          <div style={{ flex: 2, textAlign: 'right' }}>
+            <Link to="/nouvelle-visite">
+              <Button style={{ padding: 5 }} icon basic color="blue">
+                <div>
+                  <Icon name="plus" size="large" />
+                  Créer une visite
+                </div>
+              </Button>
+            </Link>
+          </div>
+        </div>
 
-        <Container style={{ paddingTop: 40 }}>
+        <div style={{ paddingTop: 70 }}>
           {this.state.visitesList.map((visite, i) => (
             <Visite visite={visite} key={i} />
           ))}
-        </Container>
-      </Container>
+        </div>
+      </div>
     );
   }
 }

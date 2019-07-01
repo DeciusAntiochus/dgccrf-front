@@ -76,7 +76,7 @@ class MonDossier extends React.Component {
             centered
             style={{
               height: '100%',
-              width: '100%',
+
               flex: 1,
               flexDirection: 'column',
               flexWrap: 'nowrap',
@@ -96,7 +96,7 @@ class MonDossier extends React.Component {
             </Grid.Row>
             <Container
               style={{ flex: 10, overflow: 'hidden' }}
-              className="hidescrollbar"
+              className="hidescrollbar responsivecontainer"
             >
               <SwipeableViews
                 style={{ height: '100%' }}

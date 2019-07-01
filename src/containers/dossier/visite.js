@@ -6,6 +6,8 @@ import moment from 'moment';
 
 export default class Visite extends Component {
   render() {
+    const { visite } = this.props;
+
     return (
       <Grid.Row style={{ padding: 10, overflow: 'auto' }}>
         <Segment
@@ -18,7 +20,7 @@ export default class Visite extends Component {
           // color={this.props.color}
           // size="massive"
         >
-          <Link to={'visite/' + this.props.visite.VISITE_IDENT}>
+          <Link to={'/visite/' + visite.visiteData.VISITE_IDENT}>
             <Grid>
               <Grid.Row verticalAlign="middle" style={{ padding: 0 }}>
                 <Grid.Column
@@ -32,12 +34,45 @@ export default class Visite extends Component {
                   }}
                 >
                   <Responsive minWidth={600}>
-                    <Icon name="search" color="grey" size="large"></Icon>
-                    <div style={{ backgroundColor: 'red' }}></div>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      <Icon name="search" color="grey" size="large"></Icon>
+                      <div
+                        style={{
+                          borderRadius: '50%',
+
+                          width: '20px',
+                          height: '20px',
+
+                          background: 'red',
+                          color: 'white'
+                        }}
+                      >
+                        {visite.controles.length}
+                      </div>
+                    </div>
                   </Responsive>
                   <Responsive maxWidth={599}>
-                    <Icon name="search" color="grey" size="small"></Icon>
-                    <Icon name="circle" color="red" size="small"></Icon>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      <Icon
+                        name="search"
+                        color="grey"
+                        size="small"
+                        style={{ fontSize: '1em' }}
+                      ></Icon>
+                      <div
+                        style={{
+                          borderRadius: '50%',
+
+                          width: '20px',
+                          height: '20px',
+
+                          background: 'red',
+                          color: 'white'
+                        }}
+                      >
+                        {visite.controles.length}
+                      </div>
+                    </div>
                   </Responsive>
                 </Grid.Column>
                 <Grid.Column width={7} textAlign="left">
@@ -46,12 +81,12 @@ export default class Visite extends Component {
                       as="h3"
                       style={{ color: 'grey', overflowWrap: 'break-word' }}
                     >
-                      {this.props.visite.controles[0].ETOB_RAISON_SOCIALE}
+                      {visite.visiteData.ETOB_RAISON_SOCIALE}
                     </Header>
                   </Grid.Row>
                   <Grid.Row>
                     <Header as="h6" style={{ fontWeight: 'normal' }}>
-                      {this.props.visite.controles[0].ETOB_NOM_RESPONSABLE}
+                      {visite.visiteData.ETOB_NOM_RESPONSABLE}
                     </Header>
                   </Grid.Row>
                 </Grid.Column>
@@ -64,10 +99,10 @@ export default class Visite extends Component {
                   <Grid.Row>
                     <Responsive minWidth={600}>
                       <Header as="h4" style={{ overflowWrap: 'break-word' }}>
-                        {this.props.visite.controles[0].ETOB_ADR1}{' '}
-                        {this.props.visite.controles[0].ETOB_ADR2}{' '}
-                        {this.props.visite.controles[0].ETOB_ADR3} -{' '}
-                        {this.props.visite.controles[0].ETOB_ADRVILLE}
+                        {visite.visiteData.ETOB_ADR1}{' '}
+                        {visite.visiteData.ETOB_ADR2}{' '}
+                        {visite.visiteData.ETOB_ADR3} -{' '}
+                        {visite.visiteData.ETOB_ADRVILLE}
                       </Header>
                     </Responsive>
                     <Responsive
@@ -75,10 +110,10 @@ export default class Visite extends Component {
                       style={{ overflowWrap: 'break-word' }}
                     >
                       <Header as="h5">
-                        {this.props.visite.controles[0].ETOB_ADR1}{' '}
-                        {this.props.visite.controles[0].ETOB_ADR2}{' '}
-                        {this.props.visite.controles[0].ETOB_ADR3} -{' '}
-                        {this.props.visite.controles[0].ETOB_ADRVILLE}
+                        {visite.visiteData.ETOB_ADR1}{' '}
+                        {visite.visiteData.ETOB_ADR2}{' '}
+                        {visite.visiteData.ETOB_ADR3} -{' '}
+                        {visite.visiteData.ETOB_ADRVILLE}
                       </Header>
                     </Responsive>
                   </Grid.Row>
@@ -88,7 +123,7 @@ export default class Visite extends Component {
                       style={{ fontWeight: 'normal', fontStyle: 'italic' }}
                     >
                       {moment(
-                        this.props.visite.controles[0].VISITE_DATE_INTERVENTION
+                        visite.visiteData.VISITE_DATE_INTERVENTION
                       ).format('DD/MM/YYYY')}
                     </Header>
                   </Grid.Row>

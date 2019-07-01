@@ -103,9 +103,9 @@ class DossierComponent extends React.Component {
           >
             {this.state.dossiers.length} dossiers trouvés.
           </div>
-          <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+          <div style={{ flex: 1, maxWidth: 200 }}>
             <Search
-              size="tiny"
+              input={{ fluid: true }}
               open={false}
               onSearchChange={_.debounce(this.handleSearchChange, 500)}
             />
