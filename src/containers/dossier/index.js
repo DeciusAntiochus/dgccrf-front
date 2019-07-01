@@ -11,6 +11,7 @@ import { Tabs, Tab } from '@material-ui/core';
 import './swipeable.css';
 import dossierService from '../../services/dossier.service';
 import DocumentsComponent from './documents.container';
+import MyActivityIndicator from '../../components/myActivityIndicator.component';
 
 function mapStateToProps() {
   return {};
@@ -44,11 +45,12 @@ class MonDossier extends React.Component {
   };
 
   loadDossier(dossier) {
-    this.setState({ dossier: dossier });
+    this.setState({ dossier: dossier }, () => {
+      this.props.changeNameOfPage(this.state.dossier.DOSSIER_LIBELLE);
+    });
   }
 
   componentDidMount() {
-    this.props.changeNameOfPage('Dossier ' + this.props.match.params.id);
     this.props.changeBackUrl('/mes-dossiers');
     dossierService
       .getDossierById(this.props.match.params.id)
@@ -65,53 +67,75 @@ class MonDossier extends React.Component {
           justifyContent: 'center'
         }}
       >
-        <Container
-          style={{
-            overflow: 'hidden',
-            height: '100%',
-            width: '100%'
-          }}
-        >
-          <Grid
-            centered
+        {this.state.dossier ? (
+          <Container
             style={{
+              overflow: 'hidden',
               height: '100%',
-
-              flex: 1,
-              flexDirection: 'column',
-              flexWrap: 'nowrap',
-              overflow: 'hidden'
+              width: '100%'
             }}
           >
-            <Grid.Row style={{ flex: 1 }}>
-              <Tabs
-                value={this.state.activeIndex}
-                fullWidth
-                onChange={this.handleChange}
-              >
-                <Tab label="Infos" />
-                <Tab label="Visites" />
-                <Tab label="Documents" />
-              </Tabs>
-            </Grid.Row>
-            <Container
-              style={{ flex: 10, overflow: 'hidden' }}
-              className="hidescrollbar responsivecontainer"
+            <Grid
+              centered
+              style={{
+                height: '100%',
+
+                flex: 1,
+                flexDirection: 'column',
+                flexWrap: 'nowrap',
+                overflow: 'hidden'
+              }}
             >
-              <SwipeableViews
-                style={{ height: '100%' }}
-                slideStyle={{ height: '100%', overflow: 'auto' }}
-                slideClassName="hidescrollbar"
-                index={this.state.activeIndex}
-                onChangeIndex={this.handleChangeIndex}
+              <Grid.Row style={{ flex: 1 }}>
+                <Tabs
+                  value={this.state.activeIndex}
+                  fullWidth
+                  onChange={this.handleChange}
+                >
+                  <Tab label="Infos" />
+                  {//pas de visites si le dossier n'est pas de type enquête!
+                  this.state.dossier.TYPE_DOSSIER_IDENT === 3 && (
+                    <Tab label="Visites" />
+                  )}
+                  <Tab label="Documents" />
+                </Tabs>
+              </Grid.Row>
+              <Container
+                style={{ flex: 10, overflow: 'hidden' }}
+                className="hidescrollbar responsivecontainer"
               >
-                <InfosComponent dossier={this.state.dossier} />
-                <VisitesComponent {...this.props} />
-                <DocumentsComponent {...this.props} />
-              </SwipeableViews>
-            </Container>
-          </Grid>
-        </Container>
+                {this.state.dossier.TYPE_DOSSIER_IDENT === 3 ? (
+                  <SwipeableViews
+                    style={{ height: '100%' }}
+                    slideStyle={{ height: '100%', overflow: 'auto' }}
+                    slideClassName="hidescrollbar"
+                    index={this.state.activeIndex}
+                    onChangeIndex={this.handleChangeIndex}
+                  >
+                    <InfosComponent dossier={this.state.dossier} />
+
+                    <VisitesComponent {...this.props} />
+
+                    <DocumentsComponent {...this.props} />
+                  </SwipeableViews>
+                ) : (
+                  <SwipeableViews
+                    style={{ height: '100%' }}
+                    slideStyle={{ height: '100%', overflow: 'auto' }}
+                    slideClassName="hidescrollbar"
+                    index={this.state.activeIndex}
+                    onChangeIndex={this.handleChangeIndex}
+                  >
+                    <InfosComponent dossier={this.state.dossier} />
+                    <DocumentsComponent {...this.props} />
+                  </SwipeableViews>
+                )}
+              </Container>
+            </Grid>
+          </Container>
+        ) : (
+          <MyActivityIndicator />
+        )}
       </div>
     );
   }

@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import './dossier.css';
 
 import _ from 'lodash';
+import MyActivityIndicator from '../../components/myActivityIndicator.component';
 
 function mapStateToProps() {
   return {};
@@ -25,7 +26,7 @@ function mapDispatchToProps(dispatch) {
 
 class DossierComponent extends React.Component {
   loadDossiers(dossiers) {
-    this.setState({ dossiers: dossiers, results: dossiers });
+    this.setState({ dossiers: dossiers, results: dossiers, isLoading: false });
   }
 
   handleSearchChange = (e, { value }) => {
@@ -46,7 +47,9 @@ class DossierComponent extends React.Component {
   componentDidMount() {
     dossierService.getAllDocs().then(res => this.loadDossiers(res));
     dossierService.onChanges(() =>
-      dossierService.getAllDocs().then(res => this.loadDossiers(res))
+      this.setState({ isLoading: true }, () => {
+        dossierService.getAllDocs().then(res => this.loadDossiers(res));
+      })
     );
     this.props.changeNameOfPage('Mes Dossiers');
     this.props.changeBackUrl('/menu');
@@ -56,11 +59,13 @@ class DossierComponent extends React.Component {
     super(props);
     this.state = {
       dossiers: [],
-      results: []
+      results: [],
+      isLoading: true
     };
   }
 
   render() {
+    console.log(this.state.dossiers);
     return (
       <Card
         fluid
@@ -77,76 +82,102 @@ class DossierComponent extends React.Component {
           height: '100%'
         }}
       >
-        <div
-          style={{
-            position: 'fixed',
-            zIndex: 10,
-            width: '100%',
-            textAlign: 'center',
-            backgroundColor: '#f2f2f2',
-            padding: 10,
+        {!this.state.isLoading ? (
+          <>
+            <div
+              style={{
+                position: 'fixed',
+                zIndex: 10,
+                width: '100%',
+                textAlign: 'center',
+                backgroundColor: '#f2f2f2',
+                padding: 10,
 
-            display: 'flex',
-            justifyContent: 'center',
-            verticalAlign: 'middle'
-          }}
-        >
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                verticalAlign: 'middle'
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
 
-              fontWeight: 'bold'
-            }}
-          >
-            {this.state.dossiers.length} dossiers trouvés.
-          </div>
-          <div style={{ flex: 1, maxWidth: 200 }}>
-            <Search
-              input={{ fluid: true }}
-              open={false}
-              onSearchChange={_.debounce(this.handleSearchChange, 500)}
-            />
-          </div>
+                  fontWeight: 'bold'
+                }}
+              >
+                {this.state.dossiers.length} dossiers trouvés.
+              </div>
+              <div style={{ flex: 1, maxWidth: 200 }}>
+                <Search
+                  input={{ fluid: true }}
+                  open={false}
+                  onSearchChange={_.debounce(this.handleSearchChange, 500)}
+                />
+              </div>
 
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              justifyContent: 'center',
+              <div
+                style={{
+                  flex: 1,
+                  display: 'flex',
+                  justifyContent: 'center',
 
-              alignItems: 'center'
-            }}
-          >
-            {this.state.results.length} résultats.
-          </div>
-        </div>
+                  alignItems: 'center'
+                }}
+              >
+                {this.state.results.length} résultats.
+              </div>
+            </div>
 
-        <div
-          className="responsivemargin"
-          style={{
-            backgroundColor: '#f2f2f2'
-          }}
-        >
-          <List>
-            {this.state.results.map(task => (
-              <List.Item key={task.id}>
-                <div className="responsivepadding">
-                  <Dossier
-                    icon="folder"
-                    iconcolor="yellow"
-                    key={task.id}
-                    dossier={task}
-                    link={'dossier/' + task.DOSSIER_IDENT}
-                    color="white"
-                  />
-                </div>
-              </List.Item>
-            ))}
-          </List>
-        </div>
+            <div
+              className="responsivemargin"
+              style={{
+                backgroundColor: '#f2f2f2'
+              }}
+            >
+              <List>
+                {this.state.results.map(task => (
+                  <List.Item key={task.DOSSIER_IDENT}>
+                    <div className="responsivepadding">
+                      {task.TYPE_DOSSIER_IDENT === 3 ? (
+                        <Dossier
+                          icon="folder"
+                          iconcolor="yellow"
+                          dossier={task}
+                          link={'dossier/' + task.DOSSIER_IDENT}
+                          color="white"
+                          type={task.TYPE_DOSSIER_LIBELLE}
+                        />
+                      ) : task.TYPE_DOSSIER_IDENT === 2 ? (
+                        <Dossier
+                          icon="info circle"
+                          iconcolor="blue"
+                          dossier={task}
+                          link={'dossier/' + task.DOSSIER_IDENT}
+                          color="white"
+                          type={task.TYPE_DOSSIER_LIBELLE}
+                        />
+                      ) : (
+                        <Dossier
+                          icon="plus circle"
+                          iconcolor="grey"
+                          dossier={task}
+                          link={'dossier/' + task.DOSSIER_IDENT}
+                          color="white"
+                          type={task.TYPE_DOSSIER_LIBELLE}
+                        />
+                      )}
+                    </div>
+                  </List.Item>
+                ))}
+              </List>
+            </div>
+          </>
+        ) : (
+          <MyActivityIndicator />
+        )}
       </Card>
     );
   }
