@@ -11,3 +11,10 @@ export function changeBackUrl(backUrl) {
     payload: { backUrl }
   };
 }
+
+export function changeActivePage(tab, value) {
+  return {
+    type: 'CHANGE_ACTIVE_PAGE',
+    payload: { tab, value }
+  };
+}

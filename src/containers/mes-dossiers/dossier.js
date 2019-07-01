@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon, Grid, Segment, Header, Responsive } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-
 import moment from 'moment';
-
 import './dossier.css';
 
 class Dossier extends React.Component {

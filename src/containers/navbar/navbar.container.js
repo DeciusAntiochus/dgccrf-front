@@ -9,7 +9,10 @@ import './navbar.css';
 function mapPropsToState(state) {
   return {
     nameOfPage: state.navbarReducer.nameOfPage,
-    backPage: state.navbarReducer.backPage
+    backPage: state.navbarReducer.backPage,
+    mesDossiersLink: state.navbarReducer.activePages.mesDossiers,
+    etablissementLink: state.navbarReducer.activePages.etablissements,
+    preferencesLink: state.navbarReducer.activePages.preferences
   };
 }
 
@@ -40,18 +43,18 @@ class NavBarComponent extends React.Component {
             <Icon style={{ margin: '0' }} name="angle left" />
             Retour
           </Menu.Item>
-          <Menu.Item as={Link} to="/mes-dossiers">
+          <Menu.Item as={Link} to={this.props.mesDossiersLink}>
             <Icon name="file" /> Mes Dossiers
           </Menu.Item>
           <Menu.Item style={{ flex: '1', verticalAlign: 'middle' }}>
             <p style={{ fontSize: '20px' }}>{this.props.nameOfPage}</p>
           </Menu.Item>
           <Menu.Menu position="right">
-            <Menu.Item as={Link} to="/etablissements">
+            <Menu.Item as={Link} to={this.props.etablissementLink}>
               <Icon name="building outline" />
               Établissements
             </Menu.Item>
-            <Menu.Item as={Link} to="/preferences">
+            <Menu.Item as={Link} to={this.props.preferencesLink}>
               <Icon name="setting"></Icon>Préférences
             </Menu.Item>
           </Menu.Menu>
@@ -76,14 +79,14 @@ class NavBarComponent extends React.Component {
           <Menu.Menu position="right">
             <Dropdown item simple icon="list layout">
               <Dropdown.Menu>
-                <Dropdown.Item as={Link} to="/mes-dossiers">
+                <Dropdown.Item as={Link} to={this.props.mesDossiersLink}>
                   <Icon name="file" /> Mes Dossiers
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/etablissements">
+                <Dropdown.Item as={Link} to={this.props.etablissementLink}>
                   <Icon name="building outline" />
                   Établissements
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/preferences">
+                <Dropdown.Item as={Link} to={this.props.preferencesLink}>
                   <Icon name="setting"></Icon>Préférences
                 </Dropdown.Item>
               </Dropdown.Menu>
@@ -101,7 +104,10 @@ NavBarComponent.propTypes = {
     push: PropTypes.func
   }),
   nameOfPage: PropTypes.string.isRequired,
-  backPage: PropTypes.string.isRequired
+  backPage: PropTypes.string.isRequired,
+  mesDossiersLink: PropTypes.string.isRequired,
+  etablissementLink: PropTypes.string,
+  preferencesLink: PropTypes.string
 };
 
 export default connect(mapPropsToState)(withRouter(NavBarComponent));

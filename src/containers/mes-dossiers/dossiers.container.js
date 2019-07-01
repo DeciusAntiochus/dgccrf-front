@@ -1,11 +1,13 @@
 import React from 'react';
-import { Grid, List, Container, Card, Search } from 'semantic-ui-react';
-
+import { List, Card, Search } from 'semantic-ui-react';
 import Dossier from './dossier';
-import MenuButton from '../../components/menuButton.component';
 import dossierService from '../../services/dossier.service';
 import { PropTypes } from 'prop-types';
-import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
+import {
+  changeNameOfPage,
+  changeBackUrl,
+  changeActivePage
+} from '../navbar/actions';
 import { connect } from 'react-redux';
 
 import './dossier.css';
@@ -18,8 +20,10 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
-    changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl))
+    changeNameOfPage: () => dispatch(changeNameOfPage('Mes Dossiers')),
+    changeBackUrl: () => dispatch(changeBackUrl('/menu')),
+    changeActivePage: () =>
+      dispatch(changeActivePage('mesDossiers', '/mes-dossiers'))
   };
 }
 
@@ -48,8 +52,9 @@ class DossierComponent extends React.Component {
     dossierService.onChanges(() =>
       dossierService.getAllDocs().then(res => this.loadDossiers(res))
     );
-    this.props.changeNameOfPage('Mes Dossiers');
-    this.props.changeBackUrl('/menu');
+    this.props.changeNameOfPage();
+    this.props.changeBackUrl();
+    this.props.changeActivePage();
   }
 
   constructor(props) {
@@ -154,7 +159,8 @@ class DossierComponent extends React.Component {
 
 DossierComponent.propTypes = {
   changeNameOfPage: PropTypes.func.isRequired,
-  changeBackUrl: PropTypes.func.isRequired
+  changeBackUrl: PropTypes.func.isRequired,
+  changeActivePage: PropTypes.func.isRequired
 };
 
 export default connect(
