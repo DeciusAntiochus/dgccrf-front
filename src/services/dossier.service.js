@@ -8,9 +8,10 @@ class pouchDbService {
         this.db = new PouchDB('mes-dossiers');
         var opts = {
             live: true,
-            retry: true
+            retry: true,
+            filter: 'filters/by_user',
+            query_params: { "AGENT_DD_IDENT": 4447 }
         };
-        this.db.replicate.to(pouchDbUrl, opts);
         this.db.replicate.from(pouchDbUrl, opts);
         this.db.createIndex({
             index: { fields: ['DOSSIER_IDENT'] }

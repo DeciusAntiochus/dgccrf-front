@@ -8,9 +8,11 @@ class pouchDbVisiteService {
     constructor() {
         this.controleDB = new PouchDB('controles');
         var opts = {
-            live: true, retry: true
+            live: true, retry: true,
+            filter: 'filters/by_user',
+            query_params: { "AGENT_DD_IDENT": 4447 }
         };
-        this.controleDB.replicate.to(config.couchDb.url_controles, { live: true, retry: true });
+
         this.controleDB.replicate.from(config.couchDb.url_controles, opts);
         this.controleDB.createIndex({
             index: { fields: ['DOSSIER_IDENT'] }
@@ -24,7 +26,6 @@ class pouchDbVisiteService {
         });
 
         this.visiteDB = new PouchDB('visites');
-        this.visiteDB.replicate.to(config.couchDb.url_visites, { live: true, retry: true });
         this.visiteDB.replicate.from(config.couchDb.url_visites, opts);
         this.visiteDB.createIndex({
             index: { fields: ['VISTE_IDENT'] }
@@ -34,6 +35,14 @@ class pouchDbVisiteService {
     //call the callback on db changes
     onChanges(cb) {
         this.controleDB.changes({
+            since: 'now',
+            live: true
+        }).on('change', cb);
+        this.newControleDB.changes({
+            since: 'now',
+            live: true
+        }).on('change', cb);
+        this.visiteDB.changes({
             since: 'now',
             live: true
         }).on('change', cb);
@@ -67,7 +76,6 @@ class pouchDbVisiteService {
             visiteData: await this.visiteDB.find({ selector: { VISITE_IDENT: parseInt(VISITE_IDENT) } }).then(table => table.docs[0]),
             controles: visitesDic[VISITE_IDENT]
         }))
-        console.log(await Promise.all(visitesList))
         return await Promise.all(visitesList);
     }
 
