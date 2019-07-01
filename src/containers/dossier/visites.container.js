@@ -26,7 +26,6 @@ export default class VisitesComponent extends React.Component {
   }
 
   render() {
-    console.log(this.state.visitesList);
     return (
       <Grid textAlign="center" style={{ display: 'flex' }} verticalAlign="top">
         <Grid.Row textAlign="right" display="flex">
@@ -44,8 +43,8 @@ export default class VisitesComponent extends React.Component {
               {this.state.visitesList.map(visite => (
                 <List.Item
                   as={Link}
-                  key={visite.id}
-                  to={'/visite/' + visite.id}
+                  key={visite.VISITE_IDENT}
+                  to={'/visite/' + visite.VISITE_IDENT}
                 >
                   <List.Content>
                     <List.Header>{visite.enterprise}</List.Header>

@@ -8,18 +8,26 @@ import FileNavigationComponent from '../fileNavigation';
 import Photo from './photo/photo';
 import Documents from './documents/documents.container';
 import { PropTypes } from 'prop-types';
-import { changeNameOfPage } from '../navbar/actions';
+import {
+  changeNameOfPage,
+  changeBackUrl,
+  changeActivePage
+} from '../navbar/actions';
 import { connect } from 'react-redux';
 
 import './trame/visite.css';
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    backUrl: state.navbarReducer.activePage.mesDossiers
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    changeNameOfPage: newName => dispatch(changeNameOfPage(newName))
+    changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
+    changeBackUrl: value => dispatch(changeBackUrl(value)),
+    changeActivePage: value => dispatch(changeActivePage('mesDossiers', value))
   };
 }
 
@@ -35,7 +43,9 @@ class Visite extends React.Component {
     this.setActiveTab = this.setActiveTab.bind(this);
   }
   componentDidMount() {
-    this.props.changeNameOfPage('Visite *Nom de la visite*');
+    this.props.changeNameOfPage('Visite ' + this.props.match.params.id);
+    this.props.changeBackUrl(this.props.backUrl);
+    this.props.changeActivePage('/visite/' + this.props.match.params.id);
   }
 
   handleChangeIndex = value => {
@@ -140,7 +150,15 @@ class Visite extends React.Component {
 }
 
 Visite.propTypes = {
-  changeNameOfPage: PropTypes.func.isRequired
+  changeNameOfPage: PropTypes.func.isRequired,
+  changeBackUrl: PropTypes.func.isRequired,
+  changeActivePage: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string
+    })
+  }),
+  backUrl: PropTypes.string.isRequired
 };
 
 export default connect(
