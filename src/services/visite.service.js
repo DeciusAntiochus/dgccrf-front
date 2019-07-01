@@ -67,7 +67,6 @@ class pouchDbVisiteService {
             visiteData: await this.visiteDB.find({ selector: { VISITE_IDENT: parseInt(VISITE_IDENT) } }).then(table => table.docs[0]),
             controles: visitesDic[VISITE_IDENT]
         }))
-        console.log(await Promise.all(visitesList))
         return await Promise.all(visitesList);
     }
 
