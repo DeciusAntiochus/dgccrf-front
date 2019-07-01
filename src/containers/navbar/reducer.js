@@ -15,19 +15,19 @@ const changeActiveState = (state, tab, value) => {
     case 'mesDossiers': {
       return {
         ...state,
-        activePage: { ...state.activePage, mesDossiers: value }
+        activePages: { ...state.activePages, mesDossiers: value }
       };
     }
     case 'etablissements': {
       return {
         ...state,
-        activePage: { ...state.activePage, etablissements: value }
+        activePages: { ...state.activePages, etablissements: value }
       };
     }
     case 'preferences': {
       return {
         ...state,
-        activePage: { ...state.activePage, preferences: value }
+        activePages: { ...state.activePages, preferences: value }
       };
     }
   }

@@ -18,7 +18,7 @@ function mapDispatchToProps(dispatch) {
     changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
     changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl)),
     changeActivePage: value =>
-      dispatch(changeActivePage(('etablissements', value)))
+      dispatch(changeActivePage('etablissements', value))
   };
 }
 
@@ -41,7 +41,7 @@ class EntrepriseViewComponent extends React.Component {
   componentDidMount() {
     this.props.changeNameOfPage('Établissement ' + this.state.enseigne);
     this.props.changeBackUrl('/etablissements');
-    this.props.changeActivePage('/etablissements/' + this.state.id);
+    this.props.changeActivePage('/etablissement/' + this.state.id);
   }
 
   render() {

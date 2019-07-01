@@ -44,7 +44,7 @@ export class App extends React.Component {
               <Route exact path="/visite/:id" component={MaVisite} />
               <Route exact path="/nouvelle-visite" component={CreateVisite} />
               <Route exact path="/nouvelle-trame" component={CreateTrame} />
-              <Route component={() => <Redirect to="/menu" />} />
+              {/* <Route component={() => <Redirect to="/menu" />} /> */}
             </Switch>
           </div>
         </Router>
