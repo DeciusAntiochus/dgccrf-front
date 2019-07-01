@@ -5,8 +5,12 @@ import { PropTypes } from 'prop-types';
 import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
 import { connect } from 'react-redux';
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    mesDossiersLink: state.navbarReducer.activePages.mesDossiers,
+    etablissementLink: state.navbarReducer.activePages.etablissements,
+    preferencesLink: state.navbarReducer.activePages.preferences
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -29,19 +33,19 @@ class MenuComponent extends React.Component {
             <Grid.Column></Grid.Column>
             <Grid.Column computer={6} tablet={8} mobile={16}>
               <MenuButtonComponent
-                link="/mes-dossiers"
+                link={this.props.mesDossiersLink}
                 name="Mes Dossiers"
                 color="teal"
                 icon="file"
               />
               <MenuButtonComponent
-                link="/etablissements"
+                link={this.props.etablissementLink}
                 name="Établissements"
                 color="blue"
                 icon="building outline"
               />
               <MenuButtonComponent
-                link="/preferences"
+                link={this.props.preferencesLink}
                 name="Préférences"
                 color="violet"
                 icon="setting"
@@ -57,7 +61,10 @@ class MenuComponent extends React.Component {
 
 MenuComponent.propTypes = {
   changeNameOfPage: PropTypes.func.isRequired,
-  changeBackUrl: PropTypes.func.isRequired
+  changeBackUrl: PropTypes.func.isRequired,
+  mesDossiersLink: PropTypes.string.isRequired,
+  etablissementLink: PropTypes.string,
+  preferencesLink: PropTypes.string
 };
 
 export default connect(
