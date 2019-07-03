@@ -5,7 +5,11 @@ import _ from 'lodash';
 import { Grid, Search, Container } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
-import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
+import {
+  changeNameOfPage,
+  changeBackUrl,
+  changeActivePage
+} from '../navbar/actions';
 import { connect } from 'react-redux';
 
 const source = [
@@ -41,8 +45,10 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
-    changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl))
+    changeNameOfPage: () => dispatch(changeNameOfPage('Établissements')),
+    changeBackUrl: () => dispatch(changeBackUrl('/menu')),
+    changeActivePage: () =>
+      dispatch(changeActivePage('etablissements', '/etablissements'))
   };
 }
 
@@ -57,8 +63,9 @@ class EntrepriseSearch extends React.Component {
   }
 
   componentDidMount() {
-    this.props.changeNameOfPage('Établissements');
-    this.props.changeBackUrl('/menu');
+    this.props.changeNameOfPage();
+    this.props.changeBackUrl();
+    this.props.changeActivePage();
   }
 
   handleResultSelect = (e, { result }) =>
@@ -142,7 +149,8 @@ class EntrepriseSearch extends React.Component {
 }
 EntrepriseSearch.propTypes = {
   changeNameOfPage: PropTypes.func.isRequired,
-  changeBackUrl: PropTypes.func.isRequired
+  changeBackUrl: PropTypes.func.isRequired,
+  changeActivePage: PropTypes.func.isRequired
 };
 
 export default connect(

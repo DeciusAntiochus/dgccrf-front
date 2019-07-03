@@ -161,7 +161,11 @@ class InfosComponent extends React.Component {
 }
 
 InfosComponent.propTypes = {
-  dossier: PropTypes.object
+  dossier: PropTypes.shape({
+    DOSSIER_OBJ_TRAVAIL: PropTypes.string,
+    DOSSIER_RESPONSABLE_LIBELLE: PropTypes.string,
+    DOSSIER_ATTRIBUTAIRES: PropTypes.string
+  })
 };
 
 export default InfosComponent;
