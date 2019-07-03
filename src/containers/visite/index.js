@@ -19,7 +19,7 @@ import './trame/visite.css';
 
 function mapStateToProps(state) {
   return {
-    backUrl: state.navbarReducer.activePage.mesDossiers
+    backUrl: state.navbarReducer.activePages.mesDossiers
   };
 }
 

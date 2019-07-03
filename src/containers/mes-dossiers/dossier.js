@@ -32,37 +32,46 @@ class Dossier extends React.Component {
                   }}
                 >
                   <Responsive minWidth={600}>
-                    <Icon name="folder" color="yellow" size="huge"></Icon>
+                    <Icon
+                      name={this.props.icon}
+                      color={this.props.iconcolor}
+                      size="huge"
+                      style={{ marginTop: 5, marginBottom: 5 }}
+                    ></Icon>
                   </Responsive>
                   <Responsive maxWidth={599}>
-                    <Icon name="folder" color="yellow" size="large"></Icon>
+                    <Icon
+                      name={this.props.icon}
+                      color={this.props.iconcolor}
+                      size="large"
+                    ></Icon>
                   </Responsive>
                 </Grid.Column>
                 <Grid.Column width={7} textAlign="left">
                   <Grid.Row>
-                    <Header as="h4">
+                    <Header as="h3">
                       {this.props.dossier.DOSSIER_LIBELLE}
                     </Header>
                   </Grid.Row>
                   <Grid.Row>
-                    <Header as="h6">
+                    <Header as="h5">
                       {this.props.dossier.DOSSIER_OBJ_TRAVAIL}
                     </Header>
                   </Grid.Row>
                 </Grid.Column>
                 <Grid.Column width={6}>
                   <Grid.Row>
-                    <Header as="h6" style={{ fontWeight: 'normal' }}>
+                    <Header as="h5" style={{ fontWeight: 'normal' }}>
                       {this.props.dossier.ACDG_LIBELLE}
                     </Header>
                   </Grid.Row>
                   <Grid.Row>
-                    <Header as="h6">
+                    <Header as="h5">
                       {this.props.dossier.DOSSIER_ATTRIBUTAIRES}
                     </Header>
                   </Grid.Row>
                   <Grid.Row>
-                    <Header as="h6">
+                    <Header as="h5">
                       {moment(this.props.dossier.DOSSIER_DATE_LIMITE).format(
                         'DD/MM/YYYY'
                       )}
@@ -80,10 +89,12 @@ class Dossier extends React.Component {
 
 Dossier.propTypes = {
   link: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   color: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
-  dossier: PropTypes.element
+  iconcolor: PropTypes.string,
+  dossier: PropTypes.object,
+  type: PropTypes.string
 };
 
 export default Dossier;
