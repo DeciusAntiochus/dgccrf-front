@@ -3,7 +3,11 @@ import React from 'react';
 import { Form, Grid, GridRow, GridColumn, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
-import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
+import {
+  changeNameOfPage,
+  changeBackUrl,
+  changeActivePage
+} from '../navbar/actions';
 import { connect } from 'react-redux';
 import visitesService from '../../services/visite.service';
 import dossierService from '../../services/dossier.service';
@@ -15,7 +19,9 @@ function mapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
-    changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl))
+    changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl)),
+    changeActivePage: () =>
+      dispatch(changeActivePage('mesDossiers', '/create-visite'))
   };
 }
 
@@ -32,23 +38,29 @@ class CreateVisiteComponent extends React.Component {
 
   componentDidMount() {
     this.props.changeNameOfPage('Création de visite');
-    this.props.changeBackUrl('/mes-dossiers');
-    dossierService.getAllActionCode().then(actionList => this.setState({ actionList }))
+    this.props.changeBackUrl('/mes-dossiers'); // TODO : change for /dossier/:idDossier
+    this.props.changeActivePage();
+    dossierService
+      .getAllActionCode()
+      .then(actionList => this.setState({ actionList }));
   }
 
-
   onSubmit() {
-    console.log(this.state.addedActions.includes(undefined))
     if (this.state.addedActions.includes(undefined)) {
-      return window.alert("Veuillez spécifier un code action ou retirer les champs actions inutiles.")
+      return window.alert(
+        'Veuillez spécifier un code action ou retirer les champs actions inutiles.'
+      );
     }
-    visitesService.postControlesByVisite({
-      ETOB_RAISON_SOCIALE: this.state.enterpise,
-      ETOB_SIRET: this.state.SIRET,
-      trame: this.state.trame
-    }, this.state.addedActions)
-      .then(console.log)
-      .then(() => window.alert("La visite a bien été ajoutée."))
+    visitesService
+      .postControlesByVisite(
+        {
+          ETOB_RAISON_SOCIALE: this.state.enterpise,
+          ETOB_SIRET: this.state.SIRET,
+          trame: this.state.trame
+        },
+        this.state.addedActions
+      )
+      .then(() => window.alert('La visite a bien été ajoutée.'));
   }
 
   render() {
@@ -199,7 +211,8 @@ class CreateVisiteComponent extends React.Component {
 
 CreateVisiteComponent.propTypes = {
   changeNameOfPage: PropTypes.func.isRequired,
-  changeBackUrl: PropTypes.func.isRequired
+  changeBackUrl: PropTypes.func.isRequired,
+  changeActivePage: PropTypes.func.isRequired
 };
 
 export default connect(

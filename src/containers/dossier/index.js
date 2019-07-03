@@ -3,11 +3,14 @@ import SwipeableViews from 'react-swipeable-views';
 import InfosComponent from './infos.container';
 import VisitesComponent from './visites.container';
 import { PropTypes } from 'prop-types';
-import { changeNameOfPage, changeBackUrl } from '../navbar/actions';
+import {
+  changeNameOfPage,
+  changeBackUrl,
+  changeActivePage
+} from '../navbar/actions';
 import { connect } from 'react-redux';
 import { Grid, Container } from 'semantic-ui-react';
 import { Tabs, Tab } from '@material-ui/core';
-
 import './swipeable.css';
 import dossierService from '../../services/dossier.service';
 
@@ -18,7 +21,8 @@ function mapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
-    changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl))
+    changeBackUrl: () => dispatch(changeBackUrl('/mes-dossiers')),
+    changeActivePage: value => dispatch(changeActivePage('mesDossiers', value))
   };
 }
 
@@ -48,7 +52,8 @@ class MonDossier extends React.Component {
 
   componentDidMount() {
     this.props.changeNameOfPage('Dossier ' + this.props.match.params.id);
-    this.props.changeBackUrl('/mes-dossiers');
+    this.props.changeBackUrl();
+    this.props.changeActivePage('/dossier/' + this.props.match.params.id);
     dossierService
       .getDossierById(this.props.match.params.id)
       .then(res => this.loadDossier(res));
@@ -130,7 +135,13 @@ class MonDossier extends React.Component {
 
 MonDossier.propTypes = {
   changeNameOfPage: PropTypes.func.isRequired,
-  changeBackUrl: PropTypes.func.isRequired
+  changeBackUrl: PropTypes.func.isRequired,
+  changeActivePage: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.number
+    })
+  })
 };
 
 export default connect(

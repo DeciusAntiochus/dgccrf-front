@@ -1,5 +1,7 @@
 import React from 'react';
-export default class InfosComponent extends React.Component {
+import PropTypes from 'prop-types';
+
+class InfosComponent extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -26,3 +28,13 @@ export default class InfosComponent extends React.Component {
     );
   }
 }
+
+InfosComponent.propTypes = {
+  dossier: PropTypes.shape({
+    DOSSIER_OBJ_TRAVAIL: PropTypes.string,
+    DOSSIER_RESPONSABLE_LIBELLE: PropTypes.string,
+    DOSSIER_ATTRIBUTAIRES: PropTypes.string
+  })
+};
+
+export default InfosComponent;
