@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Segment, Responsive, Icon, Header } from 'semantic-ui-react';
-
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
@@ -136,3 +136,15 @@ export default class Visite extends Component {
     );
   }
 }
+
+Visite.propTypes = {
+  visite: PropTypes.shape({
+    visiteData: PropTypes.shape({
+      ETOB_RAISON_SOCIALE: PropTypes.string,
+      VISITE_DATE_INTERVENTION: PropTypes.string,
+      ETOB_ADR1: PropTypes.string,
+      ETOB_ADR2: PropTypes.string,
+      ETOB_ADRVILLE: PropTypes.string
+    })
+  })
+};

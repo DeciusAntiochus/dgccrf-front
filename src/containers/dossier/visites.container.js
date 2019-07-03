@@ -1,20 +1,9 @@
 import React from 'react';
-import {
-  Grid,
-  List,
-  Icon,
-  Container,
-  Button,
-  Search,
-  Segment
-} from 'semantic-ui-react';
+import { Icon, Button, Search, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import visitesService from '../../services/visite.service';
 import PropTypes from 'prop-types';
 import Visite from './visite';
-
-import _ from 'lodash';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
 
 export default class VisitesComponent extends React.Component {
@@ -41,7 +30,6 @@ export default class VisitesComponent extends React.Component {
   }
 
   render() {
-    console.log(this.state.visitesList);
     return !this.state.isLoading ? (
       <div>
         <div

@@ -19,7 +19,8 @@ import './trame/visite.css';
 
 function mapStateToProps(state) {
   return {
-    backUrl: state.navbarReducer.activePages.mesDossiers
+    backUrl: state.navbarReducer.activePages.mesDossiers,
+    oldBackUrl: state.navbarReducer.backPage
   };
 }
 
@@ -42,9 +43,22 @@ class Visite extends React.Component {
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
     this.setActiveTab = this.setActiveTab.bind(this);
   }
+
   componentDidMount() {
     this.props.changeNameOfPage('Visite ' + this.props.match.params.id);
-    this.props.changeBackUrl(this.props.backUrl);
+    const newBackUrl = (backUrl, oldBackUrl) => {
+      if (backUrl.includes('/dossier')) {
+        return backUrl;
+      }
+      if (oldBackUrl.includes('/dossier')) {
+        return oldBackUrl;
+      } else {
+        return '/mes-dossiers';
+      }
+    };
+    this.props.changeBackUrl(
+      newBackUrl(this.props.backUrl, this.props.oldBackUrl)
+    );
     this.props.changeActivePage('/visite/' + this.props.match.params.id);
   }
 
@@ -158,7 +172,8 @@ Visite.propTypes = {
       id: PropTypes.string
     })
   }),
-  backUrl: PropTypes.string.isRequired
+  backUrl: PropTypes.string.isRequired,
+  oldBackUrl: PropTypes.string.isRequired
 };
 
 export default connect(

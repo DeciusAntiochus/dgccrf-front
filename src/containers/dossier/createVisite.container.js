@@ -21,7 +21,7 @@ function mapDispatchToProps(dispatch) {
     changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
     changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl)),
     changeActivePage: () =>
-      dispatch(changeActivePage('mesDossiers', '/create-visite'))
+      dispatch(changeActivePage('mesDossiers', '/nouvelle-visite'))
   };
 }
 
@@ -54,7 +54,7 @@ class CreateVisiteComponent extends React.Component {
     visitesService
       .postControlesByVisite(
         {
-          ETOB_RAISON_SOCIALE: this.state.enterpise,
+          ETOB_RAISON_SOCIALE: this.state.etab,
           ETOB_SIRET: this.state.SIRET,
           trame: this.state.trame
         },
@@ -74,7 +74,7 @@ class CreateVisiteComponent extends React.Component {
                   fluid
                   label="Etablissement"
                   placeholder="Etablissement"
-                  onChange={e => this.setState({ enterpise: e.target.value })}
+                  onChange={e => this.setState({ etab: e.target.value })}
                 />
 
                 <Form.Input
@@ -84,7 +84,6 @@ class CreateVisiteComponent extends React.Component {
                   onChange={e => this.setState({ siret: e.target.value })}
                 />
               </Form.Group>
-
               <Grid style={{ width: '100%', margin: 0 }}>
                 {this.state.addedActions.map((addedAction, actionIndex) => (
                   <GridRow
@@ -199,7 +198,6 @@ class CreateVisiteComponent extends React.Component {
                   </GridRow>
                 </Grid>
               </Form.Group>
-
               <Form.Button>Valider</Form.Button>
             </Form>
           </GridColumn>
