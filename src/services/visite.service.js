@@ -14,23 +14,23 @@ class pouchDbVisiteService {
       query_params: { AGENT_DD_IDENT: 4447 }
     };
 
-    this.controleDB.replicate.from(config.couchDb.url_controles, opts);
+    // this.controleDB.replicate.from(config.couchDb.url_controles, opts);
     this.controleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
 
     this.newControleDB = new PouchDB('new-controles');
-    this.newControleDB.replicate.to(config.couchDb.url_new_controles, {
-      live: true,
-      retry: true
-    });
-    this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
+    // this.newControleDB.replicate.to(config.couchDb.url_new_controles, {
+    //   live: true,
+    //   retry: true
+    // });
+    // this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
     this.newControleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
 
     this.visiteDB = new PouchDB('visites');
-    this.visiteDB.replicate.from(config.couchDb.url_visites, opts);
+    // this.visiteDB.replicate.from(config.couchDb.url_visites, opts);
     this.visiteDB.createIndex({
       index: { fields: ['VISTE_IDENT'] }
     });
