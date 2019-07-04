@@ -33,6 +33,7 @@ let RoutingComponent = (props) => !props.AGENT_DD_IDENT ? <AuthComponent /> : (
         <Route exact path="/visite/:id" component={MaVisite} />
         <Route exact path="/nouvelle-visite" component={CreateVisite} />
         <Route exact path="/nouvelle-trame" component={CreateTrame} />
+        <Route exact path="/authentification" component={AuthComponent} />
         <Route render={() => <Redirect to="/menu" />} />
     </Switch>
 );

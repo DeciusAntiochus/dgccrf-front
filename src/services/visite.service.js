@@ -8,6 +8,8 @@ class PouchDbVisiteService {
     this.resetDb = this.resetDb.bind(this);
     this.initDb = this.initDb.bind(this);
 
+    this.changesCallbacks = [];
+
     this.initDb(AGENT_DD_IDENT);
   }
 
@@ -27,11 +29,16 @@ class PouchDbVisiteService {
       'filter': 'filters/by_user',
       query_params: { AGENT_DD_IDENT: AGENT_DD_IDENT }
     };
-    this.controleDB.replicate.from(config.couchDb.url_controles, opts);
 
+    this.controleDB.replicate.from(config.couchDb.url_controles, opts)
+      .on('change', () => this.changesCallbacks.map(cb => cb()));
     this.controleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
+    this.controleDB.changes({
+      since: 'now',
+      live: true
+    }).on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.newControleDB = new PouchDB('new-controles');
     // this.newControleDB.replicate.to(config.couchDb.url_new_controles, {
@@ -42,34 +49,26 @@ class PouchDbVisiteService {
     this.newControleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
+    this.newControleDB.changes({
+      since: 'now',
+      live: true
+    }).on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.visiteDB = new PouchDB('visites');
-    this.visiteDB.replicate.from(config.couchDb.url_visites, opts);
+    this.visiteDB.replicate.from(config.couchDb.url_visites, opts)
+      .on('change', () => this.changesCallbacks.map(cb => cb()));
     this.visiteDB.createIndex({
       index: { fields: ['VISTE_IDENT'] }
     });
+    this.visiteDB.changes({
+      since: 'now',
+      live: true
+    }).on('change', () => this.changesCallbacks.map(cb => cb()));
   }
 
   //call the callback on db changes
   onChanges(cb) {
-    this.controleDB
-      .changes({
-        since: 'now',
-        live: true
-      })
-      .on('change', cb);
-    this.newControleDB
-      .changes({
-        since: 'now',
-        live: true
-      })
-      .on('change', cb);
-    this.visiteDB
-      .changes({
-        since: 'now',
-        live: true
-      })
-      .on('change', cb);
+    this.changesCallbacks.push(cb);
   }
 
   //getAllDocsOfTheDB

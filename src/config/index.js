@@ -7,6 +7,8 @@ export default {
         url_controles: url_prefix + '/controles',
         url_documents: url_prefix + '/documents',
         url_new_controles: url_prefix + '/new-controles',
-        url_visites: url_prefix + '/visites'
+        url_visites: url_prefix + '/visites',
+        url_activite: url_prefix + '/activite',
+        url_cpf: url_prefix + '/cpf'
     }
 };
