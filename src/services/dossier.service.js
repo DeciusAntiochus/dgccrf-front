@@ -7,6 +7,9 @@ class PouchDbService {
     constructor(AGENT_DD_IDENT) {
         this.resetDb = this.resetDb.bind(this);
         this.initDb = this.initDb.bind(this);
+        this.onChanges = this.onChanges.bind(this);
+
+        this.changesCallbacks = [];
 
         this.initDb(AGENT_DD_IDENT);
     }
@@ -21,13 +24,21 @@ class PouchDbService {
             'filter': 'filters/by_user',
             query_params: { AGENT_DD_IDENT }
         };
-        this.db.replicate.from(pouchDbUrl, opts);
+
+        this.db.replicate.from(pouchDbUrl, opts)
+            .on('change', () => this.changesCallbacks.map(cb => cb()));
+
         this.db.createIndex({
             index: { fields: ['DOSSIER_IDENT'] }
         });
         this.db.createIndex({
             index: { fields: ['ACDG_CODE_ACTION'] }
         });
+
+        this.db.changes({
+            since: 0,
+            live: true
+        }).on('change', () => this.changesCallbacks.map(cb => cb()));
     }
 
     async resetDb(AGENT_DD_IDENT) {
@@ -37,12 +48,7 @@ class PouchDbService {
 
     //call the callback on db changes
     onChanges(cb) {
-        this.db
-            .changes({
-                since: 'now',
-                live: true
-            })
-            .on('change', cb);
+        this.changesCallbacks.push(cb);
     }
 
     //getAllDocsOfTheDB
