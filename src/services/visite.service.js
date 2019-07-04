@@ -1,5 +1,6 @@
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
+
 import config from '../config';
 PouchDB.plugin(PouchDBFind);
 
@@ -20,6 +21,7 @@ class PouchDbVisiteService {
 
   async initDb(AGENT_DD_IDENT) {
     this.controleDB = new PouchDB('controles');
+
     var opts = {
       batch_size: 1000,
       live: true,
@@ -28,6 +30,7 @@ class PouchDbVisiteService {
       query_params: { AGENT_DD_IDENT: AGENT_DD_IDENT }
     };
     this.controleDB.replicate.from(config.couchDb.url_controles, opts);
+
 
     this.controleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
@@ -118,6 +121,7 @@ class PouchDbVisiteService {
         .then(table => table.docs[0]),
       controles: visitesDic[VISITE_IDENT]
     }));
+    // eslint-disable-next-line no-undef
     return await Promise.all(visitesList);
   }
 

@@ -1,6 +1,16 @@
 /* eslint-disable no-undef */
 import React from 'react';
-import { Form, Grid, GridRow, GridColumn, Icon } from 'semantic-ui-react';
+import {
+  Form,
+  Grid,
+  GridRow,
+  GridColumn,
+  Icon,
+  TextArea,
+  Modal,
+  Button
+} from 'semantic-ui-react';
+import { DateInput } from 'semantic-ui-calendar-react';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import {
@@ -23,7 +33,7 @@ function mapDispatchToProps(dispatch) {
     changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
     changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl)),
     changeActivePage: () =>
-      dispatch(changeActivePage('mesDossiers', '/create-visite'))
+      dispatch(changeActivePage('mesDossiers', '/nouvelle-visite'))
   };
 }
 
@@ -33,7 +43,14 @@ class CreateVisiteComponent extends React.Component {
     this.state = {
       actionList: ['123', '342', '1112'],
       trameList: ['Trame 1', 'Trame 2'],
-      addedActions: [undefined]
+      addedActions: [undefined],
+      cpmm: false,
+      mutualisee: false,
+      date: '',
+      etab: '',
+      SIRET: '',
+      observations: '',
+      trame: ''
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -56,9 +73,14 @@ class CreateVisiteComponent extends React.Component {
     visitesService
       .postControlesByVisite(
         {
-          ETOB_RAISON_SOCIALE: this.state.enterpise,
+          ETOB_RAISON_SOCIALE: this.state.etab,
           ETOB_SIRET: this.state.SIRET,
-          trame: this.state.trame
+          VIS_DATE: this.state.date,
+          VIS_OBSERVATIONS: this.state.observations,
+          VIS_MUTUALISEE: this.state.mutualisee,
+          VIS_CPMM: this.state.cpmm,
+          trame: this.state.trame,
+          AG_IDENT: '4447' // TODO : à changer pour mettre le bon code agent
         },
         this.state.addedActions
       )
@@ -72,22 +94,46 @@ class CreateVisiteComponent extends React.Component {
           <GridColumn width={14}>
             <Form onSubmit={this.onSubmit}>
               <Form.Group widths="equal">
+                <Form.Checkbox
+                  label="CPMM"
+                  onChange={e => this.setState({ cpmm: e.target.value })}
+                />
+                <Form.Checkbox
+                  label="Visite Mutualisée"
+                  onChange={e => this.setState({ mutualisee: e.target.value })}
+                />
+              </Form.Group>
+              <Form.Group widths="equal">
+                <DateInput
+                  label="Date de la visite"
+                  name="date"
+                  placeholder="Date de la visite"
+                  required
+                  value={this.state.date}
+                  iconPosition="right"
+                  onChange={(event, { value }) =>
+                    this.setState({ date: value })
+                  }
+                />
+              </Form.Group>
+              <Form.Group widths="equal">
                 <Form.Input
                   fluid
+                  required
                   label="Etablissement"
-                  placeholder="Etablissement"
-                  onChange={e => this.setState({ enterpise: e.target.value })}
+                  placeholder="Raison Sociale"
+                  onChange={e => this.setState({ etab: e.target.value })}
                 />
 
                 <Form.Input
                   fluid
+                  required
                   label="SIRET"
                   placeholder="SIRET"
                   onChange={e => this.setState({ siret: e.target.value })}
                 />
               </Form.Group>
-
-              <Grid style={{ width: '100%', margin: 0 }}>
+              {/* <Grid style={{ width: '100%', margin: 0 }}>
                 {this.state.addedActions.map((addedAction, actionIndex) => (
                   <GridRow
                     key={addedAction}
@@ -159,7 +205,7 @@ class CreateVisiteComponent extends React.Component {
                 }}
               >
                 <Icon name="circle plus" size="big" color="green" />
-              </div>
+              </div> */}
 
               <Form.Group style={{ margin: 0 }}>
                 <Grid
@@ -201,9 +247,28 @@ class CreateVisiteComponent extends React.Component {
                   </GridRow>
                 </Grid>
               </Form.Group>
-
-              <Form.Button>Valider</Form.Button>
+              <Form.Group>
+                <Form.Field width={16}>
+                  <TextArea
+                    placeholder="Observations"
+                    onChange={e =>
+                      this.setState({ observations: e.target.value })
+                    }
+                  />
+                </Form.Field>
+              </Form.Group>
             </Form>
+            <p style={{ fontWeight: 'bold' }}>Contrôles :</p>
+            <Modal trigger={<Button>Ajouter un contrôle</Button>}>
+              <Modal.Header>Ajouter un contrôle</Modal.Header>
+              <Modal.Content>
+                <ControleComponent />
+              </Modal.Content>
+            </Modal>
+
+            <Button style={{ marginTop: '20px' }} onClick={this.onSubmit}>
+              Valider
+            </Button>
           </GridColumn>
         </GridRow>
       </Grid>

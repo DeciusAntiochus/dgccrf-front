@@ -8,9 +8,7 @@ import {
   changeActivePage
 } from '../navbar/actions';
 import { connect } from 'react-redux';
-
 import './dossier.css';
-
 import _ from 'lodash';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
 
@@ -72,7 +70,6 @@ class DossierComponent extends React.Component {
   }
 
   render() {
-    console.log(this.state.dossiers);
     return (
       <Card
         fluid

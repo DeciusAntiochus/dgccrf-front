@@ -33,19 +33,19 @@ class MenuComponent extends React.Component {
             <Grid.Column></Grid.Column>
             <Grid.Column computer={6} tablet={8} mobile={16}>
               <MenuButtonComponent
-                link={this.props.mesDossiersLink}
+                link="/mes-dossiers"
                 name="Mes Dossiers"
                 color="teal"
                 icon="file"
               />
               <MenuButtonComponent
-                link={this.props.etablissementLink}
+                link="/etablissements"
                 name="Établissements"
                 color="blue"
                 icon="building outline"
               />
               <MenuButtonComponent
-                link={this.props.preferencesLink}
+                link="preferences"
                 name="Préférences"
                 color="violet"
                 icon="setting"
