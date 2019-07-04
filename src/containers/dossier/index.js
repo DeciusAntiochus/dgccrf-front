@@ -12,9 +12,12 @@ import { connect } from 'react-redux';
 import { Grid, Container } from 'semantic-ui-react';
 import { Tabs, Tab } from '@material-ui/core';
 import './swipeable.css';
-import dossierService from '../../services/dossier.service';
 import DocumentsComponent from './documents.container';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
+
+import PouchDbServices from '../../services';
+let dossierService = PouchDbServices.services.dossier;
+let visiteService = PouchDbServices.services.visite;
 
 function mapStateToProps() {
   return {};
@@ -33,7 +36,9 @@ class MonDossier extends React.Component {
     super(props, context);
     this.state = {
       activeIndex: 0,
-      dossier: null
+      dossier: null,
+      isLoading: true,
+      visitesList: null
     };
   }
 
@@ -50,11 +55,24 @@ class MonDossier extends React.Component {
 
   loadDossier(dossier) {
     this.setState({ dossier: dossier }, () => {
-      this.props.changeNameOfPage(this.state.dossier.DOSSIER_LIBELLE);
+      this.state.dossier &&
+        this.props.changeNameOfPage(this.state.dossier.DOSSIER_LIBELLE);
     });
   }
 
   componentDidMount() {
+    let dossierId = this.props.match.params.id;
+    visiteService
+      .getVisitesByDossier(dossierId)
+      .then(data => this.setState({ visitesList: data, isLoading: false }));
+    visiteService.onChanges(() =>
+      this.setState({ isLoading: true }, () => {
+        visiteService
+          .getVisitesByDossier(dossierId)
+          .then(data => this.setState({ visitesList: data, isLoading: false }));
+      })
+    );
+
     this.props.changeNameOfPage('Dossier ' + this.props.match.params.id);
     this.props.changeBackUrl();
     this.props.changeActivePage('/dossier/' + this.props.match.params.id);
@@ -120,9 +138,16 @@ class MonDossier extends React.Component {
                   >
                     <InfosComponent dossier={this.state.dossier} />
 
-                    <VisitesComponent {...this.props} />
+                    <VisitesComponent
+                      visitesList={this.state.visitesList}
+                      {...this.props}
+                    />
 
-                    <DocumentsComponent {...this.props} />
+                    <DocumentsComponent
+                      visitesList={this.state.visitesList}
+                      dossierid={this.state.dossier.DOSSIER_IDENT}
+                      {...this.props}
+                    />
                   </SwipeableViews>
                 ) : (
                   <SwipeableViews
@@ -133,7 +158,11 @@ class MonDossier extends React.Component {
                     onChangeIndex={this.handleChangeIndex}
                   >
                     <InfosComponent dossier={this.state.dossier} />
-                    <DocumentsComponent {...this.props} />
+                    <DocumentsComponent
+                      {...this.props}
+                      visitesList={this.state.visitesList}
+                      dossierid={this.state.dossier.DOSSIER_IDENT}
+                    />
                   </SwipeableViews>
                 )}
               </Container>
@@ -141,6 +170,7 @@ class MonDossier extends React.Component {
           </Container>
         ) : (
           <MyActivityIndicator />
+          // <DocumentsComponent {...this.props} />
         )}
       </div>
     );

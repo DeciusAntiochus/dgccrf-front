@@ -1,36 +1,22 @@
 import React from 'react';
 import { Icon, Button, Search, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import visitesService from '../../services/visite.service';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import Visite from './visite';
+import _ from 'lodash';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
+
+import PouchDbServices from '../../services';
+let visitesService = PouchDbServices.services.visite;
 
 export default class VisitesComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      visitesList: [],
-      isLoading: true
-    };
-  }
-
-  componentDidMount() {
-    let dossierId = this.props.match.params.id;
-    visitesService
-      .getVisitesByDossier(dossierId)
-      .then(data => this.setState({ visitesList: data, isLoading: false }));
-    visitesService.onChanges(() =>
-      this.setState({ isLoading: true }, () => {
-        visitesService
-          .getVisitesByDossier(dossierId)
-          .then(data => this.setState({ visitesList: data, isLoading: false }));
-      })
-    );
   }
 
   render() {
-    return !this.state.isLoading ? (
+    return this.props.visitesList ? (
       <div>
         <div
           style={{
@@ -48,7 +34,7 @@ export default class VisitesComponent extends React.Component {
             <Search
               input={{ fluid: true }}
               open={false}
-              // onSearchChange={_.debounce(this.handleSearchChange, 500)}
+            // onSearchChange={_.debounce(this.handleSearchChange, 500)}
             />
           </div>
           <div style={{ flex: 2, textAlign: 'right' }}>
@@ -64,28 +50,24 @@ export default class VisitesComponent extends React.Component {
         </div>
 
         <div style={{ paddingTop: 70 }}>
-          {this.state.visitesList.length > 0 ? (
-            this.state.visitesList.map((visite, i) => (
+          {this.props.visitesList.length > 0 ? (
+            this.props.visitesList.map((visite, i) => (
               <Visite visite={visite} key={i} />
             ))
           ) : (
-            <Segment style={{ fontStyle: 'italic' }}>
-              {' '}
-              Pas encore de visites pour ce dossier!{' '}
-            </Segment>
-          )}
+              <Segment style={{ fontStyle: 'italic' }}>
+                {' '}
+                Pas encore de visites pour ce dossier!{' '}
+              </Segment>
+            )}
         </div>
       </div>
     ) : (
-      <MyActivityIndicator />
-    );
+        <MyActivityIndicator />
+      );
   }
 }
 
 VisitesComponent.propTypes = {
-  match: PropTypes.objectOf({
-    params: PropTypes.objectOf({
-      id: PropTypes.string
-    })
-  })
+  visitesList: PropTypes.any
 };

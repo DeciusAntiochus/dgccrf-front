@@ -1,17 +1,9 @@
 import React from 'react';
 import './App.css';
 // import PouchDB from 'pouchdb';
-import Menu from './containers/menu';
-import Dossiers from './containers/mes-dossiers';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Redirect, Switch } from 'react-router-dom';
-import MonDossier from './containers/dossier';
-import CreateVisite from './containers/dossier/createVisite.container';
-import CreateTrame from './containers/dossier/trameCreation.container';
-import MaVisite from './containers/visite';
+import { BrowserRouter as Router } from 'react-router-dom';
 import NavBar from './containers/navbar';
-import EntrepriseView from './containers/entreprise';
-import EntrepriseViewComponent from './containers/entreprise/entrepriseView.container';
+import RoutingComponent from './Routing';
 import './containers/navbar/navbar.css';
 
 export class App extends React.Component {
@@ -31,21 +23,7 @@ export class App extends React.Component {
             className="marginNavbar"
             style={{ position: 'absolute', height: '100%', width: '100%' }}
           >
-            <Switch>
-              <Route exact path="/etablissements" component={EntrepriseView} />
-              <Route
-                exact
-                path="/etablissement/:id"
-                component={EntrepriseViewComponent}
-              />
-              <Route exact path="/menu" component={Menu} />
-              <Route exact path="/mes-dossiers" component={Dossiers} />
-              <Route exact path="/dossier/:id" component={MonDossier} />
-              <Route exact path="/visite/:id" component={MaVisite} />
-              <Route exact path="/nouvelle-visite" component={CreateVisite} />
-              <Route exact path="/nouvelle-trame" component={CreateTrame} />
-              <Route component={() => <Redirect to="/menu" />} />
-            </Switch>
+            <RoutingComponent />
           </div>
         </Router>
       </div>

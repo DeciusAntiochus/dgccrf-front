@@ -1,7 +1,6 @@
 import React from 'react';
 import { List, Card, Search } from 'semantic-ui-react';
 import Dossier from './dossier';
-import dossierService from '../../services/dossier.service';
 import { PropTypes } from 'prop-types';
 import {
   changeNameOfPage,
@@ -12,6 +11,9 @@ import { connect } from 'react-redux';
 import './dossier.css';
 import _ from 'lodash';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
+
+import PouchDbServices from '../../services';
+let dossierService = PouchDbServices.services.dossier;
 
 function mapStateToProps() {
   return {};
@@ -162,15 +164,15 @@ class DossierComponent extends React.Component {
                           type={task.TYPE_DOSSIER_LIBELLE}
                         />
                       ) : (
-                        <Dossier
-                          icon="plus circle"
-                          iconcolor="grey"
-                          dossier={task}
-                          link={'dossier/' + task.DOSSIER_IDENT}
-                          color="white"
-                          type={task.TYPE_DOSSIER_LIBELLE}
-                        />
-                      )}
+                            <Dossier
+                              icon="plus circle"
+                              iconcolor="grey"
+                              dossier={task}
+                              link={'dossier/' + task.DOSSIER_IDENT}
+                              color="white"
+                              type={task.TYPE_DOSSIER_LIBELLE}
+                            />
+                          )}
                     </div>
                   </List.Item>
                 ))}
@@ -178,8 +180,8 @@ class DossierComponent extends React.Component {
             </div>
           </>
         ) : (
-          <MyActivityIndicator />
-        )}
+            <MyActivityIndicator />
+          )}
       </Card>
     );
   }

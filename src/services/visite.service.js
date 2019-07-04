@@ -1,35 +1,53 @@
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
-import dossierService from './dossier.service';
+
+import config from '../config';
 PouchDB.plugin(PouchDBFind);
 
-class pouchDbVisiteService {
-  constructor() {
-    this.controleDB = new PouchDB('controles');
-    // var opts = {
-    //   live: true,
-    //   retry: true,
-    //   filter: 'filters/by_user',
-    //   query_params: { AGENT_DD_IDENT: 4447 }
-    // };
+class PouchDbVisiteService {
+  constructor(AGENT_DD_IDENT) {
+    this.resetDb = this.resetDb.bind(this);
+    this.initDb = this.initDb.bind(this);
 
-    // this.controleDB.replicate.from(config.couchDb.url_controles, opts);
+    this.initDb(AGENT_DD_IDENT);
+  }
+
+  async resetDb(AGENT_DD_IDENT) {
+    await this.controleDB.destroy();
+    await this.newControleDB.destroy();
+    await this.visiteDB.destroy();
+    await this.initDb(AGENT_DD_IDENT);
+  }
+
+  async initDb(AGENT_DD_IDENT) {
+    this.controleDB = new PouchDB('controles');
+
+    var opts = {
+      batch_size: 1000,
+      live: true,
+      retry: true,
+      filter: 'filters/by_user',
+      query_params: { AGENT_DD_IDENT: AGENT_DD_IDENT }
+    };
+    this.controleDB.replicate.from(config.couchDb.url_controles, opts);
+
+
     this.controleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
 
     this.newControleDB = new PouchDB('new-controles');
-    // this.newControleDB.replicate.to(config.couchDb.url_new_controles, {
-    //   live: true,
-    //   retry: true
-    // });
-    // this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
+    this.newControleDB.replicate.to(config.couchDb.url_new_controles, {
+      live: true,
+      retry: true
+    });
+    this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
     this.newControleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
 
     this.visiteDB = new PouchDB('visites');
-    // this.visiteDB.replicate.from(config.couchDb.url_visites, opts);
+    this.visiteDB.replicate.from(config.couchDb.url_visites, opts);
     this.visiteDB.createIndex({
       index: { fields: ['VISTE_IDENT'] }
     });
@@ -107,20 +125,19 @@ class pouchDbVisiteService {
     return await Promise.all(visitesList);
   }
 
-  postControlesByVisite(visiteInfos, controlesActionList) {
-    let promises = [];
-    for (let action of controlesActionList) {
-      promises.push(
-        dossierService
-          .getDossierIdFromActionCode(action)
-          .then(DOSSIER_IDENT =>
-            this.newControleDB.post({ ...visiteInfos, DOSSIER_IDENT })
-          )
-      );
-    }
-    // eslint-disable-next-line no-undef
-    return Promise.all(promises);
-  }
+  // postControlesByVisite(visiteInfos, controlesActionList) {
+  //   let promises = [];
+  //   for (let action of controlesActionList) {
+  //     promises.push(
+  //       dossierService
+  //         .getDossierIdFromActionCode(action)
+  //         .then(DOSSIER_IDENT =>
+  //           this.newControleDB.post({ ...visiteInfos, DOSSIER_IDENT })
+  //         )
+  //     );
+  //   }
+  //   return Promise.all(promises);
+  // }
 }
 
-export default new pouchDbVisiteService();
+export default PouchDbVisiteService;

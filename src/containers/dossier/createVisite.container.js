@@ -19,9 +19,10 @@ import {
   changeActivePage
 } from '../navbar/actions';
 import { connect } from 'react-redux';
-import visitesService from '../../services/visite.service';
-import dossierService from '../../services/dossier.service';
-import ControleComponent from './controle.container';
+import PouchDbServices from '../../services';
+let visitesService = PouchDbServices.services.visite;
+let dossierService = PouchDbServices.services.dossier;
+
 
 function mapStateToProps() {
   return {};

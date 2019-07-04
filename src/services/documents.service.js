@@ -2,6 +2,7 @@ import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 import config from '../config';
 import dossierService from './dossier.service';
+import moment from 'moment';
 PouchDB.plugin(PouchDBFind);
 
 class pouchDbDocumentsService {
@@ -16,6 +17,10 @@ class pouchDbDocumentsService {
       retry: true
     });
     this.documentsDB.replicate.from(config.couchDb.url_documents, opts);
+
+    this.documentsDB.createIndex({
+      index: { fields: ['visite'] }
+    });
   }
 
   //call the callback on db changes
@@ -40,22 +45,49 @@ class pouchDbDocumentsService {
       );
   }
 
-  async postDocument(document, type, name) {
+  getDocsByVisiteId(visiteid) {
+    return this.documentsDB
+      .find({
+        selector: {
+          visite: { $elemMatch: visiteid }
+        }
+      })
+      .then(res => res.docs);
+  }
+  getDocsByDossierId(dossierid) {
+    return this.documentsDB
+      .find({
+        selector: {
+          dossier: dossierid
+        }
+      })
+      .then(res => res.docs);
+  }
+
+  async postDocument(document) {
     return new Promise(async (resolve, reject) => {
       try {
-        await this.documentsDB.post({
-          document: document,
-          author: 4447,
-          dossier: 2440825,
-          visite: [],
-          type: type,
-          name: name
-        });
+        await this.documentsDB.post(document);
         resolve();
       } catch (e) {
         reject(e);
       }
     });
+  }
+
+  async editName(document) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.documentsDB.put(document);
+        resolve();
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  async deleteDocument(document) {
+    return await this.documentsDB.remove(document);
   }
 }
 
