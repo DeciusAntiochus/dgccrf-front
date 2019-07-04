@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Tab } from 'semantic-ui-react';
-import { Swipeable } from 'react-swipeable';
+import { Tab } from 'semantic-ui-react';
 import './swipeTabs.css';
 
 import 'react-flex/index.css';
@@ -67,7 +66,8 @@ SwipeTabsComponent.propTypes = {
       menuItem: PropTypes.string,
       component: PropTypes.node
     })
-  ).isRequired
+  ).isRequired,
+  emitter: PropTypes.func.isRequired
 };
 
 export default SwipeTabsComponent;

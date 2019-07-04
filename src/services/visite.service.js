@@ -1,18 +1,17 @@
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
-import config from '../config';
 import dossierService from './dossier.service';
 PouchDB.plugin(PouchDBFind);
 
 class pouchDbVisiteService {
   constructor() {
     this.controleDB = new PouchDB('controles');
-    var opts = {
-      live: true,
-      retry: true,
-      filter: 'filters/by_user',
-      query_params: { AGENT_DD_IDENT: 4447 }
-    };
+    // var opts = {
+    //   live: true,
+    //   retry: true,
+    //   filter: 'filters/by_user',
+    //   query_params: { AGENT_DD_IDENT: 4447 }
+    // };
 
     // this.controleDB.replicate.from(config.couchDb.url_controles, opts);
     this.controleDB.createIndex({
@@ -104,6 +103,7 @@ class pouchDbVisiteService {
         .then(table => table.docs[0]),
       controles: visitesDic[VISITE_IDENT]
     }));
+    // eslint-disable-next-line no-undef
     return await Promise.all(visitesList);
   }
 
@@ -118,6 +118,7 @@ class pouchDbVisiteService {
           )
       );
     }
+    // eslint-disable-next-line no-undef
     return Promise.all(promises);
   }
 }

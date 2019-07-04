@@ -6,12 +6,12 @@ PouchDB.plugin(PouchDBFind);
 class pouchDbService {
   constructor(pouchDbUrl) {
     this.db = new PouchDB('mes-dossiers');
-    var opts = {
-      live: true,
-      retry: true,
-      filter: 'filters/by_user',
-      query_params: { AGENT_DD_IDENT: 4447 }
-    };
+    // var opts = {
+    //   live: true,
+    //   retry: true,
+    //   filter: 'filters/by_user',
+    //   query_params: { AGENT_DD_IDENT: 4447 }
+    // };
     // this.db.replicate.from(pouchDbUrl, opts);
     this.db.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }

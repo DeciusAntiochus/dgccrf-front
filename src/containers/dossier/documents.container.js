@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Icon, Header, Modal } from 'semantic-ui-react';
+import { Button, Icon, Header } from 'semantic-ui-react';
 import documentsService from '../../services/documents.service';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
 import DocumentModal from '../../components/documentModal.component';
 
 function getBase64(file) {
+  // eslint-disable-next-line no-undef
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -42,7 +43,6 @@ export default class Documents extends Component {
   }
 
   showModal(document) {
-    console.log(document);
     this.setState({
       modal: true,
       documentSelected: document
@@ -70,17 +70,16 @@ export default class Documents extends Component {
           this.state.file.type,
           this.state.file.name
         );
-        console.log('File sent!');
         //ne pas oublier de resize l'image si c'est une image...
       } catch (e) {
-        console.log('Error while sending file.');
+        // eslint-disable-next-line no-undef
+        alert(e.message);
       }
     });
   };
 
   render() {
     const { documents } = this.state;
-    console.log(documents);
     return (
       <>
         {this.state.modal && this.state.documentSelected && (
