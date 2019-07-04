@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.1.1",
+    "base-64": "^0.1.0",
     "buffer": "^5.2.1",
     "faker": "^4.1.0",
     "jimp": "^0.6.4",

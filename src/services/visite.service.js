@@ -20,10 +20,10 @@ class pouchDbVisiteService {
     });
 
     this.newControleDB = new PouchDB('new-controles');
-    // this.newControleDB.replicate.to(config.couchDb.url_new_controles, {
-    //   live: true,
-    //   retry: true
-    // });
+    this.newControleDB.replicate.to(config.couchDb.url_new_controles, {
+      live: true,
+      retry: true
+    });
     // this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
     this.newControleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }

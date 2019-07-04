@@ -11,6 +11,7 @@ import { Button } from '@material-ui/core';
 import Jimp from 'jimp';
 import { Buffer } from 'buffer';
 import { PropTypes } from 'prop-types';
+import documentsService from '../../../services/documents.service';
 
 class Photo extends Component {
   constructor(props, context) {
@@ -65,8 +66,22 @@ class Photo extends Component {
       img = await this.reSizeImage(dataUri);
       size = this.getFileSize(img);
     }
-    console.log(this.getFileSize(img));
-    console.log(img);
+
+    try {
+      await documentsService.postDocument({
+        document: img,
+        name: Date.now() + '.jpeg',
+        type: 'image/jpeg',
+        author: 4445,
+        visite: [this.props.visiteid],
+        date: Date.now(),
+        dossier: null,
+        categorie: 'photo'
+      });
+      console.log('File sent!');
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   render() {
@@ -91,7 +106,6 @@ class Photo extends Component {
                 isImageMirror={false}
                 onTakePhoto={dataUri => {
                   this.onTakePhoto(dataUri);
-                  this.close();
                 }}
               />
               <div
@@ -120,7 +134,8 @@ class Photo extends Component {
 }
 
 Photo.propTypes = {
-  setActiveTab: PropTypes.func.isRequired
+  setActiveTab: PropTypes.func.isRequired,
+  visiteid: PropTypes.number.isRequired
 };
 
 export default Photo;

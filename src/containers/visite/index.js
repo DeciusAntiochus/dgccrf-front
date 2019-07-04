@@ -67,11 +67,13 @@ class Visite extends React.Component {
   render() {
     return (
       <div
+        className="hidescrollbar"
         style={{
           display: 'flex',
           height: '100%',
 
-          backgroundColor: '#f2f2f2'
+          backgroundColor: '#f2f2f2',
+          overflow: 'auto'
         }}
       >
         <div
@@ -133,9 +135,12 @@ class Visite extends React.Component {
                   </Grid.Row>
                 </Grid>
               ) : this.state.activeTab === 1 ? (
-                <Photo setActiveTab={this.setActiveTab} />
+                <Photo
+                  setActiveTab={this.setActiveTab}
+                  visiteid={parseInt(this.props.match.params.id)}
+                />
               ) : (
-                <Documents />
+                <Documents visiteid={parseInt(this.props.match.params.id)} />
               )}
             </Card>
           </Container>

@@ -20,29 +20,10 @@ import MyActivityIndicator from '../../components/myActivityIndicator.component'
 export default class VisitesComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      visitesList: [],
-      isLoading: true
-    };
-  }
-
-  componentDidMount() {
-    let dossierId = this.props.match.params.id;
-    visitesService
-      .getVisitesByDossier(dossierId)
-      .then(data => this.setState({ visitesList: data, isLoading: false }));
-    visitesService.onChanges(() =>
-      this.setState({ isLoading: true }, () => {
-        visitesService
-          .getVisitesByDossier(dossierId)
-          .then(data => this.setState({ visitesList: data, isLoading: false }));
-      })
-    );
   }
 
   render() {
-    console.log(this.state.visitesList);
-    return !this.state.isLoading ? (
+    return this.props.visitesList ? (
       <div>
         <div
           style={{
@@ -76,8 +57,8 @@ export default class VisitesComponent extends React.Component {
         </div>
 
         <div style={{ paddingTop: 70 }}>
-          {this.state.visitesList.length > 0 ? (
-            this.state.visitesList.map((visite, i) => (
+          {this.props.visitesList.length > 0 ? (
+            this.props.visitesList.map((visite, i) => (
               <Visite visite={visite} key={i} />
             ))
           ) : (
@@ -95,9 +76,5 @@ export default class VisitesComponent extends React.Component {
 }
 
 VisitesComponent.propTypes = {
-  match: PropTypes.objectOf({
-    params: PropTypes.objectOf({
-      id: PropTypes.string
-    })
-  })
+  visitesList: PropTypes.any
 };
