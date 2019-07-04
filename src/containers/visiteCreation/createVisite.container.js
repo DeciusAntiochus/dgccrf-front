@@ -7,7 +7,6 @@ import {
   GridColumn,
   Icon,
   TextArea,
-  Modal,
   Button
 } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
@@ -133,80 +132,6 @@ class CreateVisiteComponent extends React.Component {
                   onChange={e => this.setState({ siret: e.target.value })}
                 />
               </Form.Group>
-              {/* <Grid style={{ width: '100%', margin: 0 }}>
-                {this.state.addedActions.map((addedAction, actionIndex) => (
-                  <GridRow
-                    key={addedAction}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: '0',
-                      margin: '0'
-                    }}
-                  >
-                    <GridColumn width={14} style={{ margin: 0, padding: 0 }}>
-                      <Form.Select
-                        fluid
-                        placeholder="Action"
-                        label={
-                          actionIndex == 0 ? 'Actions associées' : undefined
-                        }
-                        options={this.state.actionList.map(action => ({
-                          key: action,
-                          text: action,
-                          value: action
-                        }))}
-                        style={{ width: '100%' }}
-                        value={this.state.addedActions[actionIndex]}
-                        onChange={(e, { value }) => {
-                          let newActions = this.state.addedActions.map(
-                            (el, i) => (i === actionIndex ? value : el)
-                          );
-                          this.setState({ addedActions: newActions });
-                        }}
-                      />
-                    </GridColumn>
-                    <GridColumn
-                      width={1}
-                      style={{ padding: 0, marginLeft: '0' }}
-                    >
-                      {actionIndex !== 0 && (
-                        <Icon
-                          color="red"
-                          name="minus"
-                          size="big"
-                          style={{ cursor: 'pointer' }}
-                          width={1}
-                          verticalAlign="bottom"
-                          onClick={() => {
-                            let newActions = this.state.addedActions.filter(
-                              (el, i) => i !== actionIndex
-                            );
-                            this.setState({ addedActions: newActions });
-                          }}
-                        />
-                      )}
-                    </GridColumn>
-                  </GridRow>
-                ))}
-              </Grid>
-
-              <div
-                style={{
-                  width: '100%',
-                  textAlign: 'center',
-                  marginTop: '0.5em',
-                  cursor: 'pointer'
-                }}
-                onClick={() => {
-                  let newActions = this.state.addedActions.map(el => el);
-                  newActions.push(undefined);
-                  this.setState({ addedActions: newActions });
-                }}
-              >
-                <Icon name="circle plus" size="big" color="green" />
-              </div> */}
-
               <Form.Group style={{ margin: 0 }}>
                 <Grid
                   style={{ width: '100%', margin: 0 }}
@@ -258,14 +183,7 @@ class CreateVisiteComponent extends React.Component {
                 </Form.Field>
               </Form.Group>
             </Form>
-            <p style={{ fontWeight: 'bold' }}>Contrôles :</p>
-            <Modal trigger={<Button>Ajouter un contrôle</Button>}>
-              <Modal.Header>Ajouter un contrôle</Modal.Header>
-              <Modal.Content>
-                <ControleComponent />
-              </Modal.Content>
-            </Modal>
-
+            <ControleComponent />
             <Button style={{ marginTop: '20px' }} onClick={this.onSubmit}>
               Valider
             </Button>
