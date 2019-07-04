@@ -17,7 +17,7 @@ import MyActivityIndicator from '../../components/myActivityIndicator.component'
 
 import PouchDbServices from '../../services';
 let dossierService = PouchDbServices.services.dossier;
-
+let visiteService = PouchDbServices.services.visite;
 
 function mapStateToProps() {
   return {};
@@ -36,7 +36,9 @@ class MonDossier extends React.Component {
     super(props, context);
     this.state = {
       activeIndex: 0,
-      dossier: null
+      dossier: null,
+      isLoading: true,
+      visitesList: null
     };
   }
 
@@ -53,11 +55,24 @@ class MonDossier extends React.Component {
 
   loadDossier(dossier) {
     this.setState({ dossier: dossier }, () => {
-      this.props.changeNameOfPage(this.state.dossier.DOSSIER_LIBELLE);
+      this.state.dossier &&
+        this.props.changeNameOfPage(this.state.dossier.DOSSIER_LIBELLE);
     });
   }
 
   componentDidMount() {
+    let dossierId = this.props.match.params.id;
+    visiteService
+      .getVisitesByDossier(dossierId)
+      .then(data => this.setState({ visitesList: data, isLoading: false }));
+    visiteService.onChanges(() =>
+      this.setState({ isLoading: true }, () => {
+        visiteService
+          .getVisitesByDossier(dossierId)
+          .then(data => this.setState({ visitesList: data, isLoading: false }));
+      })
+    );
+
     this.props.changeNameOfPage('Dossier ' + this.props.match.params.id);
     this.props.changeBackUrl();
     this.props.changeActivePage('/dossier/' + this.props.match.params.id);
@@ -103,9 +118,9 @@ class MonDossier extends React.Component {
                 >
                   <Tab label="Infos" />
                   {//pas de visites si le dossier n'est pas de type enquête!
-                    this.state.dossier.TYPE_DOSSIER_IDENT === 3 && (
-                      <Tab label="Visites" />
-                    )}
+                  this.state.dossier.TYPE_DOSSIER_IDENT === 3 && (
+                    <Tab label="Visites" />
+                  )}
                   <Tab label="Documents" />
                 </Tabs>
               </Grid.Row>
@@ -123,28 +138,40 @@ class MonDossier extends React.Component {
                   >
                     <InfosComponent dossier={this.state.dossier} />
 
-                    <VisitesComponent {...this.props} />
+                    <VisitesComponent
+                      visitesList={this.state.visitesList}
+                      {...this.props}
+                    />
 
-                    <DocumentsComponent {...this.props} />
+                    <DocumentsComponent
+                      visitesList={this.state.visitesList}
+                      dossierid={this.state.dossier.DOSSIER_IDENT}
+                      {...this.props}
+                    />
                   </SwipeableViews>
                 ) : (
-                    <SwipeableViews
-                      style={{ height: '100%' }}
-                      slideStyle={{ height: '100%', overflow: 'auto' }}
-                      slideClassName="hidescrollbar"
-                      index={this.state.activeIndex}
-                      onChangeIndex={this.handleChangeIndex}
-                    >
-                      <InfosComponent dossier={this.state.dossier} />
-                      <DocumentsComponent {...this.props} />
-                    </SwipeableViews>
-                  )}
+                  <SwipeableViews
+                    style={{ height: '100%' }}
+                    slideStyle={{ height: '100%', overflow: 'auto' }}
+                    slideClassName="hidescrollbar"
+                    index={this.state.activeIndex}
+                    onChangeIndex={this.handleChangeIndex}
+                  >
+                    <InfosComponent dossier={this.state.dossier} />
+                    <DocumentsComponent
+                      {...this.props}
+                      visitesList={this.state.visitesList}
+                      dossierid={this.state.dossier.DOSSIER_IDENT}
+                    />
+                  </SwipeableViews>
+                )}
               </Container>
             </Grid>
           </Container>
         ) : (
-            <MyActivityIndicator />
-          )}
+          <MyActivityIndicator />
+          // <DocumentsComponent {...this.props} />
+        )}
       </div>
     );
   }
