@@ -12,9 +12,12 @@ import { connect } from 'react-redux';
 import { Grid, Container } from 'semantic-ui-react';
 import { Tabs, Tab } from '@material-ui/core';
 import './swipeable.css';
-import dossierService from '../../services/dossier.service';
 import DocumentsComponent from './documents.container';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
+
+import PouchDbServices from '../../services';
+let dossierService = PouchDbServices.services.dossier;
+
 
 function mapStateToProps() {
   return {};
@@ -100,9 +103,9 @@ class MonDossier extends React.Component {
                 >
                   <Tab label="Infos" />
                   {//pas de visites si le dossier n'est pas de type enquête!
-                  this.state.dossier.TYPE_DOSSIER_IDENT === 3 && (
-                    <Tab label="Visites" />
-                  )}
+                    this.state.dossier.TYPE_DOSSIER_IDENT === 3 && (
+                      <Tab label="Visites" />
+                    )}
                   <Tab label="Documents" />
                 </Tabs>
               </Grid.Row>
@@ -125,23 +128,23 @@ class MonDossier extends React.Component {
                     <DocumentsComponent {...this.props} />
                   </SwipeableViews>
                 ) : (
-                  <SwipeableViews
-                    style={{ height: '100%' }}
-                    slideStyle={{ height: '100%', overflow: 'auto' }}
-                    slideClassName="hidescrollbar"
-                    index={this.state.activeIndex}
-                    onChangeIndex={this.handleChangeIndex}
-                  >
-                    <InfosComponent dossier={this.state.dossier} />
-                    <DocumentsComponent {...this.props} />
-                  </SwipeableViews>
-                )}
+                    <SwipeableViews
+                      style={{ height: '100%' }}
+                      slideStyle={{ height: '100%', overflow: 'auto' }}
+                      slideClassName="hidescrollbar"
+                      index={this.state.activeIndex}
+                      onChangeIndex={this.handleChangeIndex}
+                    >
+                      <InfosComponent dossier={this.state.dossier} />
+                      <DocumentsComponent {...this.props} />
+                    </SwipeableViews>
+                  )}
               </Container>
             </Grid>
           </Container>
         ) : (
-          <MyActivityIndicator />
-        )}
+            <MyActivityIndicator />
+          )}
       </div>
     );
   }

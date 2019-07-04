@@ -1,7 +1,6 @@
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 import config from '../config';
-import dossierService from './dossier.service';
 PouchDB.plugin(PouchDBFind);
 
 class pouchDbDocumentsService {

@@ -10,12 +10,13 @@ import {
 } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import visitesService from '../../services/visite.service';
 import PropTypes from 'prop-types';
 import Visite from './visite';
-
 import _ from 'lodash';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
+
+import PouchDbServices from '../../services';
+let visitesService = PouchDbServices.services.visite;
 
 export default class VisitesComponent extends React.Component {
   constructor(props) {
@@ -60,7 +61,7 @@ export default class VisitesComponent extends React.Component {
             <Search
               input={{ fluid: true }}
               open={false}
-              // onSearchChange={_.debounce(this.handleSearchChange, 500)}
+            // onSearchChange={_.debounce(this.handleSearchChange, 500)}
             />
           </div>
           <div style={{ flex: 2, textAlign: 'right' }}>
@@ -81,16 +82,16 @@ export default class VisitesComponent extends React.Component {
               <Visite visite={visite} key={i} />
             ))
           ) : (
-            <Segment style={{ fontStyle: 'italic' }}>
-              {' '}
-              Pas encore de visites pour ce dossier!{' '}
-            </Segment>
-          )}
+              <Segment style={{ fontStyle: 'italic' }}>
+                {' '}
+                Pas encore de visites pour ce dossier!{' '}
+              </Segment>
+            )}
         </div>
       </div>
     ) : (
-      <MyActivityIndicator />
-    );
+        <MyActivityIndicator />
+      );
   }
 }
 
