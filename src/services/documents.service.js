@@ -1,8 +1,7 @@
+/* eslint-disable no-undef */
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 import config from '../config';
-import dossierService from './dossier.service';
-import moment from 'moment';
 PouchDB.plugin(PouchDBFind);
 
 class pouchDbDocumentsService {
