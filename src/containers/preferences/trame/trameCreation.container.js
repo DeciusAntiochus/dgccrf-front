@@ -90,7 +90,7 @@ class TrameCreationComponent extends React.Component {
       taskList: [
         ...this.state.taskList,
         {
-          title: 'Nouvelle tâche',
+          title: 'Nouvelle tâche' + this.state.index,
           type: 'basic',
           innerContent: null,
           index: this.state.index,
@@ -103,17 +103,25 @@ class TrameCreationComponent extends React.Component {
   }
 
   onDragEnd = result => {
-    console.log(result);
-    let taskList = this.state.taskList;
-    taskList = taskList.filter(task => {
-      if (task.index === result.source.index) {
-        task.index = result.destination.index;
-      } else if (task.index === result.destination.index) {
-        task.index = result.source.index;
-      }
-      return task;
-    });
-    this.setState({ taskList });
+    const { destination, source, draggableId } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    const res = Array.from(this.state.taskList);
+
+    const [removed] = res.splice(result.source.index, 1);
+    res.splice(result.destination.index, 0, removed);
+
+    this.setState({ taskList: res });
   };
 
   render() {

@@ -34,7 +34,11 @@ export default class TrameComponent extends Component {
     return (
       <List className="responsivepadding" relaxed style={{ textAlign: 'left' }}>
         {this.props.taskList.map((task, i) => (
-          <Draggable key={i} draggableId={task.id.toString()} index={i}>
+          <Draggable
+            key={task.id.toString()}
+            draggableId={task.id.toString()}
+            index={i}
+          >
             {provided => (
               <div
                 {...provided.draggableProps}
@@ -42,10 +46,6 @@ export default class TrameComponent extends Component {
                 ref={provided.innerRef}
               >
                 <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  key={i}
                   style={{
                     borderRadius: 3,
                     borderBottom: '3px solid #c0c1c4',
