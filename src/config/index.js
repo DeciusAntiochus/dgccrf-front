@@ -1,6 +1,5 @@
 //var url_prefix = 'https://Admin:dtymoney91190@m.dgccrf.rie.gouv.fr/couchdb';
 var url_prefix = 'http://Admin:dtymoney91190@dty-dgccrf.centralesupelec.fr/couchdb';
-
 export default {
     backend: {
         base_url: 'http://dty-dgccrf.centralesupelec.fr/data'
