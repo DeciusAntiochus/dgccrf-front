@@ -43,13 +43,16 @@ class NavBarComponent extends React.Component {
             <Icon style={{ margin: '0' }} name="angle left" />
             Retour
           </Menu.Item>
-          <Menu.Item as={Link} to={this.props.mesDossiersLink}>
-            <Icon name="file" /> Mes Dossiers
+          <Menu.Item as={Link} to="/menu">
+            <Icon name="home" /> Menu
           </Menu.Item>
           <Menu.Item style={{ flex: '1', verticalAlign: 'middle' }}>
             <p style={{ fontSize: '20px' }}>{this.props.nameOfPage}</p>
           </Menu.Item>
           <Menu.Menu position="right">
+            <Menu.Item as={Link} to={this.props.mesDossiersLink}>
+              <Icon name="file" /> Mes Dossiers
+            </Menu.Item>
             <Menu.Item as={Link} to={this.props.etablissementLink}>
               <Icon name="building outline" />
               Établissements
@@ -79,6 +82,9 @@ class NavBarComponent extends React.Component {
           <Menu.Menu position="right">
             <Dropdown item simple icon="list layout">
               <Dropdown.Menu>
+                <Dropdown.Item as={Link} to="/menu">
+                  <Icon name="home" /> Menu
+                </Dropdown.Item>
                 <Dropdown.Item as={Link} to={this.props.mesDossiersLink}>
                   <Icon name="file" /> Mes Dossiers
                 </Dropdown.Item>

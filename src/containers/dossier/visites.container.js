@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Grid,
-  List,
-  Icon,
-  Container,
-  Button,
-  Search,
-  Segment
-} from 'semantic-ui-react';
+import { Icon, Button, Search, Segment } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import PropTypes from 'prop-types';

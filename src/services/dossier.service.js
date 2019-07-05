@@ -3,6 +3,7 @@ import PouchDBFind from 'pouchdb-find';
 import config from '../config';
 
 PouchDB.plugin(PouchDBFind);
+
 class PouchDbService {
     constructor(AGENT_DD_IDENT) {
         this.resetDb = this.resetDb.bind(this);
