@@ -14,6 +14,7 @@ class CpfService {
         };
 
         this.db.replicate.from(pouchDbUrl, opts)
+        this.resetDb = () => undefined; // no need to reset activite
 
     }
 
