@@ -19,7 +19,7 @@ import {
 } from '../navbar/actions';
 import { connect } from 'react-redux';
 import PouchDbServices from '../../services';
-import ControleComponent from './controle.container';
+import ControleComponent from './controles.container';
 let visitesService = PouchDbServices.services.visite;
 let dossierService = PouchDbServices.services.dossier;
 
