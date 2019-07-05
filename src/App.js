@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 // import PouchDB from 'pouchdb';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 import NavBar from './containers/navbar';
 import RoutingComponent from './Routing';
 import './containers/navbar/navbar.css';
