@@ -179,8 +179,7 @@ export default class documentsList extends Component {
               <div
                 className="hidescrollbar"
                 style={{
-                  width: '15em',
-                  overflow: 'auto',
+                  width: '10em',
                   display: 'flex',
                   justifyContent: 'center',
                   height: 50
@@ -191,8 +190,10 @@ export default class documentsList extends Component {
                     <Header
                       onClick={() => this.handleClicks(document)}
                       as="h4"
+                      className="hidescrollbar"
                       style={{
-                        overflowWrap: 'break-word'
+                        overflowWrap: 'break-word',
+                        overflowX: 'hidden'
                       }}
                       color={this.getColor(document.type)[0]}
                     >

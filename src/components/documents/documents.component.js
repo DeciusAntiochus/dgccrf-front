@@ -130,33 +130,35 @@ class Documents extends Component {
 
   render() {
     const { documents } = this.state;
-    console.log(this.props.visiteid);
+    console.log(this.props.dossier);
 
     return (
-      <div>
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         {this.props.visitesList || this.props.visiteid ? (
-          <div>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: 20
-              }}
-            >
-              <Tabs
-                value={this.state.activeIndex}
-                fullWidth
-                onChange={this.handleChange}
-                TabIndicatorProps={{ style: { backgroundColor: '#00b5ad' } }}
+          <div style={{ flex: 1 }}>
+            {!this.props.dossier && (
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: 20
+                }}
               >
-                <Tab label="Supports" />
+                <Tabs
+                  value={this.state.activeIndex}
+                  fullWidth
+                  onChange={this.handleChange}
+                  TabIndicatorProps={{ style: { backgroundColor: '#00b5ad' } }}
+                >
+                  <Tab label="Supports" />
 
-                <Tab label="Joints" />
+                  <Tab label="Joints" />
 
-                <Tab label="Photos" />
-              </Tabs>
-            </div>
+                  <Tab label="Photos" />
+                </Tabs>
+              </div>
+            )}
             {this.state.activeIndex != 2 && (
               <>
                 <Button
@@ -183,30 +185,39 @@ class Documents extends Component {
         )}
 
         {documents ? (
-          <div>
-            <SwipeableViews
-              style={{ height: '100%' }}
-              slideStyle={{ height: '100%', overflow: 'auto' }}
-              slideClassName="hidescrollbar"
-              index={this.state.activeIndex}
-              onChangeIndex={this.handleChangeIndex}
-            >
+          <div style={{ flex: 10 }}>
+            {this.props.dossier ? (
               <DocumentsList
                 documents={documents.filter(document => {
                   return document.categorie === 'support';
                 })}
               />
-              <DocumentsList
-                documents={documents.filter(document => {
-                  return document.categorie === 'joint';
-                })}
-              />
-              <DocumentsList
-                documents={documents.filter(document => {
-                  return document.categorie === 'photo';
-                })}
-              />
-            </SwipeableViews>
+            ) : (
+              <SwipeableViews
+                style={{ height: '100%' }}
+                slideStyle={{ height: '100%', overflow: 'auto' }}
+                slideClassName="hidescrollbar"
+                index={this.state.activeIndex}
+                onChangeIndex={this.handleChangeIndex}
+              >
+                <DocumentsList
+                  documents={documents.filter(document => {
+                    return document.categorie === 'support';
+                  })}
+                />
+
+                <DocumentsList
+                  documents={documents.filter(document => {
+                    return document.categorie === 'joint';
+                  })}
+                />
+                <DocumentsList
+                  documents={documents.filter(document => {
+                    return document.categorie === 'photo';
+                  })}
+                />
+              </SwipeableViews>
+            )}
           </div>
         ) : (
           <MyActivityIndicator />
