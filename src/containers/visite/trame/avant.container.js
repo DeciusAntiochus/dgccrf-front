@@ -87,6 +87,11 @@ export default class Avant extends Component {
           title: 'Saisir son emploi du temps dans Agat'.toUpperCase(),
           status: 'problem',
           documentToFill: 'PVprelevement.pdf'
+        },
+        {
+          title: 'Dernier'.toUpperCase(),
+          status: 'problem',
+          documentToFill: 'PVprelevement.pdf'
         }
       ]
     };

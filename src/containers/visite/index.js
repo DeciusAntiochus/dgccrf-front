@@ -87,7 +87,7 @@ class Visite extends React.Component {
           height: '100%',
 
           backgroundColor: '#f2f2f2',
-          overflow: 'auto'
+          overflow: 'hidden'
         }}
       >
         <div
@@ -97,66 +97,60 @@ class Visite extends React.Component {
             textAlign: 'center'
           }}
         >
-          <Container>
-            <Card
-              fluid
-              style={{
-                backgroundColor: '#f2f2f2',
-                background: 'none',
-                borderRadius: 5,
-                boxShadow: '0px 0px 0px 0px #f2f2f2'
-              }}
-            >
-              {this.state.activeTab === 0 ? (
-                <Grid
-                  centered
+          <Container style={{ height: '100%' }}>
+            {this.state.activeTab === 0 ? (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  overflow: 'auto',
+                  height: '100%'
+                }}
+              >
+                <div
                   style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    flexWrap: 'nowrap'
+                    position: 'fixed',
+                    zIndex: 10,
+                    width: '100%',
+                    backgroundColor: '#f2f2f2',
+                    display: 'flex',
+                    justifyContent: 'center'
                   }}
                 >
-                  {/* <Grid.Row style={{ flex: 1 }}>
-                  <Header
-                    textAlign="center"
-                    size="huge"
-                    style={{ padding: 20, color: '#3C4586' }}
+                  <Tabs
+                    value={this.state.activeIndex}
+                    fullWidth
+                    onChange={this.handleChange}
                   >
-                    VISITE
-                  </Header>
-                </Grid.Row> */}
-                  <Grid.Row style={{ flex: 1 }}>
-                    <Tabs
-                      value={this.state.activeIndex}
-                      fullWidth
-                      onChange={this.handleChange}
-                    >
-                      <Tab label="Avant" />
-                      <Tab label="Pendant" />
-                      <Tab label="Après" />
-                    </Tabs>
-                  </Grid.Row>
-                  <Grid.Row
-                    style={{ flex: 10, overflowY: 'auto' }}
-                    className="hidescrollbar"
-                  >
-                    <Grid.Column width={16} centered>
-                      <TrameComponent
-                        index={this.state.activeIndex}
-                        handleChangeIndex={this.handleChangeIndex}
-                      />
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid>
-              ) : this.state.activeTab === 1 ? (
-                <Photo
-                  setActiveTab={this.setActiveTab}
-                  visiteid={parseInt(this.props.match.params.id)}
-                />
-              ) : (
-                <Documents visiteid={parseInt(this.props.match.params.id)} />
-              )}
-            </Card>
+                    <Tab label="Avant" />
+                    <Tab label="Pendant" />
+                    <Tab label="Après" />
+                  </Tabs>
+                </div>
+                <div
+                  style={{
+                    flex: 10,
+                    overflowY: 'auto',
+                    marginTop: 80,
+                    paddingBottom: 105
+                  }}
+                  className="hidescrollbar"
+                >
+                  <TrameComponent
+                    index={this.state.activeIndex}
+                    handleChangeIndex={this.handleChangeIndex}
+                  />
+                </div>
+              </div>
+            ) : this.state.activeTab === 1 ? (
+              <Photo
+                setActiveTab={this.setActiveTab}
+                visiteid={parseInt(this.props.match.params.id)}
+              />
+            ) : (
+              <Documents visiteid={parseInt(this.props.match.params.id)} />
+            )}
           </Container>
           <FileNavigationComponent
             setActiveTab={this.setActiveTab}
