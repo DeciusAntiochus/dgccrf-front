@@ -1,7 +1,8 @@
 import React from 'react';
 import { Form, Select } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import dossierService from '../../services/dossier.service';
+import PouchDbServices from '../../services';
+let dossierService = PouchDbServices.services.dossier;
 
 export default class DossierField extends React.Component {
   constructor(props) {
