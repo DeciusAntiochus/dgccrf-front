@@ -5,7 +5,7 @@ import { Route } from 'react-router-dom';
 import { Redirect, Switch } from 'react-router-dom';
 import MonDossier from './containers/dossier';
 import CreateVisite from './containers/dossier/createVisite.container';
-import CreateTrame from './containers/preferences/trameCreation.container';
+import CreateTrame from './containers/preferences/trame/trameCreation.container';
 import MaVisite from './containers/visite';
 import EntrepriseView from './containers/entreprise';
 import EntrepriseViewComponent from './containers/entreprise/entrepriseView.container';

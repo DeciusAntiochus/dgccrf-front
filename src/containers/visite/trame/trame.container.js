@@ -93,7 +93,9 @@ export default class DossierComponent extends React.Component {
                 <div style={{ flex: 1 }}>
                   {this.getIconFromStatus(task.status)}
                 </div>
-                <div style={{ flex: 8, color: 'white' }}>{task.title}</div>
+                <div style={{ flex: 8, color: 'white' }}>
+                  {task.title.toUpperCase()}
+                </div>
                 <div
                   style={{
                     flex: 1,
