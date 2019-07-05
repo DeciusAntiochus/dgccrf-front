@@ -1,6 +1,8 @@
 import { store } from '../store';
 import DossierService from './dossier.service';
 import VisiteService from './visite.service';
+import ActiviteService from './activite.service';
+import CpfService from './cpf.service';
 
 class PouchDbServices {
 
@@ -9,6 +11,8 @@ class PouchDbServices {
         this.services = {
             dossier: new DossierService(this.AGENT_DD_IDENT),
             visite: new VisiteService(this.AGENT_DD_IDENT),
+            activite: new ActiviteService(),
+            cpf: new CpfService()
         }
         this.ChangeAgent = this.ChangeAgent.bind(this);
     }
