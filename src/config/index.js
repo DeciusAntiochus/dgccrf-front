@@ -1,9 +1,9 @@
-var url_prefix = 'http://Admin:pass@172.17.64.137:5984';
-// 'http://Admin:dtymoney91190@dty-dgccrf.centralesupelec.fr/couchdb';
+//var url_prefix = 'https://Admin:dtymoney91190@m.dgccrf.rie.gouv.fr/couchdb';
+var url_prefix = 'http://Admin:dtymoney91190@dty-dgccrf.centralesupelec.fr/couchdb';
 
 export default {
     backend: {
-        base_url: 'http://localhost:8080'
+        base_url: 'http://dty-dgccrf.centralesupelec.fr/data'
     },
     couchDb: {
         url_dossiers: url_prefix + '/dossiers',
