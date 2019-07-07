@@ -23,8 +23,10 @@ import ControleComponent from './controles.container';
 let visitesService = PouchDbServices.services.visite;
 let dossierService = PouchDbServices.services.dossier;
 
-function mapStateToProps() {
-  return {};
+function mapStateToProps(state) {
+  return {
+    agentIdent: state.dataReducer.AGENT_DD_IDENT
+  };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -40,16 +42,14 @@ class CreateVisiteComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      actionList: ['123', '342', '1112'],
-      trameList: ['Trame 1', 'Trame 2'],
-      addedActions: [undefined],
       cpmm: false,
       mutualisee: false,
       date: '',
       etab: '',
       SIRET: '',
       observations: '',
-      trame: ''
+      trame: '',
+      trameList: ['trame 1', 'trame 2']
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -64,11 +64,6 @@ class CreateVisiteComponent extends React.Component {
   }
 
   onSubmit() {
-    if (this.state.addedActions.includes(undefined)) {
-      return window.alert(
-        'Veuillez spécifier un code action ou retirer les champs actions inutiles.'
-      );
-    }
     visitesService
       .postControlesByVisite(
         {
@@ -79,7 +74,7 @@ class CreateVisiteComponent extends React.Component {
           VIS_MUTUALISEE: this.state.mutualisee,
           VIS_CPMM: this.state.cpmm,
           trame: this.state.trame,
-          AG_IDENT: '4447' // TODO : à changer pour mettre le bon code agent
+          AG_IDENT: this.props.agentIdent
         },
         this.state.addedActions
       )
@@ -197,7 +192,8 @@ class CreateVisiteComponent extends React.Component {
 CreateVisiteComponent.propTypes = {
   changeNameOfPage: PropTypes.func.isRequired,
   changeBackUrl: PropTypes.func.isRequired,
-  changeActivePage: PropTypes.func.isRequired
+  changeActivePage: PropTypes.func.isRequired,
+  agentIdent: PropTypes.string.isRequired
 };
 
 export default connect(

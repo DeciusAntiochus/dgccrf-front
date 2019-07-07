@@ -8,8 +8,35 @@ export default class DossierField extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dossiers: []
+      dossiers: [],
+      taches: []
     };
+  }
+
+  async handleDossierChange(codeDossier) {
+    let taches = [];
+    const dossier = await dossierService.getDossierById(codeDossier);
+    for (var i = 0; i < dossier.TAPR_LIBELLE.length; i += 1) {
+      if (
+        dossier.TAPR_LIBELLE[i] !== '[*]Non défini' &&
+        taches.map(tache => tache.key).indexOf(dossier.TAPR_IDENT[i]) === -1
+      ) {
+        taches = taches.concat([
+          {
+            text: dossier.TAPR_LIBELLE[i] + dossier.TAPR_LIBELLE_COURT[i],
+            value: parseInt(dossier.TAPR_IDENT[i]),
+            key: parseInt(dossier.TAPR_IDENT[i])
+          }
+        ]);
+      }
+    }
+    if (taches.length === 0) {
+      taches = [{ text: 'Aucun', value: -1, key: -1 }];
+    }
+    this.setState({ taches });
+    if (taches.map(tache => tache.key).indexOf(this.props.tache) === -1) {
+      this.props.tacheChange(taches[0].key, taches[0].text);
+    }
   }
 
   loadDossiers(dossiers) {
@@ -39,14 +66,21 @@ export default class DossierField extends React.Component {
           label="Dossier"
           placeholder="Dossier"
           search
-          onChange={this.props.dossierChange}
+          onChange={(e, data) => (
+            this.props.dossierChange(data.value, e.currentTarget.innerText),
+            this.handleDossierChange(data.value)
+          )}
         />
-        <Form.Input
-          fluid
+        <Form.Field
           required
+          control={Select}
+          options={this.state.taches}
           label="Tâche Programmée"
           placeholder="Tâche Programmée"
-          onChange={e => this.setState({ dg: e.target.value })}
+          search
+          onChange={(e, data) => {
+            this.props.tacheChange(data.value, e.currentTarget.innerText);
+          }}
         />
       </Form.Group>
     );
@@ -54,5 +88,8 @@ export default class DossierField extends React.Component {
 }
 
 DossierField.propTypes = {
-  dossierChange: PropTypes.func.isRequired
+  dossierChange: PropTypes.func.isRequired,
+  tacheChange: PropTypes.func.isRequired,
+  dossier: PropTypes.number.isRequired,
+  tache: PropTypes.number.isRequired
 };

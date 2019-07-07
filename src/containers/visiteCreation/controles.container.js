@@ -14,17 +14,22 @@ export default class ControleComponent extends React.Component {
   }
 
   submitControle = controle => {
-    if (!controle.dossier || !controle.dg || !controle.cpf || !controle.stade) {
+    if (
+      !controle.dossier ||
+      !controle.tache ||
+      !controle.activite ||
+      !controle.cpf ||
+      !controle.stade
+    ) {
       this.setState({
         addModalErrorMessage:
           'Veuillez renseigner tous les champs obligatoires.'
       });
     } else {
+      controle.ident = this.state.countControl;
       this.setState({
         countCountrol: this.state.countControl + 1,
-        controles: this.state.controles.concat([
-          { ...controle, key: this.state.countCountrol }
-        ]),
+        controles: this.state.controles.concat([controle]),
         addModalOpen: false
       });
     }
@@ -70,8 +75,8 @@ export default class ControleComponent extends React.Component {
         <Table celled>
           <Table.Body>
             {this.state.controles.map(controle => (
-              <Table.Row key={controle.key}>
-                <Table.Cell>{controle.dossier}</Table.Cell>
+              <Table.Row key={controle.ident}>
+                <Table.Cell>{controle.dossierText}</Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
