@@ -39,17 +39,28 @@ class Photo extends Component {
   };
 
   getFileSize = dataUri => {
-    console.log(dataUri);
     const size = dataUri.length * (3 / 4) - 2;
     return size;
   };
 
-  reSizeImage = dataUri =>
+  convertImage = dataUri =>
     new Promise(resolve => {
       Jimp.read(
         Buffer.from(dataUri.replace(/^data:image\/png;base64,/, ''), 'base64')
       ).then(img => {
-        const n = img.quality(90);
+        img.getBase64(Jimp.MIME_JPEG, (err, res) => {
+          // console.log(this.getFileSize(res));
+          resolve(res);
+        });
+      });
+    });
+
+  reSizeImage = (dataUri, quality) =>
+    new Promise(resolve => {
+      Jimp.read(
+        Buffer.from(dataUri.replace(/^data:image\/jpeg;base64,/, ''), 'base64')
+      ).then(img => {
+        const n = img.quality(quality);
         n.getBase64(Jimp.MIME_JPEG, (err, res) => {
           // console.log(this.getFileSize(res));
           resolve(res);
@@ -61,10 +72,16 @@ class Photo extends Component {
     // Do stuff with the dataUri photo...
 
     let size = this.getFileSize(dataUri);
+
+    dataUri = await this.convertImage(dataUri);
+
     let img = dataUri;
+    let quality = 90;
     while (size > 100000) {
-      img = await this.reSizeImage(dataUri);
+      img = await this.reSizeImage(dataUri, quality);
       size = this.getFileSize(img);
+      console.log(size);
+      quality = quality - quality / 10;
     }
 
     try {

@@ -185,7 +185,7 @@ class Documents extends Component {
         )}
 
         {documents ? (
-          <div style={{ flex: 10 }}>
+          <div style={{ flex: 10, overflowY:'auto' }}>
             {this.props.dossier ? (
               <DocumentsList
                 documents={documents.filter(document => {
