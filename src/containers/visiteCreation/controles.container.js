@@ -1,13 +1,13 @@
 import React from 'react';
 import { Modal, Container, Button, Table, Message } from 'semantic-ui-react';
 import SingleControleComponent from './singleControle.container';
+import PropTypes from 'prop-types';
 
 export default class ControleComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       countControl: 0,
-      controles: [],
       addModalOpen: false,
       addModalErrorMessage: ''
     };
@@ -29,9 +29,9 @@ export default class ControleComponent extends React.Component {
       controle.ident = this.state.countControl;
       this.setState({
         countCountrol: this.state.countControl + 1,
-        controles: this.state.controles.concat([controle]),
         addModalOpen: false
       });
+      this.props.changeControle(this.props.controles.concat([controle]));
     }
   };
 
@@ -74,7 +74,7 @@ export default class ControleComponent extends React.Component {
         </Modal>
         <Table celled>
           <Table.Body>
-            {this.state.controles.map(controle => (
+            {this.props.controles.map(controle => (
               <Table.Row key={controle.ident}>
                 <Table.Cell>{controle.dossierText}</Table.Cell>
               </Table.Row>
@@ -85,3 +85,8 @@ export default class ControleComponent extends React.Component {
     );
   }
 }
+
+ControleComponent.propTypes = {
+  changeControle: PropTypes.func.isRequired,
+  controles: PropTypes.array.isRequired
+};

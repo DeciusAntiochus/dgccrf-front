@@ -49,7 +49,8 @@ class CreateVisiteComponent extends React.Component {
       SIRET: '',
       observations: '',
       trame: '',
-      trameList: ['trame 1', 'trame 2']
+      trameList: ['trame 1', 'trame 2'],
+      controlesList: []
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -76,7 +77,7 @@ class CreateVisiteComponent extends React.Component {
           trame: this.state.trame,
           AG_IDENT: this.props.agentIdent
         },
-        this.state.addedActions
+        this.state.controlesList
       )
       .then(() => window.alert('La visite a bien été ajoutée.'));
   }
@@ -178,7 +179,10 @@ class CreateVisiteComponent extends React.Component {
                 </Form.Field>
               </Form.Group>
             </Form>
-            <ControleComponent />
+            <ControleComponent
+              controles={this.state.controlesList}
+              changeControle={controlesList => this.setState({ controlesList })}
+            />
             <Button style={{ marginTop: '20px' }} onClick={this.onSubmit}>
               Valider
             </Button>
