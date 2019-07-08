@@ -25,6 +25,8 @@ class TrameComponent extends Component {
     this.singleClickTimer = '';
   }
 
+  fileInputRef = React.createRef();
+
   handleTextChange(e, data, task) {
     this.props.handleTextChange(task, data.value);
   }
@@ -46,6 +48,10 @@ class TrameComponent extends Component {
       this.clickCount = 0;
       this.handleDoubleClick(document);
     }
+  }
+
+  fileChange(e) {
+    console.log(e.target.files[0]);
   }
 
   handleChangeName(event) {
@@ -96,7 +102,8 @@ class TrameComponent extends Component {
                     borderBottom: '3px solid #c0c1c4',
 
                     margin: 15,
-                    boxShadow: '6px 1px 12px 2px #cfcfcf'
+                    boxShadow: '6px 1px 12px 2px #cfcfcf',
+                    position: 'relative'
                   }}
                 >
                   <List.Item
@@ -109,6 +116,19 @@ class TrameComponent extends Component {
                     key={task.title}
                     // onClick={() => task.documentToFill && this.handleClick(i)}
                   >
+                    <Icon
+                      name="times circle"
+                      style={{
+                        position: 'absolute',
+                        top: '0',
+                        left: '0',
+
+                        color: 'red',
+                        cursor: 'pointer',
+                        fontSize: '1em'
+                      }}
+                      onClick={() => this.props.deleteTask(task)}
+                    ></Icon>
                     <div
                       style={{
                         display: 'flex',
@@ -239,7 +259,24 @@ class TrameComponent extends Component {
                             ></div>
                           </Form>
                         ) : (
-                          'coucou'
+                          <>
+                            <Button
+                              style={{
+                                background: '#3C4586',
+                                color: 'white'
+                              }}
+                              content="Ajouter un fichier"
+                              labelPosition="left"
+                              icon="file"
+                              onClick={() => this.fileInputRef.current.click()}
+                            />
+                            <input
+                              ref={this.fileInputRef}
+                              type="file"
+                              hidden
+                              onChange={this.fileChange}
+                            />
+                          </>
                         )}
                       </div>
                     )}
@@ -257,7 +294,8 @@ class TrameComponent extends Component {
 TrameComponent.propTypes = {
   taskList: PropTypes.array,
   changeType: PropTypes.func,
-  validateName: PropTypes.func
+  validateName: PropTypes.func,
+  deleteTask: PropTypes.func
 };
 
 export default TrameComponent;

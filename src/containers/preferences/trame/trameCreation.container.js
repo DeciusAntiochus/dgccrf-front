@@ -38,11 +38,20 @@ class TrameCreationComponent extends React.Component {
     this.changeType = this.changeType.bind(this);
     this.handleTextChange = this.handleTextChange.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
   }
   componentDidMount() {
     this.props.changeNameOfPage();
     this.props.changeBackUrl();
     this.props.changeActivePage();
+  }
+
+  deleteTask(task) {
+    this.setState({
+      taskList: this.state.taskList.filter(t => {
+        return t != task;
+      })
+    });
   }
 
   validateName(task, name) {
@@ -236,6 +245,7 @@ class TrameCreationComponent extends React.Component {
                           taskList={this.state.taskList}
                           changeType={this.changeType}
                           handleTextChange={this.handleTextChange}
+                          deleteTask={this.deleteTask}
                         />
                         {provided.placeholder}
                       </div>
