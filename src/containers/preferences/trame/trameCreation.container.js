@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Container,
-  Button,
-  Input,
-  Icon,
-  List,
-  Segment
-} from 'semantic-ui-react';
+import { Container, Button, Icon, Input, Responsive } from 'semantic-ui-react';
 import { PropTypes } from 'prop-types';
 import {
   changeNameOfPage,
@@ -14,19 +7,10 @@ import {
   changeActivePage
 } from '../../navbar/actions';
 import { connect } from 'react-redux';
-import { Tabs, Tab } from '@material-ui/core';
+
 import TrameComponent from './trame';
 
-import styled from 'styled-components';
-
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-const MyContainer = styled.div`
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-  padding: 8px;
-  margin-bottom: 8px;
-`;
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 function mapStateToProps() {
   return {};
@@ -47,10 +31,13 @@ class TrameCreationComponent extends React.Component {
     this.state = {
       taskList: [],
       index: 0,
-      id: 0
+      id: 0,
+      trameName: ''
     };
     this.validateName = this.validateName.bind(this);
     this.changeType = this.changeType.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
   }
   componentDidMount() {
     this.props.changeNameOfPage();
@@ -68,6 +55,22 @@ class TrameCreationComponent extends React.Component {
       return t;
     });
 
+    this.setState({ taskList });
+  }
+
+  handleNameChange(e, data) {
+    this.setState({ trameName: data.value });
+  }
+
+  handleTextChange(task, text) {
+    let taskList = this.state.taskList;
+    taskList = taskList.filter(t => {
+      if (t == task) {
+        t.innerContent = text;
+      }
+
+      return t;
+    });
     this.setState({ taskList });
   }
 
@@ -92,7 +95,7 @@ class TrameCreationComponent extends React.Component {
         {
           title: 'Nouvelle tâche' + this.state.index,
           type: 'basic',
-          innerContent: null,
+          innerContent: '',
           index: this.state.index,
           id: this.state.id
         }
@@ -103,7 +106,7 @@ class TrameCreationComponent extends React.Component {
   }
 
   onDragEnd = result => {
-    const { destination, source, draggableId } = result;
+    const { destination, source } = result;
 
     if (!destination) {
       return;
@@ -161,13 +164,46 @@ class TrameCreationComponent extends React.Component {
                   width: '100%',
                   backgroundColor: '#f2f2f2',
                   display: 'flex',
-                  justifyContent: 'center',
+                  flexDirection: 'row',
+
                   padding: 20
                 }}
               >
-                <div>
-                  <Button color="teal" icon onClick={() => this.addTask()}>
+                <Responsive minWidth={400}>
+                  <div style={{ flex: 0.3 }}></div>
+                </Responsive>
+                <div style={{ flex: 1 }}>
+                  <Input
+                    style={{ width: 150 }}
+                    placeholder="Nom de la trame..."
+                    value={this.state.trameName}
+                    onChange={this.handleNameChange}
+                  ></Input>
+                  <Button
+                    style={{ marginLeft: 5 }}
+                    color="teal"
+                    icon
+                    onClick={() => this.addTask()}
+                  >
                     <Icon name="plus" color="white"></Icon>
+                  </Button>
+                </div>
+                <div
+                  style={{
+                    flex: 0.3,
+                    justifyContent: 'flex-end',
+                    display: 'flex'
+                  }}
+                >
+                  <Button
+                    color="red"
+                    disabled={
+                      this.state.trameName.length === 0 ||
+                      this.state.taskList.length === 0
+                    }
+                    icon
+                  >
+                    <Icon name="save" color="white"></Icon>
                   </Button>
                 </div>
 
@@ -199,6 +235,7 @@ class TrameCreationComponent extends React.Component {
                           validateName={this.validateName}
                           taskList={this.state.taskList}
                           changeType={this.changeType}
+                          handleTextChange={this.handleTextChange}
                         />
                         {provided.placeholder}
                       </div>

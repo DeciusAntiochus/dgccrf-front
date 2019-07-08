@@ -1,20 +1,66 @@
 import React, { Component } from 'react';
-import { List, Icon, Dropdown } from 'semantic-ui-react';
+import {
+  List,
+  Icon,
+  Dropdown,
+  TextArea,
+  Form,
+  Button
+} from 'semantic-ui-react';
 
 import { Draggable } from 'react-beautiful-dnd';
 
-export default class TrameComponent extends Component {
+import PropTypes from 'prop-types';
+
+class TrameComponent extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
       taskEdited: null,
-      taskName: null
+      taskName: null,
+      activeDropdowns: []
     };
     this.handleChangeName = this.handleChangeName.bind(this);
+    this.clickCount = null;
+    this.singleClickTimer = '';
+  }
+
+  handleTextChange(e, data, task) {
+    this.props.handleTextChange(task, data.value);
+  }
+
+  handleDoubleClick = document => {
+    this.editName(document);
+  };
+  handleClicks(document) {
+    this.clickCount++;
+    if (this.clickCount === 1) {
+      this.singleClickTimer = setTimeout(
+        function() {
+          this.clickCount = 0;
+        }.bind(this),
+        300
+      );
+    } else if (this.clickCount === 2) {
+      clearTimeout(this.singleClickTimer);
+      this.clickCount = 0;
+      this.handleDoubleClick(document);
+    }
   }
 
   handleChangeName(event) {
     this.setState({ taskName: event.target.value.toUpperCase() });
+  }
+
+  handleClick(index) {
+    const i = this.state.activeDropdowns.indexOf(index);
+    i === -1
+      ? this.setState({
+          activeDropdowns: [...this.state.activeDropdowns, index]
+        })
+      : this.setState({
+          activeDropdowns: this.state.activeDropdowns.filter(e => e !== index)
+        });
   }
 
   validateName(task, name) {
@@ -30,7 +76,6 @@ export default class TrameComponent extends Component {
   }
 
   render() {
-    console.log(this.props.taskList);
     return (
       <List className="responsivepadding" relaxed style={{ textAlign: 'left' }}>
         {this.props.taskList.map((task, i) => (
@@ -73,23 +118,36 @@ export default class TrameComponent extends Component {
                       <div style={{ flex: 1 }}>
                         {/* {this.getIconFromStatus(task.status)} */}
                       </div>
-                      <div style={{ flex: 8, color: 'white' }}>
-                        <input
-                          disabled={task != this.state.taskEdited}
-                          type="text"
-                          style={{
-                            background: 'transparent',
-                            border: '0',
-                            outline: 'none',
-                            color: 'white'
+                      <div
+                        style={{
+                          flex: 8,
+                          color: 'white',
+                          flexDirection: 'row',
+                          display: 'flex'
+                        }}
+                      >
+                        <div
+                          onClick={() => {
+                            this.handleClicks(task);
                           }}
-                          value={
-                            task != this.state.taskEdited
-                              ? task.title.toUpperCase()
-                              : this.state.taskName
-                          }
-                          onChange={this.handleChangeName}
-                        ></input>
+                        >
+                          <input
+                            disabled={task != this.state.taskEdited}
+                            type="text"
+                            style={{
+                              background: 'transparent',
+                              border: '0',
+                              outline: 'none',
+                              color: 'white'
+                            }}
+                            value={
+                              task != this.state.taskEdited
+                                ? task.title.toUpperCase()
+                                : this.state.taskName
+                            }
+                            onChange={this.handleChangeName}
+                          ></input>
+                        </div>
                         {task != this.state.taskEdited ? (
                           <Icon
                             style={{ marginLeft: 10, cursor: 'pointer' }}
@@ -114,47 +172,78 @@ export default class TrameComponent extends Component {
                           textAlign: 'right'
                         }}
                       >
-                        <Dropdown style={{ color: 'white' }} pointing={'right'}>
-                          <Dropdown.Menu>
-                            <Dropdown.Item
-                              onClick={() =>
-                                this.props.changeType(task, 'basic')
-                              }
-                              icon={task.type === 'basic' && 'check'}
-                              text="Basique"
-                            ></Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={() =>
-                                this.props.changeType(task, 'text')
-                              }
-                              icon={task.type === 'text' && 'check'}
-                              text="Texte"
-                            ></Dropdown.Item>
-                            <Dropdown.Item
-                              onClick={() =>
-                                this.props.changeType(task, 'document')
-                              }
-                              icon={task.type === 'document' && 'check'}
-                              text="Document"
-                            ></Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                        {/* {task.documentToFill &&
-                                          (this.state.activeDropdowns.includes(i) ? (
-                                              <List.Icon
-                                                  name="caret up"
-                                                  style={{ color: 'white' }}
-                                              ></List.Icon>
-                                          ) : (
-                                                  <List.Icon
-                                                      name="caret down"
-                                                      style={{ color: 'white' }}
-                                                  ></List.Icon>
-                                              ))} */}
+                        {task.type === 'basic' ? (
+                          <Icon
+                            name="ellipsis horizontal"
+                            style={{ cursor: 'pointer', color: 'white' }}
+                            onClick={() => this.props.changeType(task, 'text')}
+                          ></Icon>
+                        ) : task.type === 'text' ? (
+                          <Icon
+                            name="text cursor"
+                            style={{ cursor: 'pointer', color: 'white' }}
+                            onClick={() =>
+                              this.props.changeType(task, 'document')
+                            }
+                          ></Icon>
+                        ) : (
+                          <Icon
+                            name="file"
+                            style={{ cursor: 'pointer', color: 'white' }}
+                            onClick={() => this.props.changeType(task, 'basic')}
+                          ></Icon>
+                        )}
+
+                        {task.type === 'text' || task.type === 'document' ? (
+                          this.state.activeDropdowns.includes(task.index) ? (
+                            <List.Icon
+                              onClick={() => this.handleClick(task.index)}
+                              name="caret up"
+                              style={{ color: 'white', cursor: 'pointer' }}
+                            ></List.Icon>
+                          ) : (
+                            <List.Icon
+                              onClick={() => this.handleClick(task.index)}
+                              name="caret down"
+                              style={{ color: 'white', cursor: 'pointer' }}
+                            ></List.Icon>
+                          )
+                        ) : (
+                          <List.Icon
+                            color="grey"
+                            name="caret down"
+                            style={{ cursor: 'pointer' }}
+                          ></List.Icon>
+                        )}
                       </div>
                     </div>
                   </List.Item>
-                  <List.Item>{/* dropdown */}</List.Item>
+                  <List.Item>
+                    {this.state.activeDropdowns.includes(task.index) && (
+                      <div style={{ padding: 15 }}>
+                        {task.type === 'text' ? (
+                          <Form>
+                            <TextArea
+                              value={task.innerContent}
+                              onChange={(e, data) =>
+                                this.handleTextChange(e, data, task)
+                              }
+                            />
+                            <div
+                              style={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                marginTop: 10
+                              }}
+                            ></div>
+                          </Form>
+                        ) : (
+                          'coucou'
+                        )}
+                      </div>
+                    )}
+                  </List.Item>
                 </div>
               </div>
             )}
@@ -164,3 +253,11 @@ export default class TrameComponent extends Component {
     );
   }
 }
+
+TrameComponent.propTypes = {
+  taskList: PropTypes.array,
+  changeType: PropTypes.func,
+  validateName: PropTypes.func
+};
+
+export default TrameComponent;

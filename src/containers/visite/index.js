@@ -133,7 +133,8 @@ class Visite extends React.Component {
                     flex: 10,
                     overflowY: 'auto',
                     marginTop: 80,
-                    paddingBottom: 105
+                    paddingBottom: 105,
+                    maxWidth: '100%'
                   }}
                   className="hidescrollbar"
                 >
