@@ -160,8 +160,9 @@ class PouchDbVisiteService {
 
   postControlesByVisite(visiteInfos, controlesList) {
     let promises = [];
-    const ident =
-      parseInt(visiteInfos.VIS_DATE.replace(/-/g, '')) + visiteInfos.ETOB_SIRET;
+    const ident = parseInt(
+      visiteInfos.VIS_DATE.replace(/-/g, '') + visiteInfos.ETOB_SIRET
+    );
     promises.push(
       this.newVisiteDB.post({
         ...visiteInfos,
