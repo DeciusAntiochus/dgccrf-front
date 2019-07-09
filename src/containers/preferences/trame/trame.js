@@ -12,6 +12,15 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import PropTypes from 'prop-types';
 
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
 class TrameComponent extends Component {
   constructor(props, context) {
     super(props, context);
@@ -50,8 +59,29 @@ class TrameComponent extends Component {
     }
   }
 
-  fileChange(e) {
-    console.log(e.target.files[0]);
+  getColor(type) {
+    if (type.includes('image')) {
+      return ['teal', 'file image'];
+    } else if (type.includes('pdf')) {
+      return ['red', 'file pdf'];
+    } else if (type.includes('sheet')) {
+      return ['green', 'file excel'];
+    } else if (type.includes('word') || type.includes('opendocument.text')) {
+      return ['blue', 'file word'];
+    } else {
+      return ['grey', 'file'];
+    }
+  }
+
+  async fileChange(task, e) {
+    const file = e.target.files[0];
+    const file64 = await getBase64(file);
+
+    this.props.addDocument(task, {
+      document: file64,
+      name: file.name,
+      type: file.type
+    });
   }
 
   handleChangeName(event) {
@@ -150,6 +180,7 @@ class TrameComponent extends Component {
                           onClick={() => {
                             this.handleClicks(task);
                           }}
+                          style={{ width: '100%' }}
                         >
                           <input
                             disabled={task != this.state.taskEdited}
@@ -158,7 +189,8 @@ class TrameComponent extends Component {
                               background: 'transparent',
                               border: '0',
                               outline: 'none',
-                              color: 'white'
+                              color: 'white',
+                              width: '100%'
                             }}
                             value={
                               task != this.state.taskEdited
@@ -258,14 +290,80 @@ class TrameComponent extends Component {
                               }}
                             ></div>
                           </Form>
+                        ) : task.innerContent ? (
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <div style={{ flex: 0.1 }}></div>
+                            <div
+                              style={{
+                                flex: 1,
+                                display: 'flex',
+                                justifyContent: 'center'
+                              }}
+                            >
+                              {!task.innerContent.type.includes('image') ? (
+                                <Button
+                                  as="a"
+                                  href={
+                                    !task.innerContent.type.includes('image')
+                                      ? task.innerContent.document
+                                      : undefined
+                                  }
+                                  download={task.innerContent.name}
+                                  onClick={() => {
+                                    task.innerContent.type.includes('image') &&
+                                      this.showModal(document);
+                                  }}
+                                  icon
+                                  labelPosition="right"
+                                  color={
+                                    this.getColor(task.innerContent.type)[0]
+                                  }
+                                  basic
+                                >
+                                  {task.innerContent.name}
+                                  <Icon
+                                    style={{ background: 'none' }}
+                                    name={
+                                      this.getColor(task.innerContent.type)[1]
+                                    }
+                                  ></Icon>
+                                </Button>
+                              ) : (
+                                <img
+                                  style={{ maxHeight: 200, maxWidth: '100%' }}
+                                  src={task.innerContent.document}
+                                ></img>
+                              )}
+                            </div>
+                            <div style={{ flex: 0.1 }}>
+                              <Button
+                                color="red"
+                                onClick={() => this.props.deleteDocument(task)}
+                                icon
+                              >
+                                <Icon name="times" color="white"></Icon>
+                              </Button>
+                            </div>
+                          </div>
                         ) : (
-                          <>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'center'
+                            }}
+                          >
                             <Button
                               style={{
                                 background: '#3C4586',
                                 color: 'white'
                               }}
-                              content="Ajouter un fichier"
+                              content="Ajouter un document"
                               labelPosition="left"
                               icon="file"
                               onClick={() => this.fileInputRef.current.click()}
@@ -274,9 +372,9 @@ class TrameComponent extends Component {
                               ref={this.fileInputRef}
                               type="file"
                               hidden
-                              onChange={this.fileChange}
+                              onChange={e => this.fileChange(task, e)}
                             />
-                          </>
+                          </div>
                         )}
                       </div>
                     )}
@@ -295,7 +393,9 @@ TrameComponent.propTypes = {
   taskList: PropTypes.array,
   changeType: PropTypes.func,
   validateName: PropTypes.func,
-  deleteTask: PropTypes.func
+  deleteTask: PropTypes.func,
+  addDocument: PropTypes.func,
+  deleteDocument: PropTypes.func
 };
 
 export default TrameComponent;
