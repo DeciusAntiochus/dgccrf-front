@@ -24,7 +24,7 @@ class AuthComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            AGENT_DD_IDENT: ""
+            idAgent: ""
         }
         this.onSubmit = this.onSubmit.bind(this);
     }
@@ -32,9 +32,12 @@ class AuthComponent extends React.Component {
 
     onSubmit = async () => {
         try {
-            let res = await axios.get(config.backend.base_url + '/agent/' + this.state.AGENT_DD_IDENT);
+            let res = await axios.get(config.backend.base_url + '/agent/' + this.state.idAgent);
             if (window.confirm("Etes vous sur de vouloir changer d'utilisateur pour " + res.data.AGENT_DD_LIBELLE + ".\n Vous perdrez toutes les données actuelles pour télécharger les données du nounvel utilisateur.")) {
-                this.props.changeAgent(this.state.AGENT_DD_IDENT)
+                this.props.changeAgent(res.data.AGENT_DD_IDENT);
+                if (this.props.location.pathname == "/authentification") {
+                    this.props.history.push('/mes-dossiers')
+                }
             }
         } catch (err) {
             console.log(err)
@@ -42,10 +45,10 @@ class AuthComponent extends React.Component {
                 window.alert('Vous devez être connecté à internet pour changer d\'utilisateur.\nVérifier votre connection avant de réeesayer')
             }
             else if (err.response.status == 404) {
-                window.alert("L'utilisateur avec le code agent " + this.state.AGENT_DD_IDENT + " est introuvable")
+                window.alert("L'utilisateur avec le code agent " + this.state.idAgent + " est introuvable")
             }
             else {
-                window.alert("An unknown error occured");
+                window.alert(err.response.status + " An unknown error occured");
 
             }
         }
@@ -57,8 +60,8 @@ class AuthComponent extends React.Component {
                 <Grid>
                     <Form onSubmit={this.onSubmit}>
                         <FormGroup>
-                            <Input label="Votre identifiant agent IRIS" default={this.props.AGENT_DD_IDENT}
-                                onChange={(event, { value }) => this.setState({ AGENT_DD_IDENT: value })} />
+                            <Input label="Votre identifiant agent IRIS"
+                                onChange={(event, { value }) => this.setState({ idAgent: value })} />
 
                         </FormGroup>
 
@@ -71,8 +74,9 @@ class AuthComponent extends React.Component {
 }
 
 AuthComponent.propTypes = {
-    AGENT_DD_IDENT: PropTypes.string.isRequired,
-    changeAgent: PropTypes.func.isRequired
+    changeAgent: PropTypes.func.isRequired,
+    location: PropTypes.any,
+    history: PropTypes.any
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthComponent);
