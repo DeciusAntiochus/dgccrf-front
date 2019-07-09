@@ -25,6 +25,4 @@ const configureStore = () => {
   return { store, persistor };
 };
 
-let { store, persistor } = configureStore();
-
-export { store, persistor };
+export { configureStore };

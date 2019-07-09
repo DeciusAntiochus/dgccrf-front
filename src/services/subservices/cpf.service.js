@@ -13,7 +13,7 @@ class CpfService {
             live: true,
             retry: true,
         };
-        this.interval = replicateFromSQL(this.db, config.backend.base_url + '/fulldata/cpf/');
+        this.replication = replicateFromSQL(this.db, config.backend.base_url + '/fulldata/cpf/', 'cpf_date');
         this.resetDb = () => undefined; // no need to reset activite
 
     }

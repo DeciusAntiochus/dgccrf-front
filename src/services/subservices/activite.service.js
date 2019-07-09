@@ -15,7 +15,7 @@ class ActiviteService {
             retry: true,
         };
 
-        this.interval = replicateFromSQL(this.db, config.backend.base_url + '/fulldata/activite/');
+        this.replication = replicateFromSQL(this.db, config.backend.base_url + '/fulldata/activite/', 'activite_date');
         this.resetDb = () => undefined; // no need to reset activite
     }
 

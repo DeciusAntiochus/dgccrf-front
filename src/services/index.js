@@ -7,7 +7,7 @@ import CpfService from './subservices/cpf.service';
 class PouchDbServices {
 
     constructor() {
-        this.AGENT_DD_IDENT = store.getState().dataReducer.AGENT_DD_IDENT;
+        this.AGENT_DD_IDENT = window.localStorage.getItem("AGENT_DD_IDENT");
         this.services = {
             dossier: new DossierService(this.AGENT_DD_IDENT),
             visite: new VisiteService(this.AGENT_DD_IDENT),
@@ -19,6 +19,7 @@ class PouchDbServices {
 
     async ChangeAgent(AGENT_DD_IDENT) {
         this.AGENT_DD_IDENT = AGENT_DD_IDENT;
+        window.localStorage.setItem("AGENT_DD_IDENT", AGENT_DD_IDENT);
         Object.keys(this.services).map(key => this.services[key].resetDb(AGENT_DD_IDENT));
     }
 }

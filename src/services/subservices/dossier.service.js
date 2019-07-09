@@ -18,7 +18,7 @@ class PouchDbService {
 
     async initDb(AGENT_DD_IDENT) {
         this.db = new PouchDB('mes-dossiers');
-        this.interval = replicateFromSQL(this.db, config.backend.base_url + '/fulldata/dossiers/' + AGENT_DD_IDENT);
+        this.replication = replicateFromSQL(this.db, config.backend.base_url + '/fulldata/dossiers?idAgent=' + AGENT_DD_IDENT, 'dossier_date');
 
 
         this.db.createIndex({
@@ -35,7 +35,7 @@ class PouchDbService {
     }
 
     async resetDb(AGENT_DD_IDENT) {
-        console.log(clearInterval(this.interval));
+        this.replication.stopReplication();
         await this.db.destroy();
         await this.initDb(AGENT_DD_IDENT);
     }

@@ -3,6 +3,7 @@ import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 import replicateFromSQL from '../replicationHandler';
 import config from '../../config';
+import { optionalCallExpression } from '@babel/types';
 PouchDB.plugin(PouchDBFind);
 
 class PouchDbVisiteService {
@@ -14,8 +15,8 @@ class PouchDbVisiteService {
   }
 
   async resetDb(AGENT_DD_IDENT) {
-    clearInterval(this.controleInterval);
-    clearInterval(this.visiteInterval);
+    this.controleReplication.stopReplication();
+    this.visiteReplication.stopReplication();
     await this.controleDB.destroy();
     await this.newControleDB.destroy();
     await this.visiteDB.destroy();
@@ -39,62 +40,37 @@ class PouchDbVisiteService {
     };
 
     this.controleDB = new PouchDB('controles');
-    this.controleInterval = replicateFromSQL(this.controleDB, config.backend.base_url + '/fulldata/controles/' + AGENT_DD_IDENT);
+    this.controleReplication = replicateFromSQL(this.controleDB, config.backend.base_url + '/fulldata/controles?idAgent=' + AGENT_DD_IDENT, 'controle_date');
     this.controleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
-    this.controleDB
-      .changes({
-        since: 'now',
-        live: true
-      })
+    this.controleDB.changes({ since: 'now', live: true })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.newVisiteDB = new PouchDB('new-visites');
-    this.newVisiteDB.replicate.to(config.couchDb.url_new_visites, {
-      live: true,
-      retry: true
-    });
-    this.newVisiteDB.replicate.from(
-      config.couchDb.url_new_visites,
-      opts_without_filter
-    );
+    this.newVisiteDB.replicate.to(config.couchDb.url_new_visites, optionalCallExpression);
+    this.newVisiteDB.replicate.from(config.couchDb.url_new_visites, opts_without_filter);
     this.newVisiteDB.createIndex({
       index: { fields: ['VISITE_IDENT'] }
     });
-    this.newVisiteDB
-      .changes({
-        since: 'now',
-        live: true
-      })
+    this.newVisiteDB.changes({ since: 'now', live: true })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.newControleDB = new PouchDB('new-controles');
-    this.newControleDB.replicate.to(config.couchDb.url_new_controles, {
-      live: true,
-      retry: true
-    });
+    this.newControleDB.replicate.to(config.couchDb.url_new_controles, opts_without_filter);
     this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
     this.newControleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
-    this.newControleDB
-      .changes({
-        since: 'now',
-        live: true
-      })
+    this.newControleDB.changes({ since: 'now', live: true })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.visiteDB = new PouchDB('visites');
-    this.visiteInterval = replicateFromSQL(this.visiteDB, config.backend.base_url + '/fulldata/visites/' + AGENT_DD_IDENT);
+    this.visiteReplication = replicateFromSQL(this.visiteDB, config.backend.base_url + '/fulldata/visites?idAgent=' + AGENT_DD_IDENT, 'visite_date');
     this.visiteDB.createIndex({
       index: { fields: ['VISTE_IDENT'] }
     });
-    this.visiteDB
-      .changes({
-        since: 'now',
-        live: true
-      })
+    this.visiteDB.changes({ since: 'now', live: true })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
   }
 
