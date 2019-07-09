@@ -153,7 +153,6 @@ class PouchDbVisiteService {
       }
     });
     visitesList = await Promise.all(visitesList);
-    debugger;
     // eslint-disable-next-line no-undefa
     return visitesList.filter(doc => doc);
   }
@@ -161,7 +160,7 @@ class PouchDbVisiteService {
   postControlesByVisite(visiteInfos, controlesList) {
     let promises = [];
     const ident = parseInt(
-      visiteInfos.VIS_DATE.replace(/-/g, '') + visiteInfos.ETOB_SIRET
+      Date.now()
     );
     promises.push(
       this.newVisiteDB.post({
