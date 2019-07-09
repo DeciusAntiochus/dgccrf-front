@@ -11,7 +11,6 @@ class InfosComponent extends React.Component {
   }
   render() {
     const { dossier } = this.props;
-    console.log(dossier);
     return dossier ? (
       <Container style={{ padding: 5 }}>
         <Card centered raised fluid>

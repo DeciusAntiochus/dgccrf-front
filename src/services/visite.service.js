@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 
@@ -8,9 +9,7 @@ class PouchDbVisiteService {
   constructor(AGENT_DD_IDENT) {
     this.resetDb = this.resetDb.bind(this);
     this.initDb = this.initDb.bind(this);
-
     this.changesCallbacks = [];
-
     this.initDb(AGENT_DD_IDENT);
   }
 
@@ -18,6 +17,7 @@ class PouchDbVisiteService {
     await this.controleDB.destroy();
     await this.newControleDB.destroy();
     await this.visiteDB.destroy();
+    await this.newVisiteDB.destroy();
     await this.initDb(AGENT_DD_IDENT);
   }
 
@@ -31,15 +31,18 @@ class PouchDbVisiteService {
     };
 
     this.controleDB = new PouchDB('controles');
-    this.controleDB.replicate.from(config.couchDb.url_controles, opts)
+    this.controleDB.replicate
+      .from(config.couchDb.url_controles, opts)
       .on('change', () => this.changesCallbacks.map(cb => cb()));
     this.controleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
-    this.controleDB.changes({
-      since: 'now',
-      live: true
-    }).on('change', () => this.changesCallbacks.map(cb => cb()));
+    this.controleDB
+      .changes({
+        since: 'now',
+        live: true
+      })
+      .on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.newControleDB = new PouchDB('new-controles');
     this.newControleDB.replicate.to(config.couchDb.url_new_controles, {
@@ -50,21 +53,42 @@ class PouchDbVisiteService {
     this.newControleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
-    this.newControleDB.changes({
-      since: 'now',
-      live: true
-    }).on('change', () => this.changesCallbacks.map(cb => cb()));
+    this.newControleDB
+      .changes({
+        since: 'now',
+        live: true
+      })
+      .on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.visiteDB = new PouchDB('visites');
-    this.visiteDB.replicate.from(config.couchDb.url_visites, opts)
+    this.visiteDB.replicate
+      .from(config.couchDb.url_visites, opts)
       .on('change', () => this.changesCallbacks.map(cb => cb()));
     this.visiteDB.createIndex({
       index: { fields: ['VISTE_IDENT'] }
     });
-    this.visiteDB.changes({
-      since: 'now',
-      live: true
-    }).on('change', () => this.changesCallbacks.map(cb => cb()));
+    this.visiteDB
+      .changes({
+        since: 'now',
+        live: true
+      })
+      .on('change', () => this.changesCallbacks.map(cb => cb()));
+
+    this.newVisiteDB = new PouchDB('new-visites');
+    this.newVisiteDB.replicate.to(config.couchDb.url_new_visites, {
+      live: true,
+      retry: true
+    });
+    this.newVisiteDB.replicate.from(config.couchDb.url_new_visites, opts);
+    this.newVisiteDB.createIndex({
+      index: { fields: ['VISITE_IDENT'] }
+    });
+    this.newVisiteDB
+      .changes({
+        since: 'now',
+        live: true
+      })
+      .on('change', () => this.changesCallbacks.map(cb => cb()));
   }
 
   //call the callback on db changes
@@ -112,29 +136,52 @@ class PouchDbVisiteService {
         visitesDic[controle.VISITE_IDENT] || [];
       visitesDic[controle.VISITE_IDENT].push(controle);
     }
-    let visitesList = Object.keys(visitesDic).map(async VISITE_IDENT => ({
-      visiteData: await this.visiteDB
+    let visitesList = Object.keys(visitesDic).map(async VISITE_IDENT => {
+      let visiteData = await this.visiteDB
         .find({ selector: { VISITE_IDENT: parseInt(VISITE_IDENT) } })
-        .then(table => table.docs[0]),
-      controles: visitesDic[VISITE_IDENT]
-    }));
-    // eslint-disable-next-line no-undef
-    return await Promise.all(visitesList);
+        .then(table => table.docs[0]);
+      if (!visiteData) {
+        visiteData = await this.newVisiteDB
+          .find({ selector: { VISITE_IDENT: parseInt(VISITE_IDENT) } })
+          .then(table => table.docs[0]);
+      }
+      if (visiteData) {
+        return {
+          visiteData,
+          controles: visitesDic[VISITE_IDENT]
+        };
+      }
+    });
+    visitesList = await Promise.all(visitesList);
+    // eslint-disable-next-line no-undefa
+    return visitesList.filter(doc => doc);
   }
 
-  // postControlesByVisite(visiteInfos, controlesActionList) {
-  //   let promises = [];
-  //   for (let action of controlesActionList) {
-  //     promises.push(
-  //       dossierService
-  //         .getDossierIdFromActionCode(action)
-  //         .then(DOSSIER_IDENT =>
-  //           this.newControleDB.post({ ...visiteInfos, DOSSIER_IDENT })
-  //         )
-  //     );
-  //   }
-  //   return Promise.all(promises);
-  // }
+  postControlesByVisite(visiteInfos, controlesList) {
+    let promises = [];
+    const ident = parseInt(
+      Date.now()
+    );
+    promises.push(
+      this.newVisiteDB.post({
+        ...visiteInfos,
+        VISITE_IDENT: ident
+      })
+    );
+    for (let controle of controlesList) {
+      promises.push(
+        this.newControleDB.post({
+          ...visiteInfos,
+          DOSSIER_IDENT: controle.dossier,
+          CPF_CODE_PRODUIT: controle.cpf,
+          STADE_PRODUIT_IDENT: parseInt(controle.stade),
+          CONTROLE_IDENT: controle.dossier.toString() + controle.cpf.toString(),
+          VISITE_IDENT: ident
+        })
+      );
+    }
+    return Promise.all(promises);
+  }
 }
 
 export default PouchDbVisiteService;

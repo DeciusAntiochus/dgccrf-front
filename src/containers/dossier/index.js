@@ -67,9 +67,9 @@ class MonDossier extends React.Component {
       .then(data => this.setState({ visitesList: data, isLoading: false }));
     visiteService.onChanges(() =>
       this.setState({ isLoading: true }, () => {
-        visiteService
-          .getVisitesByDossier(dossierId)
-          .then(data => this.setState({ visitesList: data, isLoading: false }));
+        visiteService.getVisitesByDossier(dossierId).then(data => {
+          this.setState({ visitesList: data, isLoading: false });
+        });
       })
     );
 
