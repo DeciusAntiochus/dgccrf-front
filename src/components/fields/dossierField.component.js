@@ -9,7 +9,8 @@ export default class DossierField extends React.Component {
     super(props);
     this.state = {
       dossiers: [],
-      taches: []
+      taches: [],
+      value: 'Coucou'
     };
   }
 
@@ -40,7 +41,7 @@ export default class DossierField extends React.Component {
   }
 
   loadDossiers(dossiers) {
-    const newDossiers = dossiers
+    var newDossiers = dossiers
       .filter(dossier => !(dossier.TYPE_DOSSIER_LIBELLE === 'Information'))
       .map(dossier => {
         return {
@@ -49,11 +50,13 @@ export default class DossierField extends React.Component {
           value: dossier.DOSSIER_IDENT
         };
       });
+    newDossiers = [{ key: -1, text: 'Aucun', value: -1 }].concat(newDossiers);
     this.setState({ dossiers: newDossiers });
   }
 
   componentDidMount() {
     dossierService.getAllDocs().then(res => this.loadDossiers(res));
+    this.handleDossierChange(this.props.dossier);
   }
 
   render() {
@@ -64,12 +67,12 @@ export default class DossierField extends React.Component {
           control={Select}
           options={this.state.dossiers}
           label="Dossier"
-          placeholder="Dossier"
           search
           onChange={(e, data) => (
             this.props.dossierChange(data.value, e.currentTarget.innerText),
             this.handleDossierChange(data.value)
           )}
+          defaultValue={this.props.dossier}
         />
         <Form.Field
           required
@@ -81,6 +84,7 @@ export default class DossierField extends React.Component {
           onChange={(e, data) => {
             this.props.tacheChange(data.value, e.currentTarget.innerText);
           }}
+          defaultValue={this.props.tache}
         />
       </Form.Group>
     );

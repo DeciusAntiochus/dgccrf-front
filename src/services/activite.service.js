@@ -4,29 +4,38 @@ import config from '../config';
 
 PouchDB.plugin(PouchDBFind);
 class ActiviteService {
-    constructor() {
-        let pouchDbUrl = config.couchDb.url_activite;
-        this.db = new PouchDB('activite');
-        var opts = {
-            batch_size: 1000,
-            live: true,
-            retry: true,
-        };
+  constructor() {
+    let pouchDbUrl = config.couchDb.url_activite;
+    this.db = new PouchDB('activite');
+    var opts = {
+      batch_size: 1000,
+      live: true,
+      retry: true
+    };
 
-        this.db.replicate.from(pouchDbUrl, opts)
-        this.resetDb = () => undefined; // no need to reset activite
-    }
+    this.db.replicate.from(pouchDbUrl, opts);
+    this.resetDb = () => undefined; // no need to reset activite
+  }
 
-    //getAllDocsOfTheDB
-    getAllDocs() {
-        return this.db
-            .allDocs({ include_docs: true, descending: true })
-            .then(table =>
-                table.rows
-                    .map(item => item.doc)
-                    .filter(item => !(item._id.split('/')[0] == '_design'))
-            );
-    }
+  //getAllDocsOfTheDB
+  getAllDocs() {
+    return this.db
+      .allDocs({ include_docs: true, descending: true })
+      .then(table =>
+        table.rows
+          .map(item => item.doc)
+          .filter(item => !(item._id.split('/')[0] == '_design'))
+      );
+  }
+  getActiviteById(codeActivite) {
+    return this.db
+      .find({
+        selector: {
+          ACDG_IDENT: parseInt(codeActivite)
+        }
+      })
+      .then(res => res.docs[0]);
+  }
 }
 
 export default ActiviteService;

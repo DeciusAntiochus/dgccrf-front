@@ -79,7 +79,10 @@ class PouchDbVisiteService {
       live: true,
       retry: true
     });
-    this.newVisiteDB.replicate.from(config.couchDb.url_new_visites, opts);
+    this.newVisiteDB.replicate.from(config.couchDb.url_new_visites, {
+      live: true,
+      retry: true
+    });
     this.newVisiteDB.createIndex({
       index: { fields: ['VISITE_IDENT'] }
     });
@@ -159,9 +162,7 @@ class PouchDbVisiteService {
 
   postControlesByVisite(visiteInfos, controlesList) {
     let promises = [];
-    const ident = parseInt(
-      Date.now()
-    );
+    const ident = parseInt(Date.now());
     promises.push(
       this.newVisiteDB.post({
         ...visiteInfos,
@@ -176,7 +177,8 @@ class PouchDbVisiteService {
           CPF_CODE_PRODUIT: controle.cpf,
           STADE_PRODUIT_IDENT: parseInt(controle.stade),
           CONTROLE_IDENT: controle.dossier.toString() + controle.cpf.toString(),
-          VISITE_IDENT: ident
+          VISITE_IDENT: ident,
+          new_visite: true
         })
       );
     }

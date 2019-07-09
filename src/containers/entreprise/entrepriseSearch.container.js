@@ -88,6 +88,7 @@ class EntrepriseSearch extends React.Component {
       });
     }, 300);
   };
+  
   renderResults({ id, raisonSociale, enseigne, siret }) {
     return (
       <Container

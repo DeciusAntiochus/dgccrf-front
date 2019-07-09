@@ -8,18 +8,35 @@ import CodesField from '../../components/fields/codes.component';
 export default class SingleControleComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      controle: {
-        dossier: 0,
-        tache: 0,
-        activite: '',
-        cpf: '',
-        stade: '',
-        dossierText: '',
-        activiteText: ''
-      }
-    };
+    if (props.controle) {
+      this.state = {
+        controle: {
+          dossier: props.controle.dossier,
+          dossierText: props.controle.dossierText,
+          tache: props.controle.tache,
+          tacheText: props.controle.tacheText,
+          activite: props.controle.ACDG_IDENT,
+          activiteText: props.controle.ACDG_CODE_LIB_NIVEAU3,
+          cpf: props.controle.CPF_IDENT,
+          stade: props.controle.stade
+        }
+      };
+    } else {
+      this.state = {
+        controle: {
+          dossier: parseInt(this.props.dossier.id),
+          dossierText: this.props.dossier.text,
+          tache: 0,
+          tacheText: '',
+          activite: 0,
+          activiteText: '',
+          cpf: 0,
+          stade: ''
+        }
+      };
+    }
   }
+
   render() {
     return (
       <Form>
@@ -63,6 +80,8 @@ export default class SingleControleComponent extends React.Component {
               }
             });
           }}
+          activite={this.state.controle.activite}
+          cpf={this.state.controle.cpf}
         />
         <StadeField
           onChange={(e, data) =>
@@ -70,6 +89,7 @@ export default class SingleControleComponent extends React.Component {
               controle: { ...this.state.controle, stade: data.value }
             })
           }
+          stade={this.state.controle.stade}
         />
         <Form.Button onClick={() => this.props.onSubmit(this.state.controle)}>
           Valider
@@ -80,5 +100,10 @@ export default class SingleControleComponent extends React.Component {
 }
 
 SingleControleComponent.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  dossier: PropTypes.shape({
+    id: PropTypes.string,
+    text: PropTypes.string
+  }),
+  controle: PropTypes.any
 };
