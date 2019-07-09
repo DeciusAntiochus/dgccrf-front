@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Header, Icon, Input } from 'semantic-ui-react';
-import documentsService from '../../services/documents.service';
+import documentsService from '../../services/subservices/documents.service';
 import DocumentModal from './documentModal.component';
 
 function removeExtension(documentname) {
@@ -30,7 +30,7 @@ export default class documentsList extends Component {
     this.clickCount++;
     if (this.clickCount === 1) {
       this.singleClickTimer = setTimeout(
-        function() {
+        function () {
           this.clickCount = 0;
         }.bind(this),
         300
@@ -207,20 +207,20 @@ export default class documentsList extends Component {
                     ></Icon>
                   </>
                 ) : (
-                  <div style={{ height: 30 }}>
-                    <Input
-                      style={{ height: 30 }}
-                      value={this.state.documentname}
-                      onChange={this.handleChangeName}
-                    ></Input>
-                    <Icon
-                      onClick={() => this.validateName(document)}
-                      name="check"
-                      color="grey"
-                      style={{ marginLeft: 5, cursor: 'pointer' }}
-                    ></Icon>
-                  </div>
-                )}
+                    <div style={{ height: 30 }}>
+                      <Input
+                        style={{ height: 30 }}
+                        value={this.state.documentname}
+                        onChange={this.handleChangeName}
+                      ></Input>
+                      <Icon
+                        onClick={() => this.validateName(document)}
+                        name="check"
+                        color="grey"
+                        style={{ marginLeft: 5, cursor: 'pointer' }}
+                      ></Icon>
+                    </div>
+                  )}
               </div>
             </div>
           ))}
