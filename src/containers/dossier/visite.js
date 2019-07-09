@@ -7,6 +7,7 @@ import moment from 'moment';
 export default class Visite extends Component {
   render() {
     const { visite } = this.props;
+    console.log(visite);
 
     return (
       <Grid.Row style={{ padding: 10, overflow: 'auto' }}>
@@ -22,7 +23,13 @@ export default class Visite extends Component {
         >
           <Link to={'/visite/' + visite.visiteData.VISITE_IDENT}>
             <Grid>
-              <Grid.Row verticalAlign="middle" style={{ padding: 0 }}>
+              <Grid.Row
+                verticalAlign="middle"
+                style={{
+                  padding: 0,
+                  backgroundColor: !visite.visiteData.new_visite && 'grey'
+                }}
+              >
                 <Grid.Column
                   width={3}
                   style={{
@@ -86,7 +93,7 @@ export default class Visite extends Component {
                   </Grid.Row>
                   <Grid.Row>
                     <Header as="h6" style={{ fontWeight: 'normal' }}>
-                      {visite.visiteData.ETOB_NOM_RESPONSABLE}
+                      {visite.visiteData.VISITE_AGENT_LIBELLE}
                     </Header>
                   </Grid.Row>
                 </Grid.Column>

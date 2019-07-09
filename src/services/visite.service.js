@@ -30,6 +30,12 @@ class PouchDbVisiteService {
       query_params: { AGENT_DD_IDENT: AGENT_DD_IDENT }
     };
 
+    var opts_without_filter = {
+      batch_size: 1000,
+      live: true,
+      retry: true
+    };
+
     this.controleDB = new PouchDB('controles');
     this.controleDB.replicate
       .from(config.couchDb.url_controles, opts)
@@ -38,6 +44,25 @@ class PouchDbVisiteService {
       index: { fields: ['DOSSIER_IDENT'] }
     });
     this.controleDB
+      .changes({
+        since: 'now',
+        live: true
+      })
+      .on('change', () => this.changesCallbacks.map(cb => cb()));
+
+    this.newVisiteDB = new PouchDB('new-visites');
+    this.newVisiteDB.replicate.to(config.couchDb.url_new_visites, {
+      live: true,
+      retry: true
+    });
+    this.newVisiteDB.replicate.from(
+      config.couchDb.url_new_visites,
+      opts_without_filter
+    );
+    this.newVisiteDB.createIndex({
+      index: { fields: ['VISITE_IDENT'] }
+    });
+    this.newVisiteDB
       .changes({
         since: 'now',
         live: true
@@ -68,22 +93,6 @@ class PouchDbVisiteService {
       index: { fields: ['VISTE_IDENT'] }
     });
     this.visiteDB
-      .changes({
-        since: 'now',
-        live: true
-      })
-      .on('change', () => this.changesCallbacks.map(cb => cb()));
-
-    this.newVisiteDB = new PouchDB('new-visites');
-    this.newVisiteDB.replicate.to(config.couchDb.url_new_visites, {
-      live: true,
-      retry: true
-    });
-    this.newVisiteDB.replicate.from(config.couchDb.url_new_visites, opts);
-    this.newVisiteDB.createIndex({
-      index: { fields: ['VISITE_IDENT'] }
-    });
-    this.newVisiteDB
       .changes({
         since: 'now',
         live: true
@@ -159,9 +168,7 @@ class PouchDbVisiteService {
 
   postControlesByVisite(visiteInfos, controlesList) {
     let promises = [];
-    const ident = parseInt(
-      Date.now()
-    );
+    const ident = parseInt(Date.now());
     promises.push(
       this.newVisiteDB.post({
         ...visiteInfos,
