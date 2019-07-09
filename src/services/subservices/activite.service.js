@@ -1,21 +1,22 @@
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
-import config from '../config';
+import config from '../../config';
+import replicateFromSQL from '../replicationHandler';
+
 
 PouchDB.plugin(PouchDBFind);
-class CpfService {
+class ActiviteService {
     constructor() {
-        let pouchDbUrl = config.couchDb.url_cpf;
-        this.db = new PouchDB('cpf');
+        let pouchDbUrl = config.couchDb.url_activite;
+        this.db = new PouchDB('activite');
         var opts = {
             batch_size: 1000,
             live: true,
             retry: true,
         };
 
-        this.db.replicate.from(pouchDbUrl, opts)
+        this.interval = replicateFromSQL(this.db, config.backend.base_url + '/fulldata/activite/');
         this.resetDb = () => undefined; // no need to reset activite
-
     }
 
     //getAllDocsOfTheDB
@@ -30,4 +31,4 @@ class CpfService {
     }
 }
 
-export default CpfService;
+export default ActiviteService;

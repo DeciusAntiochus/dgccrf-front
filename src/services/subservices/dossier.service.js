@@ -1,6 +1,7 @@
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
-import config from '../config';
+import config from '../../config';
+import replicateFromSQL from '../replicationHandler';
 
 PouchDB.plugin(PouchDBFind);
 
@@ -16,18 +17,9 @@ class PouchDbService {
     }
 
     async initDb(AGENT_DD_IDENT) {
-        let pouchDbUrl = config.couchDb.url_dossiers;
         this.db = new PouchDB('mes-dossiers');
-        var opts = {
-            batch_size: 1000,
-            live: true,
-            retry: true,
-            'filter': 'filters/by_user',
-            query_params: { AGENT_DD_IDENT }
-        };
+        this.interval = replicateFromSQL(this.db, config.backend.base_url + '/fulldata/dossiers/' + AGENT_DD_IDENT);
 
-        this.db.replicate.from(pouchDbUrl, opts)
-            .on('change', () => this.changesCallbacks.map(cb => cb()));
 
         this.db.createIndex({
             index: { fields: ['DOSSIER_IDENT'] }
@@ -43,6 +35,7 @@ class PouchDbService {
     }
 
     async resetDb(AGENT_DD_IDENT) {
+        console.log(clearInterval(this.interval));
         await this.db.destroy();
         await this.initDb(AGENT_DD_IDENT);
     }

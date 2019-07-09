@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
+import replicateFromSQL from '../replicationHandler';
 
-import config from '../config';
+import config from '../../config';
 PouchDB.plugin(PouchDBFind);
 
 class PouchDbVisiteService {
@@ -14,6 +15,8 @@ class PouchDbVisiteService {
   }
 
   async resetDb(AGENT_DD_IDENT) {
+    clearInterval(this.controleInterval);
+    clearInterval(this.visiteInterval);
     await this.controleDB.destroy();
     await this.newControleDB.destroy();
     await this.visiteDB.destroy();
@@ -31,9 +34,7 @@ class PouchDbVisiteService {
     };
 
     this.controleDB = new PouchDB('controles');
-    this.controleDB.replicate
-      .from(config.couchDb.url_controles, opts)
-      .on('change', () => this.changesCallbacks.map(cb => cb()));
+    this.controleInterval = replicateFromSQL(this.controleDB, config.backend.base_url + '/fulldata/controles/' + AGENT_DD_IDENT);
     this.controleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
@@ -61,9 +62,7 @@ class PouchDbVisiteService {
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.visiteDB = new PouchDB('visites');
-    this.visiteDB.replicate
-      .from(config.couchDb.url_visites, opts)
-      .on('change', () => this.changesCallbacks.map(cb => cb()));
+    this.visiteInterval = replicateFromSQL(this.visiteDB, config.backend.base_url + '/fulldata/visites/' + AGENT_DD_IDENT);
     this.visiteDB.createIndex({
       index: { fields: ['VISTE_IDENT'] }
     });
@@ -153,7 +152,6 @@ class PouchDbVisiteService {
       }
     });
     visitesList = await Promise.all(visitesList);
-    debugger;
     // eslint-disable-next-line no-undefa
     return visitesList.filter(doc => doc);
   }

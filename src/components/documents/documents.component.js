@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Icon, Header, Modal, Input } from 'semantic-ui-react';
-import documentsService from '../../services/documents.service';
+import documentsService from '../../services/subservices/documents.service';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
 import DocumentModal from './documentModal.component';
 
@@ -79,22 +79,22 @@ class Documents extends Component {
   componentDidMount() {
     this.props.dossier
       ? documentsService.getDocsByDossierId(this.props.dossierid).then(res => {
-          this.loadDocuments(res);
-        })
+        this.loadDocuments(res);
+      })
       : documentsService.getDocsByVisiteId(this.props.visiteid).then(res => {
-          this.loadDocuments(res);
-        });
+        this.loadDocuments(res);
+      });
 
     documentsService.onChanges(() =>
       this.props.dossier
         ? documentsService
-            .getDocsByDossierId(this.props.dossierid)
-            .then(res => {
-              this.loadDocuments(res);
-            })
-        : documentsService.getDocsByVisiteId(this.props.visiteid).then(res => {
+          .getDocsByDossierId(this.props.dossierid)
+          .then(res => {
             this.loadDocuments(res);
           })
+        : documentsService.getDocsByVisiteId(this.props.visiteid).then(res => {
+          this.loadDocuments(res);
+        })
     );
   }
 
@@ -113,8 +113,8 @@ class Documents extends Component {
           author: 4447,
           visite: this.props.dossier
             ? this.props.visitesList.map(visite => {
-                return visite.visiteData.VISITE_IDENT;
-              })
+              return visite.visiteData.VISITE_IDENT;
+            })
             : [this.props.visiteid],
           date: Date.now(),
           dossier: this.props.dossier ? this.props.dossierid : null,
@@ -181,8 +181,8 @@ class Documents extends Component {
             )}
           </div>
         ) : (
-          <MyActivityIndicator />
-        )}
+            <MyActivityIndicator />
+          )}
 
         {documents ? (
           <div style={{ flex: 10 }}>
@@ -193,35 +193,35 @@ class Documents extends Component {
                 })}
               />
             ) : (
-              <SwipeableViews
-                style={{ height: '100%' }}
-                slideStyle={{ height: '100%', overflow: 'auto' }}
-                slideClassName="hidescrollbar"
-                index={this.state.activeIndex}
-                onChangeIndex={this.handleChangeIndex}
-              >
-                <DocumentsList
-                  documents={documents.filter(document => {
-                    return document.categorie === 'support';
-                  })}
-                />
+                <SwipeableViews
+                  style={{ height: '100%' }}
+                  slideStyle={{ height: '100%', overflow: 'auto' }}
+                  slideClassName="hidescrollbar"
+                  index={this.state.activeIndex}
+                  onChangeIndex={this.handleChangeIndex}
+                >
+                  <DocumentsList
+                    documents={documents.filter(document => {
+                      return document.categorie === 'support';
+                    })}
+                  />
 
-                <DocumentsList
-                  documents={documents.filter(document => {
-                    return document.categorie === 'joint';
-                  })}
-                />
-                <DocumentsList
-                  documents={documents.filter(document => {
-                    return document.categorie === 'photo';
-                  })}
-                />
-              </SwipeableViews>
-            )}
+                  <DocumentsList
+                    documents={documents.filter(document => {
+                      return document.categorie === 'joint';
+                    })}
+                  />
+                  <DocumentsList
+                    documents={documents.filter(document => {
+                      return document.categorie === 'photo';
+                    })}
+                  />
+                </SwipeableViews>
+              )}
           </div>
         ) : (
-          <MyActivityIndicator />
-        )}
+            <MyActivityIndicator />
+          )}
       </div>
     );
   }

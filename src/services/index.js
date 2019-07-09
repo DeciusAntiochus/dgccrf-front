@@ -1,8 +1,8 @@
 import { store } from '../store';
-import DossierService from './dossier.service';
-import VisiteService from './visite.service';
-import ActiviteService from './activite.service';
-import CpfService from './cpf.service';
+import DossierService from './subservices/dossier.service';
+import VisiteService from './subservices/visite.service';
+import ActiviteService from './subservices/activite.service';
+import CpfService from './subservices/cpf.service';
 
 class PouchDbServices {
 
