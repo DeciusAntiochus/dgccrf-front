@@ -1,32 +1,37 @@
 import React from 'react';
 import { Modal, Container, Button, Table, Message } from 'semantic-ui-react';
 import SingleControleComponent from './singleControle.container';
+import PropTypes from 'prop-types';
 
 export default class ControleComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       countControl: 0,
-      controles: [],
       addModalOpen: false,
       addModalErrorMessage: ''
     };
   }
 
   submitControle = controle => {
-    if (!controle.dossier || !controle.dg || !controle.cpf || !controle.stade) {
+    if (
+      !controle.dossier ||
+      !controle.tache ||
+      !controle.activite ||
+      !controle.cpf ||
+      !controle.stade
+    ) {
       this.setState({
         addModalErrorMessage:
           'Veuillez renseigner tous les champs obligatoires.'
       });
     } else {
+      controle.ident = this.state.countControl;
       this.setState({
         countCountrol: this.state.countControl + 1,
-        controles: this.state.controles.concat([
-          { ...controle, key: this.state.countCountrol }
-        ]),
         addModalOpen: false
       });
+      this.props.changeControle(this.props.controles.concat([controle]));
     }
   };
 
@@ -69,9 +74,9 @@ export default class ControleComponent extends React.Component {
         </Modal>
         <Table celled>
           <Table.Body>
-            {this.state.controles.map(controle => (
-              <Table.Row key={controle.key}>
-                <Table.Cell>{controle.dossier}</Table.Cell>
+            {this.props.controles.map(controle => (
+              <Table.Row key={controle.ident}>
+                <Table.Cell>{controle.dossierText}</Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
@@ -80,3 +85,8 @@ export default class ControleComponent extends React.Component {
     );
   }
 }
+
+ControleComponent.propTypes = {
+  changeControle: PropTypes.func.isRequired,
+  controles: PropTypes.array.isRequired
+};

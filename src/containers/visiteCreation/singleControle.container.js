@@ -3,16 +3,20 @@ import { Form } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import DossierField from '../../components/fields/dossierField.component';
 import StadeField from '../../components/fields/stadeField.component';
+import CodesField from '../../components/fields/codes.component';
 
 export default class SingleControleComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       controle: {
-        dossier: '',
-        dg: '',
+        dossier: 0,
+        tache: 0,
+        activite: '',
         cpf: '',
-        stade: ''
+        stade: '',
+        dossierText: '',
+        activiteText: ''
       }
     };
   }
@@ -20,37 +24,46 @@ export default class SingleControleComponent extends React.Component {
     return (
       <Form>
         <DossierField
-          dossierChange={(e, data) =>
+          dossierChange={(value, text) =>
             this.setState({
-              controle: { ...this.state.controle, dossier: data.value }
+              controle: {
+                ...this.state.controle,
+                dossier: value,
+                dossierText: text
+              }
             })
           }
+          tacheChange={(value, text) =>
+            this.setState({
+              controle: {
+                ...this.state.controle,
+                tache: value,
+                tacheText: text
+              }
+            })
+          }
+          dossier={this.state.controle.dossier}
+          tache={this.state.controle.tache}
         />
-        <Form.Group widths="equal">
-          <Form.Input
-            fluid
-            required
-            label="Code DG"
-            placeholder="Code DG"
-            onChange={e =>
-              this.setState({
-                controle: { ...this.state.controle, dg: e.target.value }
-              })
-            }
-          />
-
-          <Form.Input
-            fluid
-            required
-            label="Code CPF"
-            placeholder="Code CPF"
-            onChange={e =>
-              this.setState({
-                controle: { ...this.state.controle, cpf: e.target.value }
-              })
-            }
-          />
-        </Form.Group>
+        <CodesField
+          activiteChange={(e, data) =>
+            this.setState({
+              controle: {
+                ...this.state.controle,
+                activite: data.value,
+                activiteText: e.currentTarget.innerText
+              }
+            })
+          }
+          cpfChange={(e, data) => {
+            this.setState({
+              controle: {
+                ...this.state.controle,
+                cpf: data.value
+              }
+            });
+          }}
+        />
         <StadeField
           onChange={(e, data) =>
             this.setState({

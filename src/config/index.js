@@ -12,6 +12,7 @@ export default {
     url_visites: url_prefix + '/visites',
     url_activite: url_prefix + '/activite',
     url_cpf: url_prefix + '/produit-cpf',
-    url_trames: url_prefix + '/trames'
+    url_trames: url_prefix + '/trames',
+    url_new_visites: url_prefix + '/new-visites'
   }
 };
