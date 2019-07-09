@@ -2,7 +2,6 @@
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 import replicateFromSQL from '../replicationHandler';
-
 import config from '../../config';
 PouchDB.plugin(PouchDBFind);
 
@@ -96,35 +95,21 @@ class PouchDbVisiteService {
   }
 
   //getAllDocsOfTheDB
-  getAllDocs() {
-    return this.controleDB
-      .allDocs({ include_docs: true, descending: true })
-      .then(table => table.rows.map(item => item.doc))
-      .then(firstArray =>
-        this.newControleDB
-          .allDocs({ include_docs: true, descending: true })
-          .then(table =>
-            table.rows
-              .map(item => item.doc)
-              .concat(firstArray)
-              .filter(item => !(item._id.split('/')[0] == '_design'))
-          )
-      );
+  async getAllDocs() {
+    let firstArray = await this.controleDB.allDocs({ include_docs: true, descending: true });
+    firstArray = firstArray.rows.map(item => item.doc);
+    let secondArray = await this.newControleDB.allDocs({ include_docs: true, descending: true });
+    secondArray = secondArray.rows.map(item => item.doc);
+
+    return secondArray.concat(firstArray).filter(item => !(item._id.split('/')[0] == '_design'));
   }
 
-  getControlesByDossier(dossierID) {
-    return this.controleDB
-      .find({ selector: { DOSSIER_IDENT: parseInt(dossierID) } })
-      .then(table => table.docs)
-      .then(firstArray =>
-        this.newControleDB
-          .find({ selector: { DOSSIER_IDENT: parseInt(dossierID) } })
-          .then(table =>
-            table.docs
-              .concat(firstArray)
-              .filter((value, index, self) => self.indexOf(value) === index)
-          )
-      );
+  async getControlesByDossier(dossierID) {
+    let firstArray = await this.controleDB.find({ selector: { DOSSIER_IDENT: parseInt(dossierID) } });
+    firstArray = firstArray.docs;
+    let secondArray = await this.newControleDB.find({ selector: { DOSSIER_IDENT: parseInt(dossierID) } });
+    secondArray = secondArray.docs;
+    return firstArray.concat(secondArray).filter((value, index, self) => self.indexOf(value) === index);
   }
 
   async getVisitesByDossier(dossierID) {
