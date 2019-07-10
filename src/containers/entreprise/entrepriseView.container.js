@@ -2,12 +2,16 @@ import React from 'react';
 import { Card, Grid, Container } from 'semantic-ui-react';
 import { PropTypes } from 'prop-types';
 import EntrepriseAttribute from '../../components/entrepriseAttribute.component';
+import VisiteComponent from './visite.component';
+import MyActivityIndicator from '../../components/myActivityIndicator.component';
 import {
   changeNameOfPage,
   changeBackUrl,
   changeActivePage
 } from '../navbar/actions';
 import { connect } from 'react-redux';
+import config from '../../config';
+import axios from 'axios';
 
 function mapStateToProps() {
   return {};
@@ -23,28 +27,42 @@ function mapDispatchToProps(dispatch) {
 }
 
 class EntrepriseViewComponent extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
-      id: '1',
-      siret: '43425495900035',
-      raisonSociale: 'Sadaka',
-      enseigne: 'Le Salon',
-      naf:
-        "Commerce de gros (commerce interentreprises) d'autres biens domestiques",
-      adresse: '27 rue des étuves',
-      ville: 'Montpellier',
-      codePostal: '34000'
-    };
+      visites: []
+    }
   }
 
   componentDidMount() {
-    this.props.changeNameOfPage('Établissement ' + this.state.enseigne);
     this.props.changeBackUrl('/etablissements');
-    this.props.changeActivePage('/etablissement/' + this.state.id);
+    this.setState({ isLoading: true });
+    axios.get(config.backend.base_url + '/entreprise/' + this.props.match.params.id)
+      .then(({ data }) => {
+        this.setState(data);
+        this.props.changeNameOfPage('Établissement ' + data.ETOB_ENSEIGNE_LIB);
+        this.props.changeActivePage('/etablissement/' + data.ETOB_IDENT);
+        this.setState({ isLoading: false });
+      })
+  }
+  componentDidUpdate(prevprops) {
+    if (prevprops.match.params.id != this.props.match.params.id) {
+      this.setState({ isLoading: true });
+
+      axios.get(config.backend.base_url + '/entreprise/' + this.props.match.params.id)
+        .then(({ data }) => {
+          this.setState(data);
+          this.props.changeNameOfPage('Établissement ' + data.ETOB_ENSEIGNE_LIB);
+          this.props.changeActivePage('/etablissement/' + data.ETOB_IDENT);
+          this.setState({ isLoading: false });
+        })
+    }
   }
 
   render() {
+    if (this.state.isLoading)
+      return <MyActivityIndicator />
     return (
       <Container style={{ padding: '1rem' }}>
         <Card centered raised fluid>
@@ -56,32 +74,35 @@ class EntrepriseViewComponent extends React.Component {
               <EntrepriseAttribute
                 name="Enseigne :"
                 icon="building"
-                value={<span>{this.state.enseigne}</span>}
+                value={<span>{this.state.ETOB_ENSEIGNE_LIB}</span>}
               />
 
               <EntrepriseAttribute
                 name="Raison Sociale :"
                 icon="address card"
-                value={<span>{this.state.raisonSociale}</span>}
+                value={<span>{this.state.ETOB_RAISON_SOCIALE}</span>}
               />
               <EntrepriseAttribute
                 name="SIRET :"
                 icon="text cursor"
-                value={<span>{this.state.siret}</span>}
+                value={<span>{this.state.ETOB_SIRET}</span>}
               />
               <EntrepriseAttribute
                 name="NAF :"
                 icon="clipboard"
-                value={<span>{this.state.naf}</span>}
+                value={<span>{this.state.NAF_LIBELLE}</span>}
               />
               <EntrepriseAttribute
                 name="Adresse :"
                 icon="address book"
                 value={
                   <span>
-                    {this.state.adresse} <br /> {this.state.codePostal}
+                    {this.state.ETOB_ADR1} <br />
+                    {this.state.ETOB_ADR2 && <span>{this.state.ETOB_ADR2} <br /></span>}
+                    {this.state.ETOB_ADR3 && <span>{this.state.ETOB_ADR3} <br /></span>}
+                    {this.state.ETOB_ADRCP}
                     <span> </span>
-                    {this.state.ville}
+                    {this.state.ETOB_ADRVILLE}
                   </span>
                 }
               />
@@ -93,7 +114,9 @@ class EntrepriseViewComponent extends React.Component {
             <Card.Header textAlign="center">Visites</Card.Header>
           </Card.Content>
           <Card.Content>
-            <Grid></Grid>
+            <Grid>
+              {this.state.visites.map(visite => <VisiteComponent key={visite.VISITE_IDENT} visite={visite} />)}
+            </Grid>
           </Card.Content>
         </Card>
       </Container>
@@ -102,6 +125,8 @@ class EntrepriseViewComponent extends React.Component {
 }
 
 EntrepriseViewComponent.propTypes = {
+  location: PropTypes.any.isRequired,
+  match: PropTypes.any.isRequired,
   changeNameOfPage: PropTypes.func.isRequired,
   changeBackUrl: PropTypes.func.isRequired,
   changeActivePage: PropTypes.func.isRequired

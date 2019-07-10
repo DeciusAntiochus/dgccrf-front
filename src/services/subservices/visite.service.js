@@ -59,9 +59,8 @@ class PouchDbVisiteService {
     this.newControleDB = new PouchDB('new-controles');
     this.newControleDB.replicate.to(config.couchDb.url_new_controles, opts_without_filter);
     this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
-    this.newControleDB.createIndex({
-      index: { fields: ['DOSSIER_IDENT'] }
-    });
+    this.newControleDB.createIndex({ index: { fields: ['DOSSIER_IDENT'] } });
+    this.newControleDB.createIndex({ index: { fields: ['VISITE_IDENT'] } });
     this.newControleDB.changes({ since: 'now', live: true })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
