@@ -23,8 +23,10 @@ class Replication {
     }
 
     async tryReplication() {
-        let nextChangeDate = moment(localStorage.getItem(this.storageKey)).format("YYYY-MM-DDTHH:mm:SSS");
-        if (nextChangeDate < moment(new Date()).format("YYYY-MM-DDTHH:mm:SSS")) {
+        let rawNextChangeDate = localStorage.getItem(this.storageKey)
+        let nextChangeDate = moment(rawNextChangeDate).format("YYYY-MM-DDTHH:mm:SSS");
+        console.log(rawNextChangeDate);
+        if (!(rawNextChangeDate) || nextChangeDate < moment(new Date()).format("YYYY-MM-DDTHH:mm:SSS")) {
             try {
                 let { data } = await axios.get(this.replicationUrl);
                 await this.db.bulkDocs({ docs: data });

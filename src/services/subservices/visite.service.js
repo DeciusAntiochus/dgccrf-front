@@ -10,9 +10,10 @@ class PouchDbVisiteService {
   constructor(AGENT_DD_IDENT) {
     this.resetDb = this.resetDb.bind(this);
     this.initDb = this.initDb.bind(this);
+    this.postControlesByVisite = this.postControlesByVisite.bind(this);
+
     this.changesCallbacks = [];
     this.initDb(AGENT_DD_IDENT);
-    this.postControlesByVisite = this.postControlesByVisite.bind(this);
   }
 
   async resetDb(AGENT_DD_IDENT) {
