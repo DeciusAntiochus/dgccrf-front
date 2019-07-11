@@ -51,7 +51,7 @@ class CreateVisiteComponent extends React.Component {
       SIRET: '',
       observations: '',
       trame: '',
-      trameList: ['trame 1', 'trame 2'],
+      trameList: [{ _id: 0, name: 'Aucune trame' }],
       controlesList: [],
       message: '',
       dossierText: ''
@@ -66,6 +66,15 @@ class CreateVisiteComponent extends React.Component {
     dossierService
       .getAllActionCode()
       .then(actionList => this.setState({ actionList }));
+
+    PouchDbServices.services.trame
+      .getAllDocs()
+      .then(res => {
+        this.setState({ trameList: this.state.trameList.concat(res) });
+      })
+      .catch(e => {
+        //
+      });
     const dossier = await dossierService.getDossierById(
       this.props.match.params.dossierId
     );
@@ -125,7 +134,7 @@ class CreateVisiteComponent extends React.Component {
             VIS_OBSERVATIONS: this.state.observations,
             VIS_MUTUALISEE: this.state.mutualisee,
             VIS_CPMM: this.state.cpmm,
-            trame: this.state.trame,
+            trame: this.state.trame._id === 0 ? null : this.state.trame,
             AG_IDENT: this.props.agentIdent
           },
           this.state.controlesList
@@ -195,36 +204,21 @@ class CreateVisiteComponent extends React.Component {
                     verticalAlign="bottom"
                   >
                     <GridRow style={{ display: 'flex' }}>
-                      <Grid.Column width={14} style={{ padding: 0 }}>
+                      <Grid.Column width={16} style={{ padding: 0 }}>
                         <Form.Select
                           fluid
-                          placeholder="Trâme"
-                          label="Trâme associée"
+                          placeholder="Trame"
+                          label="Trame associée"
                           style={{ width: '100%' }}
                           options={this.state.trameList.map(trame => ({
-                            key: trame,
-                            text: trame,
+                            key: trame._id,
+                            text: trame.name,
                             value: trame
                           }))}
                           onChange={(e, { value }) =>
                             this.setState({ trame: value })
                           }
                         />
-                      </Grid.Column>
-
-                      <Grid.Column width={1} style={{ padding: 0 }}>
-                        <Link to="/nouvelle-trame">
-                          <div
-                            style={{
-                              width: '100%',
-                              textAlign: 'center',
-                              cursor: 'pointer',
-                              paddingBottom: '0.3em'
-                            }}
-                          >
-                            <Icon name="plus" size="big" />
-                          </div>
-                        </Link>
                       </Grid.Column>
                     </GridRow>
                   </Grid>

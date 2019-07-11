@@ -12,7 +12,10 @@ export default class Pendant extends Component {
     return this.props.editMode ? (
       <EditComponent {...this.props}></EditComponent>
     ) : (
-      <TrameComponent {...this.props} taskList={this.props.trame.trame} />
+      <TrameComponent
+        {...this.props}
+        taskList={this.props.trame.tramePendant}
+      />
     );
   }
 }
