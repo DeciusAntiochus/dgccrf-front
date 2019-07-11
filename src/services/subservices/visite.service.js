@@ -3,7 +3,6 @@ import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 import replicateFromSQL from '../replicationHandler';
 import config from '../../config';
-import { optionalCallExpression } from '@babel/types';
 PouchDB.plugin(PouchDBFind);
 
 class PouchDbVisiteService {
@@ -55,7 +54,7 @@ class PouchDbVisiteService {
     this.newVisiteDB = new PouchDB('new-visites');
     this.newVisiteDB.replicate.to(
       config.couchDb.url_new_visites,
-      optionalCallExpression
+      opts_without_filter
     );
     this.newVisiteDB.replicate.from(
       config.couchDb.url_new_visites,
@@ -73,7 +72,10 @@ class PouchDbVisiteService {
       config.couchDb.url_new_controles,
       opts_without_filter
     );
-    this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
+    this.newControleDB.replicate.from(
+      config.couchDb.url_new_controles,
+      opts_without_filter
+    );
     this.newControleDB.createIndex({ index: { fields: ['DOSSIER_IDENT'] } });
     this.newControleDB.createIndex({ index: { fields: ['VISITE_IDENT'] } });
     this.newControleDB

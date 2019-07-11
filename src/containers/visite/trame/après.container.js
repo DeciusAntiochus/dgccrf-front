@@ -12,7 +12,7 @@ export default class Apres extends Component {
     return this.props.editMode ? (
       <EditComponent {...this.props}></EditComponent>
     ) : (
-      <TrameComponent {...this.props} taskList={this.props.trame.trame} />
+      <TrameComponent {...this.props} taskList={this.props.trame.trameAprès} />
     );
   }
 }
