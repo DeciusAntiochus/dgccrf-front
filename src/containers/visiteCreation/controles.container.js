@@ -36,6 +36,7 @@ export default class ControleComponent extends React.Component {
           <Table.Row>
             <Table.HeaderCell>Dossier</Table.HeaderCell>
             <Table.HeaderCell>Code Action</Table.HeaderCell>
+            <Table.HeaderCell></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
       );
@@ -106,6 +107,12 @@ export default class ControleComponent extends React.Component {
     }
   }
 
+  deleteControle = controleId => {
+    this.props.changeControle(
+      this.props.controles.filter(cont => cont.ident !== controleId)
+    );
+  };
+
   displayMessage = message => {
     if (message) {
       return (
@@ -161,7 +168,9 @@ export default class ControleComponent extends React.Component {
           <Modal.Content>
             {this.displayMessage(this.state.modifyModalErrorMessage)}
             <SingleControleComponent
-              onSubmit={this.submitModifyControle}
+              onSubmit={controle =>
+                this.submitModifyControle(controle, controle.ident)
+              }
               controle={this.state.controleModified}
               dossier={{
                 id: this.state.controleModified.dossier,
@@ -170,7 +179,7 @@ export default class ControleComponent extends React.Component {
             />
           </Modal.Content>
         </Modal>
-        <Table celled>
+        <Table celled stackable>
           {this.displayNoControleAlert()}
           <Table.Body>
             {this.props.controles.map(controle => (
@@ -178,15 +187,20 @@ export default class ControleComponent extends React.Component {
                 <Table.Cell>{controle.dossierText}</Table.Cell>
                 <Table.Cell>{controle.ACDG_CODE_LIB_NIVEAU3}</Table.Cell>
                 <Button
+                  icon="pencil"
+                  style={{ margin: '3px' }}
                   onClick={() =>
                     this.setState({
                       modifyModalOpen: true,
                       controleModified: controle
                     })
                   }
-                >
-                  Modifier
-                </Button>
+                ></Button>
+                <Button
+                  icon="trash alternate"
+                  style={{ margin: '3px' }}
+                  onClick={() => this.deleteControle(controle.ident)}
+                ></Button>
               </Table.Row>
             ))}
           </Table.Body>

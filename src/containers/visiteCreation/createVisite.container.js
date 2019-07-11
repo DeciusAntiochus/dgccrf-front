@@ -186,7 +186,7 @@ class CreateVisiteComponent extends React.Component {
                     required
                     label="SIRET"
                     placeholder="SIRET"
-                    onChange={e => this.setState({ siret: e.target.value })}
+                    onChange={e => this.setState({ SIRET: e.target.value })}
                   />
                 </Form.Group>
                 <Form.Group style={{ margin: 0 }}>

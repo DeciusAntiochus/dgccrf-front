@@ -18,7 +18,8 @@ export default class SingleControleComponent extends React.Component {
           activite: props.controle.ACDG_IDENT,
           activiteText: props.controle.ACDG_CODE_LIB_NIVEAU3,
           cpf: props.controle.CPF_IDENT,
-          stade: props.controle.stade
+          stade: props.controle.stade,
+          ident: props.controle.ident
         }
       };
     } else {
