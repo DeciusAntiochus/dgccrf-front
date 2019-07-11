@@ -151,7 +151,7 @@ class Visite extends React.Component {
                     overflowY: 'auto',
                     marginTop: 80,
                     paddingBottom: 105,
-                    maxWidth: '100%'
+                    width: '100%'
                   }}
                   className="hidescrollbar"
                 >

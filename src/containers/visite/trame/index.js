@@ -102,6 +102,7 @@ class Trame extends React.Component {
           />
         ) : (
           <SwipeableViews
+            style={{ width: '100%' }}
             className="hidescrollbar"
             index={this.props.index}
             onChangeIndex={this.props.handleChangeIndex}
