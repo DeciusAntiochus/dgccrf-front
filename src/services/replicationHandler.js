@@ -25,7 +25,6 @@ class Replication {
     async tryReplication() {
         let rawNextChangeDate = localStorage.getItem(this.storageKey)
         let nextChangeDate = moment(rawNextChangeDate).format("YYYY-MM-DDTHH:mm:SSS");
-        console.log(rawNextChangeDate);
         if (!(rawNextChangeDate) || nextChangeDate < moment(new Date()).format("YYYY-MM-DDTHH:mm:SSS")) {
             try {
                 let { data } = await axios.get(this.replicationUrl);

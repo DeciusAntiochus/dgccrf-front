@@ -22,9 +22,9 @@ class PouchDbServices {
   async ChangeAgent(AGENT_DD_IDENT) {
     this.AGENT_DD_IDENT = AGENT_DD_IDENT;
     window.localStorage.setItem('AGENT_DD_IDENT', AGENT_DD_IDENT);
-    Object.keys(this.services).map(key =>
-      this.services[key].resetDb(AGENT_DD_IDENT)
-    );
+    await Promise.all(Object.keys(this.services).map(async key => {
+      await this.services[key].resetDb(AGENT_DD_IDENT);
+    }));
   }
 }
 

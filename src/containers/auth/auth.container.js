@@ -6,6 +6,7 @@ import { changeAgent } from '../../services/actions';
 import { FormGroup } from '@material-ui/core';
 import axios from 'axios';
 import config from '../../config';
+import PouchDBServices from '../../services';
 
 
 function mapStateToProps(state) {
@@ -16,7 +17,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        changeAgent: newAgentIdent => dispatch(changeAgent(newAgentIdent)),
+        changeAgent: async newAgentIdent => {
+            await PouchDBServices.ChangeAgent(newAgentIdent);
+            dispatch(changeAgent(newAgentIdent));
+        },
     };
 }
 
@@ -34,8 +38,8 @@ class AuthComponent extends React.Component {
         try {
             let res = await axios.get(config.backend.base_url + '/agent/' + this.state.idAgent);
             if (window.confirm("Etes vous sur de vouloir changer d'utilisateur pour " + res.data.AGENT_DD_LIBELLE + ".\n Vous perdrez toutes les données actuelles pour télécharger les données du nounvel utilisateur.")) {
-                this.props.changeAgent(res.data.AGENT_DD_IDENT);
-                if (this.props.location.pathname == "/authentification") {
+                await this.props.changeAgent(res.data.AGENT_DD_IDENT);
+                if (this.props.location && this.props.location.pathname == "/authentification") {
                     this.props.history.push('/mes-dossiers')
                 }
             }
