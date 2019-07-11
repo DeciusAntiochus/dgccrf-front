@@ -46,6 +46,7 @@ export default class CodesField extends React.Component {
       <Form.Group widths="equal">
         <Form.Field
           required
+          lazyLoad
           control={Select}
           options={this.state.activites}
           label="Code DG"
@@ -55,6 +56,7 @@ export default class CodesField extends React.Component {
           onChange={this.props.activiteChange}
         />
         <Form.Field
+          lazyLoad
           required
           control={Select}
           options={this.state.cpf}
