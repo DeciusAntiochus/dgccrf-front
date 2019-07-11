@@ -49,7 +49,7 @@ class CreateVisiteComponent extends React.Component {
       SIRET: '',
       observations: '',
       trame: '',
-      trameList: ['trame 1', 'trame 2'],
+      trameList: [],
       controlesList: []
     };
     this.onSubmit = this.onSubmit.bind(this);
@@ -62,6 +62,15 @@ class CreateVisiteComponent extends React.Component {
     dossierService
       .getAllActionCode()
       .then(actionList => this.setState({ actionList }));
+
+    PouchDbServices.services.trame
+      .getAllDocs()
+      .then(res => {
+        this.setState({ trameList: res });
+      })
+      .catch(e => {
+        //
+      });
   }
 
   onSubmit() {
@@ -134,36 +143,21 @@ class CreateVisiteComponent extends React.Component {
                   verticalAlign="bottom"
                 >
                   <GridRow style={{ display: 'flex' }}>
-                    <Grid.Column width={14} style={{ padding: 0 }}>
+                    <Grid.Column width={16} style={{ padding: 0 }}>
                       <Form.Select
                         fluid
-                        placeholder="Trâme"
+                        placeholder="Trame"
                         label="Trâme associée"
                         style={{ width: '100%' }}
                         options={this.state.trameList.map(trame => ({
-                          key: trame,
-                          text: trame,
+                          key: trame._Id,
+                          text: trame.name,
                           value: trame
                         }))}
                         onChange={(e, { value }) =>
                           this.setState({ trame: value })
                         }
                       />
-                    </Grid.Column>
-
-                    <Grid.Column width={1} style={{ padding: 0 }}>
-                      <Link to="/nouvelle-trame">
-                        <div
-                          style={{
-                            width: '100%',
-                            textAlign: 'center',
-                            cursor: 'pointer',
-                            paddingBottom: '0.3em'
-                          }}
-                        >
-                          <Icon name="plus" size="big" />
-                        </div>
-                      </Link>
                     </Grid.Column>
                   </GridRow>
                 </Grid>
