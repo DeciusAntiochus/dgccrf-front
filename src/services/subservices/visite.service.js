@@ -12,6 +12,7 @@ class PouchDbVisiteService {
     this.initDb = this.initDb.bind(this);
     this.changesCallbacks = [];
     this.initDb(AGENT_DD_IDENT);
+    this.postControlesByVisite = this.postControlesByVisite.bind(this);
   }
 
   async resetDb(AGENT_DD_IDENT) {
@@ -25,6 +26,7 @@ class PouchDbVisiteService {
   }
 
   async initDb(AGENT_DD_IDENT) {
+    this.AGENT_DD_IDENT = AGENT_DD_IDENT;
     var opts = {
       batch_size: 1000,
       live: true,
@@ -127,7 +129,7 @@ class PouchDbVisiteService {
 
   postControlesByVisite(visiteInfos, controlesList) {
     let promises = [];
-    const ident = parseInt(Date.now());
+    const ident = parseInt(Date.now() + this.AGENT_DD_IDENT.toString());
     promises.push(
       this.newVisiteDB.post({
         ...visiteInfos,
