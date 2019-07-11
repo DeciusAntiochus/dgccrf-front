@@ -3,6 +3,7 @@ import { Grid, Segment, Responsive, Icon, Header } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import MyLink from '../../components/visites/myLink.component';
 
 export default class Visite extends Component {
   render() {
@@ -21,13 +22,13 @@ export default class Visite extends Component {
           // color={this.props.color}
           // size="massive"
         >
-          <Link to={'/visite/' + visite.visiteData.VISITE_IDENT}>
+          <MyLink {...this.props} trames={this.props.trames} visite={visite}>
             <Grid>
               <Grid.Row
                 verticalAlign="middle"
                 style={{
                   padding: 0,
-                  backgroundColor: !visite.visiteData.new_visite && 'grey'
+                  backgroundColor: !visite.visiteData.new_visite && '#f2f2f2'
                 }}
               >
                 <Grid.Column
@@ -42,6 +43,9 @@ export default class Visite extends Component {
                 >
                   <Responsive minWidth={600}>
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      {!visite.visiteData.new_visite && (
+                        <Icon name="lock" color="grey" size="large"></Icon>
+                      )}
                       <Icon name="search" color="grey" size="large"></Icon>
                       <div
                         style={{
@@ -60,6 +64,14 @@ export default class Visite extends Component {
                   </Responsive>
                   <Responsive maxWidth={599}>
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      {!visite.visiteData.new_visite && (
+                        <Icon
+                          name="lock"
+                          color="grey"
+                          size="small"
+                          style={{ fontSize: '1em' }}
+                        ></Icon>
+                      )}
                       <Icon
                         name="search"
                         color="grey"
@@ -137,7 +149,7 @@ export default class Visite extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-          </Link>
+          </MyLink>
         </Segment>
       </Grid.Row>
     );

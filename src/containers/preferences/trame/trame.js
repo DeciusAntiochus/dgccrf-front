@@ -89,6 +89,7 @@ class TrameComponent extends Component {
   }
 
   handleClick(index) {
+    console.log(this.state.activeDropdowns);
     const i = this.state.activeDropdowns.indexOf(index);
     i === -1
       ? this.setState({

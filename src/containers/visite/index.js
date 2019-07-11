@@ -1,6 +1,6 @@
 import React from 'react';
 import TrameComponent from './trame';
-import { Grid, Card, Container } from 'semantic-ui-react';
+import { Grid, Card, Container, Icon, Button } from 'semantic-ui-react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { EventEmitter } from 'events';
@@ -38,10 +38,12 @@ class Visite extends React.Component {
     this._emitter = new EventEmitter();
     this.state = {
       activeIndex: 0,
-      activeTab: 0
+      activeTab: 0,
+      editMode: false
     };
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
     this.setActiveTab = this.setActiveTab.bind(this);
+    this.closeEdit = this.closeEdit.bind(this);
   }
 
   componentDidMount() {
@@ -60,6 +62,10 @@ class Visite extends React.Component {
       newBackUrl(this.props.backUrl, this.props.oldBackUrl)
     );
     this.props.changeActivePage('/visite/' + this.props.match.params.id);
+  }
+
+  closeEdit() {
+    this.setState({ editMode: false });
   }
 
   handleChangeIndex = value => {
@@ -118,6 +124,17 @@ class Visite extends React.Component {
                     justifyContent: 'center'
                   }}
                 >
+                  <Button
+                    icon
+                    disabled={this.state.editMode}
+                    style={{ position: 'absolute', left: 10, top: 10 }}
+                    labelPosition="left"
+                    onClick={() => this.setState({ editMode: true })}
+                  >
+                    <Icon name="pencil"></Icon>
+                    Editer
+                  </Button>
+
                   <Tabs
                     value={this.state.activeIndex}
                     fullWidth
@@ -139,6 +156,9 @@ class Visite extends React.Component {
                   className="hidescrollbar"
                 >
                   <TrameComponent
+                    editMode={this.state.editMode}
+                    close={this.closeEdit}
+                    {...this.props}
                     index={this.state.activeIndex}
                     handleChangeIndex={this.handleChangeIndex}
                   />

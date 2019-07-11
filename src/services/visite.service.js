@@ -166,6 +166,29 @@ class PouchDbVisiteService {
     return visitesList.filter(doc => doc);
   }
 
+  associateTrame(visite, trame) {
+    this.newVisiteDB.put({
+      ...visite.visiteData,
+      trame: trame
+    });
+  }
+
+  updateTrame(visite, rev, trame) {
+    console.log(rev);
+    return this.newVisiteDB.put({
+      ...visite,
+      _rev: rev,
+      trame: trame
+    });
+  }
+
+  getVisiteById(visiteid) {
+    console.log(visiteid);
+    return this.newVisiteDB
+      .find({ selector: { VISITE_IDENT: parseInt(visiteid) } })
+      .then(res => res.docs[0]);
+  }
+
   postControlesByVisite(visiteInfos, controlesList) {
     let promises = [];
     const ident = parseInt(Date.now());

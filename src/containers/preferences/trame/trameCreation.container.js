@@ -97,6 +97,8 @@ class TrameCreationComponent extends React.Component {
         taskList: trame.trame,
         trameName: trame.name,
         _id: trame._id,
+        index: trame.trame.length,
+        id: trame.trame.length,
         isLoading: false,
         _rev: trame._rev
       });
