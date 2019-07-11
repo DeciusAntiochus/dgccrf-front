@@ -4,10 +4,23 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Visite from './visite';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
+import PouchDbService from '../../services/index';
 
 export default class VisitesComponent extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      trames: []
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      const trames = await PouchDbService.services.trame.getAllDocs();
+      this.setState({ trames });
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   render() {
@@ -33,7 +46,7 @@ export default class VisitesComponent extends React.Component {
             />
           </div>
           <div style={{ flex: 2, textAlign: 'right' }}>
-            <Link to="/nouvelle-visite">
+            <Link to={'/nouvelle-visite/' + this.props.dossierid}>
               <Button style={{ padding: 5 }} icon basic color="blue">
                 <div>
                   <Icon name="plus" size="large" />
@@ -47,7 +60,12 @@ export default class VisitesComponent extends React.Component {
         <div style={{ paddingTop: 70 }}>
           {this.props.visitesList.length > 0 ? (
             this.props.visitesList.map((visite, i) => (
-              <Visite visite={visite} key={i} />
+              <Visite
+                {...this.props}
+                trames={this.state.trames}
+                visite={visite}
+                key={i}
+              />
             ))
           ) : (
             <Segment style={{ fontStyle: 'italic' }}>
@@ -64,5 +82,6 @@ export default class VisitesComponent extends React.Component {
 }
 
 VisitesComponent.propTypes = {
-  visitesList: PropTypes.any
+  visitesList: PropTypes.any,
+  dossierid: PropTypes.number.isRequired
 };

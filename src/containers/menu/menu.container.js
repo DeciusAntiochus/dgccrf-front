@@ -45,7 +45,7 @@ class MenuComponent extends React.Component {
                 icon="building outline"
               />
               <MenuButtonComponent
-                link="preferences"
+                link="/preferences"
                 name="Préférences"
                 color="violet"
                 icon="setting"

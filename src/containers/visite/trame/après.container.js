@@ -1,27 +1,18 @@
 import React, { Component } from 'react';
 
 import TrameComponent from './trame.container';
+import EditComponent from './edit';
 
 export default class Apres extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      taskList: [
-        {
-          title: 'Saisir dans Sora'.toUpperCase(),
-          status: 'done',
-          documentToFill: null
-        },
-        {
-          title: 'Envoyer un mail'.toUpperCase(),
-          status: 'problem',
-          documentToFill: 'PVprelevement.pdf'
-        }
-      ]
-    };
   }
 
   render() {
-    return <TrameComponent taskList={this.state.taskList} />;
+    return this.props.editMode ? (
+      <EditComponent {...this.props}></EditComponent>
+    ) : (
+      <TrameComponent {...this.props} taskList={this.props.trame.trame} />
+    );
   }
 }

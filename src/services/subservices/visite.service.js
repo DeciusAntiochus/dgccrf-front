@@ -42,36 +42,79 @@ class PouchDbVisiteService {
     };
 
     this.controleDB = new PouchDB('controles');
-    this.controleReplication = replicateFromSQL(this.controleDB, config.backend.base_url + '/fulldata/controles?idAgent=' + AGENT_DD_IDENT, 'controle_date');
+    this.controleReplication = replicateFromSQL(
+      this.controleDB,
+      config.backend.base_url + '/fulldata/controles?idAgent=' + AGENT_DD_IDENT,
+      'controle_date'
+    );
     this.controleDB.createIndex({
       index: { fields: ['DOSSIER_IDENT'] }
     });
-    this.controleDB.changes({ since: 'now', live: true })
+    this.controleDB
+      .changes({ since: 'now', live: true })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.newVisiteDB = new PouchDB('new-visites');
-    this.newVisiteDB.replicate.to(config.couchDb.url_new_visites, optionalCallExpression);
-    this.newVisiteDB.replicate.from(config.couchDb.url_new_visites, opts_without_filter);
+    this.newVisiteDB.replicate.to(
+      config.couchDb.url_new_visites,
+      optionalCallExpression
+    );
+    this.newVisiteDB.replicate.from(
+      config.couchDb.url_new_visites,
+      opts_without_filter
+    );
     this.newVisiteDB.createIndex({
       index: { fields: ['VISITE_IDENT'] }
     });
-    this.newVisiteDB.changes({ since: 'now', live: true })
+    this.newVisiteDB
+      .changes({ since: 'now', live: true })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.newControleDB = new PouchDB('new-controles');
-    this.newControleDB.replicate.to(config.couchDb.url_new_controles, opts_without_filter);
+    this.newControleDB.replicate.to(
+      config.couchDb.url_new_controles,
+      opts_without_filter
+    );
     this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
     this.newControleDB.createIndex({ index: { fields: ['DOSSIER_IDENT'] } });
     this.newControleDB.createIndex({ index: { fields: ['VISITE_IDENT'] } });
-    this.newControleDB.changes({ since: 'now', live: true })
+    this.newControleDB
+      .changes({ since: 'now', live: true })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.visiteDB = new PouchDB('visites');
-    this.visiteReplication = replicateFromSQL(this.visiteDB, config.backend.base_url + '/fulldata/visites?idAgent=' + AGENT_DD_IDENT, 'visite_date');
+    this.visiteReplication = replicateFromSQL(
+      this.visiteDB,
+      config.backend.base_url + '/fulldata/visites?idAgent=' + AGENT_DD_IDENT,
+      'visite_date'
+    );
     this.visiteDB.createIndex({
       index: { fields: ['VISTE_IDENT'] }
     });
-    this.visiteDB.changes({ since: 'now', live: true })
+    this.visiteDB
+      .changes({
+        since: 'now',
+        live: true
+      })
+      .on('change', () => this.changesCallbacks.map(cb => cb()));
+
+    this.newVisiteDB = new PouchDB('new-visites');
+    this.newVisiteDB.replicate.to(config.couchDb.url_new_visites, {
+      live: true,
+      retry: true
+    });
+    this.newVisiteDB.replicate.from(config.couchDb.url_new_visites, {
+      live: true,
+      retry: true
+    });
+    this.newVisiteDB.createIndex({
+      index: { fields: ['VISITE_IDENT'] }
+    });
+    this.newVisiteDB
+      .changes({
+        since: 'now',
+        live: true
+      })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
   }
 
@@ -82,20 +125,34 @@ class PouchDbVisiteService {
 
   //getAllDocsOfTheDB
   async getAllDocs() {
-    let firstArray = await this.controleDB.allDocs({ include_docs: true, descending: true });
+    let firstArray = await this.controleDB.allDocs({
+      include_docs: true,
+      descending: true
+    });
     firstArray = firstArray.rows.map(item => item.doc);
-    let secondArray = await this.newControleDB.allDocs({ include_docs: true, descending: true });
+    let secondArray = await this.newControleDB.allDocs({
+      include_docs: true,
+      descending: true
+    });
     secondArray = secondArray.rows.map(item => item.doc);
 
-    return secondArray.concat(firstArray).filter(item => !(item._id.split('/')[0] == '_design'));
+    return secondArray
+      .concat(firstArray)
+      .filter(item => !(item._id.split('/')[0] == '_design'));
   }
 
   async getControlesByDossier(dossierID) {
-    let firstArray = await this.controleDB.find({ selector: { DOSSIER_IDENT: parseInt(dossierID) } });
+    let firstArray = await this.controleDB.find({
+      selector: { DOSSIER_IDENT: parseInt(dossierID) }
+    });
     firstArray = firstArray.docs;
-    let secondArray = await this.newControleDB.find({ selector: { DOSSIER_IDENT: parseInt(dossierID) } });
+    let secondArray = await this.newControleDB.find({
+      selector: { DOSSIER_IDENT: parseInt(dossierID) }
+    });
     secondArray = secondArray.docs;
-    return firstArray.concat(secondArray).filter((value, index, self) => self.indexOf(value) === index);
+    return firstArray
+      .concat(secondArray)
+      .filter((value, index, self) => self.indexOf(value) === index);
   }
 
   async getVisitesByDossier(dossierID) {
@@ -127,6 +184,27 @@ class PouchDbVisiteService {
     return visitesList.filter(doc => doc);
   }
 
+  associateTrame(visite, trame) {
+    this.newVisiteDB.put({
+      ...visite.visiteData,
+      trame: trame
+    });
+  }
+
+  updateTrame(visite, rev, trame) {
+    return this.newVisiteDB.put({
+      ...visite,
+      _rev: rev,
+      trame: trame
+    });
+  }
+
+  getVisiteById(visiteid) {
+    return this.newVisiteDB
+      .find({ selector: { VISITE_IDENT: parseInt(visiteid) } })
+      .then(res => res.docs[0]);
+  }
+
   postControlesByVisite(visiteInfos, controlesList) {
     let promises = [];
     const ident = parseInt(Date.now() + this.AGENT_DD_IDENT.toString());
@@ -144,7 +222,8 @@ class PouchDbVisiteService {
           CPF_CODE_PRODUIT: controle.cpf,
           STADE_PRODUIT_IDENT: parseInt(controle.stade),
           CONTROLE_IDENT: controle.dossier.toString() + controle.cpf.toString(),
-          VISITE_IDENT: ident
+          VISITE_IDENT: ident,
+          new_visite: true
         })
       );
     }

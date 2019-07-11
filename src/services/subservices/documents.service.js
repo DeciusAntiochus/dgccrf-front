@@ -11,10 +11,10 @@ class pouchDbDocumentsService {
       live: true,
       retry: true
     };
-    this.documentsDB.replicate.to(config.couchDb.url_documents, {
-      live: true,
-      retry: true
-    });
+    // this.documentsDB.replicate.to(config.couchDb.url_documents, {
+    //   live: true,
+    //   retry: true
+    // });
     this.documentsDB.replicate.from(config.couchDb.url_documents, opts);
 
     this.documentsDB.createIndex({
