@@ -36,8 +36,12 @@ let RoutingComponent = props =>
       <Route exact path="/mes-dossiers" component={Dossiers} />
       <Route exact path="/dossier/:id" component={MonDossier} />
       <Route exact path="/visite/:id" component={MaVisite} />
-      <Route exact path="/nouvelle-visite" component={CreateVisite} />
       <Route exact path="/nouvelle-trame/:id" component={CreateTrame} />
+      <Route
+        exact
+        path="/nouvelle-visite/:dossierId"
+        component={CreateVisite}
+      />
       <Route exact path="/nouvelle-trame" component={CreateTrame} />
       <Route exact path="/authentification" component={AuthComponent} />
       <Route render={() => <Redirect to="/menu" />} />

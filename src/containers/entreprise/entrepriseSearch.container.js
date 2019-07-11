@@ -62,7 +62,12 @@ class EntrepriseSearch extends React.Component {
       });
     }, 300);
   };
+<<<<<<< HEAD
   renderResults({ ETOB_IDENT, ETOB_RAISON_SOCIALE, ETOB_ENSEIGNE_LIB, ETOB_SIRET }) {
+=======
+  
+  renderResults({ id, raisonSociale, enseigne, siret }) {
+>>>>>>> fix-controle-bugs
     return (
       <Container
         fluid

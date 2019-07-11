@@ -90,7 +90,29 @@ class PouchDbVisiteService {
       index: { fields: ['VISTE_IDENT'] }
     });
     this.visiteDB
-      .changes({ since: 'now', live: true })
+      .changes({
+        since: 'now',
+        live: true
+      })
+      .on('change', () => this.changesCallbacks.map(cb => cb()));
+
+    this.newVisiteDB = new PouchDB('new-visites');
+    this.newVisiteDB.replicate.to(config.couchDb.url_new_visites, {
+      live: true,
+      retry: true
+    });
+    this.newVisiteDB.replicate.from(config.couchDb.url_new_visites, {
+      live: true,
+      retry: true
+    });
+    this.newVisiteDB.createIndex({
+      index: { fields: ['VISITE_IDENT'] }
+    });
+    this.newVisiteDB
+      .changes({
+        since: 'now',
+        live: true
+      })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
   }
 
@@ -168,7 +190,6 @@ class PouchDbVisiteService {
   }
 
   updateTrame(visite, rev, trame) {
-    console.log(rev);
     return this.newVisiteDB.put({
       ...visite,
       _rev: rev,
@@ -177,7 +198,6 @@ class PouchDbVisiteService {
   }
 
   getVisiteById(visiteid) {
-    console.log(visiteid);
     return this.newVisiteDB
       .find({ selector: { VISITE_IDENT: parseInt(visiteid) } })
       .then(res => res.docs[0]);
@@ -200,7 +220,8 @@ class PouchDbVisiteService {
           CPF_CODE_PRODUIT: controle.cpf,
           STADE_PRODUIT_IDENT: parseInt(controle.stade),
           CONTROLE_IDENT: controle.dossier.toString() + controle.cpf.toString(),
-          VISITE_IDENT: ident
+          VISITE_IDENT: ident,
+          new_visite: true
         })
       );
     }

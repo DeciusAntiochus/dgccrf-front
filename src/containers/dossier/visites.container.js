@@ -46,7 +46,7 @@ export default class VisitesComponent extends React.Component {
             />
           </div>
           <div style={{ flex: 2, textAlign: 'right' }}>
-            <Link to="/nouvelle-visite">
+            <Link to={'/nouvelle-visite/' + this.props.dossierid}>
               <Button style={{ padding: 5 }} icon basic color="blue">
                 <div>
                   <Icon name="plus" size="large" />
@@ -82,5 +82,6 @@ export default class VisitesComponent extends React.Component {
 }
 
 VisitesComponent.propTypes = {
-  visitesList: PropTypes.any
+  visitesList: PropTypes.any,
+  dossierid: PropTypes.number.isRequired
 };
