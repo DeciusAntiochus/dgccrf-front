@@ -151,16 +151,23 @@ export default class documentsList extends Component {
                 color={this.getColor(document.type)[0]}
               >
                 <>
-                  <Icon
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      fontSize: '4em',
-                      margin: 0
-                    }}
-                    name={this.getColor(document.type)[1]}
-                  ></Icon>
+                  {document.type.includes('image') ? (
+                    <img
+                      src={document.document}
+                      style={{ maxWidth: '8em', maxHeight: '8em' }}
+                    ></img>
+                  ) : (
+                    <Icon
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '4em',
+                        margin: 0
+                      }}
+                      name={this.getColor(document.type)[1]}
+                    ></Icon>
+                  )}
                   <Icon
                     style={{
                       position: 'absolute',

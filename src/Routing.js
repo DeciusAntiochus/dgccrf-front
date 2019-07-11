@@ -12,6 +12,7 @@ import EntrepriseViewComponent from './containers/entreprise/entrepriseView.cont
 import AuthComponent from './containers/auth/auth.container';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
+import Preferences from './containers/preferences';
 
 function mapStateToProps(state) {
   return {
@@ -23,23 +24,25 @@ let RoutingComponent = props =>
   !props.AGENT_DD_IDENT ? (
     <AuthComponent />
   ) : (
-      <Switch>
-        <Route exact path="/etablissements" component={EntrepriseView} />
-        <Route
-          exact
-          path="/etablissement/:id"
-          component={EntrepriseViewComponent}
-        />
-        <Route exact path="/menu" component={Menu} />
-        <Route exact path="/mes-dossiers" component={Dossiers} />
-        <Route exact path="/dossier/:id" component={MonDossier} />
-        <Route exact path="/visite/:id" component={MaVisite} />
-        <Route exact path="/nouvelle-visite" component={CreateVisite} />
-        <Route exact path="/nouvelle-trame" component={CreateTrame} />
-        <Route exact path="/authentification" component={AuthComponent} />
-        <Route render={() => <Redirect to="/menu" />} />
-      </Switch>
-    );
+    <Switch>
+      <Route exact path="/etablissements" component={EntrepriseView} />
+      <Route
+        exact
+        path="/etablissement/:id"
+        component={EntrepriseViewComponent}
+      />
+      <Route exact path="/menu" component={Menu} />
+      <Route exact path="/preferences" component={Preferences} />
+      <Route exact path="/mes-dossiers" component={Dossiers} />
+      <Route exact path="/dossier/:id" component={MonDossier} />
+      <Route exact path="/visite/:id" component={MaVisite} />
+      <Route exact path="/nouvelle-visite" component={CreateVisite} />
+      <Route exact path="/nouvelle-trame/:id" component={CreateTrame} />
+      <Route exact path="/nouvelle-trame" component={CreateTrame} />
+      <Route exact path="/authentification" component={AuthComponent} />
+      <Route render={() => <Redirect to="/menu" />} />
+    </Switch>
+  );
 
 RoutingComponent.propTypes = {
   AGENT_DD_IDENT: PropTypes.string.isRequired
