@@ -44,6 +44,20 @@ export default class Preferences extends Component {
                 <Grid.Row style={{ padding: '20px' }}>
                   <Button
                     as={Link}
+                    to={'/authentification'}
+                    icon
+                    fluid
+                    color="red"
+                    size="massive"
+                    labelPosition="left"
+                  >
+                    <Icon name="log out" />
+                    Se déconnecter
+                  </Button>
+                </Grid.Row>
+                <Grid.Row style={{ padding: '20px' }}>
+                  <Button
+                    as={Link}
                     to={'/nouvelle-trame'}
                     icon
                     fluid
