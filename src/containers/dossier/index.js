@@ -140,6 +140,7 @@ class MonDossier extends React.Component {
 
                     <VisitesComponent
                       visitesList={this.state.visitesList}
+                      dossierid={this.state.dossier.DOSSIER_IDENT}
                       {...this.props}
                     />
 

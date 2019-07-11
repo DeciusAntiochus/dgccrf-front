@@ -28,9 +28,9 @@ export default class CodesField extends React.Component {
   loadCpf(cpf) {
     const newcpf = cpf.map(cpf => {
       return {
-        key: cpf.CPF_CODE_PRODUIT,
+        key: cpf.CPF_IDENT,
         text: cpf.CPF_CODE_LIBELLE,
-        value: cpf.CPF_CODE_PRODUIT
+        value: cpf.CPF_IDENT
       };
     });
     this.setState({ cpf: newcpf });
@@ -46,20 +46,24 @@ export default class CodesField extends React.Component {
       <Form.Group widths="equal">
         <Form.Field
           required
+          lazyLoad
           control={Select}
           options={this.state.activites}
           label="Code DG"
           placeholder="Code DG"
           search
+          defaultValue={this.props.activite}
           onChange={this.props.activiteChange}
         />
         <Form.Field
+          lazyLoad
           required
           control={Select}
           options={this.state.cpf}
           label="Code CPF"
           placeholder="Code CPF"
           search
+          defaultValue={this.props.cpf}
           onChange={this.props.cpfChange}
         />
       </Form.Group>
@@ -69,5 +73,7 @@ export default class CodesField extends React.Component {
 
 CodesField.propTypes = {
   activiteChange: PropTypes.func.isRequired,
-  cpfChange: PropTypes.func.isRequired
+  cpfChange: PropTypes.func.isRequired,
+  activite: PropTypes.number.isRequired,
+  cpf: PropTypes.number.isRequired
 };

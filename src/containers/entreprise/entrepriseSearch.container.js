@@ -13,7 +13,7 @@ import {
   changeActivePage
 } from '../navbar/actions';
 import { connect } from 'react-redux';
-import './entreprise.css'
+import './entreprise.css';
 
 const initialState = { isLoading: false, results: [], value: '' };
 
@@ -55,27 +55,31 @@ class EntrepriseSearch extends React.Component {
     clearTimeout(this.timeout);
     this.timeout = setTimeout(async () => {
       if (this.state.value.length < 1) return this.setState(initialState);
-      let { data } = await axios.get(config.backend.base_url + '/entreprise/search?query=' + this.state.value);
+      let { data } = await axios.get(
+        config.backend.base_url + '/entreprise/search?query=' + this.state.value
+      );
       this.setState({
         isLoading: false,
         results: data
       });
     }, 300);
   };
-  renderResults({ ETOB_IDENT, ETOB_RAISON_SOCIALE, ETOB_ENSEIGNE_LIB, ETOB_SIRET }) {
+  renderResults({
+    ETOB_IDENT,
+    ETOB_RAISON_SOCIALE,
+    ETOB_ENSEIGNE_LIB,
+    ETOB_SIRET
+  }) {
     return (
       <Container
         fluid
         as={Link}
         to={'/etablissement/' + ETOB_IDENT}
-        style={{ color: 'black', padding: "1em" }}
+        style={{ color: 'black', padding: '1em' }}
       >
         <Grid>
-          <Grid.Row style={{ padding: "0.2em" }}
-          >
-            <Header as="h3">
-              {ETOB_ENSEIGNE_LIB || ETOB_RAISON_SOCIALE}
-            </Header>
+          <Grid.Row style={{ padding: '0.2em' }}>
+            <Header as="h3">{ETOB_ENSEIGNE_LIB || ETOB_RAISON_SOCIALE}</Header>
           </Grid.Row>
           <Grid.Row style={{ padding: 0 }}>
             <Grid.Column style={{ fontWeight: 'bold' }} width={5}>
@@ -104,11 +108,12 @@ class EntrepriseSearch extends React.Component {
     const { isLoading, value, results } = this.state;
 
     return (
-      <Container style={{ height: "90%" }}>
-        <Grid style={{ height: "100%", marginTop: '1rem' }}>
+      <Container style={{ height: '90%' }}>
+        <Grid style={{ height: '100%', marginTop: '1rem' }}>
           <Grid.Column tablet={11} mobile={16} computer={16} textAlign="center">
             <Search
               fluid
+              noResultsMessage="Aucun résultat."
               loading={isLoading}
               onResultSelect={this.handleResultSelect}
               onSearchChange={_.debounce(this.handleSearchChange, 10000, {

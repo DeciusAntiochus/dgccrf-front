@@ -13,6 +13,7 @@ export default class StadeField extends React.Component {
         label="Stade"
         placeholder="Stade"
         search
+        defaultValue={this.props.stade}
         onChange={this.props.onChange}
       />
     );
@@ -20,5 +21,6 @@ export default class StadeField extends React.Component {
 }
 
 StadeField.propTypes = {
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  stade: PropTypes.string.isRequired
 };

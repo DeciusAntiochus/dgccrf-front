@@ -9,38 +9,69 @@ export default class DossierField extends React.Component {
     super(props);
     this.state = {
       dossiers: [],
-      taches: []
+      taches: [],
+      allTaches: [],
+      tabDossiersTaches: [],
+      optionsDossiers: []
     };
   }
 
-  async handleDossierChange(codeDossier) {
-    let taches = [];
-    const dossier = await dossierService.getDossierById(codeDossier);
-    for (var i = 0; i < dossier.TAPR_LIBELLE.length; i += 1) {
-      if (
-        dossier.TAPR_LIBELLE[i] !== '[*]Non défini' &&
-        taches.map(tache => tache.key).indexOf(dossier.TAPR_IDENT[i]) === -1
-      ) {
-        taches = taches.concat([
-          {
-            text: dossier.TAPR_LIBELLE[i] + dossier.TAPR_LIBELLE_COURT[i],
-            value: parseInt(dossier.TAPR_IDENT[i]),
-            key: parseInt(dossier.TAPR_IDENT[i])
-          }
-        ]);
-      }
-    }
-    if (taches.length === 0) {
-      taches = [{ text: 'Aucun', value: -1, key: -1 }];
-    }
-    this.setState({ taches });
-    if (taches.map(tache => tache.key).indexOf(this.props.tache) === -1) {
-      this.props.tacheChange(taches[0].key, taches[0].text);
-    }
+  componentDidMount() {
+    dossierService.getAllDocs().then(res => this.loadDossiers(res));
   }
 
-  loadDossiers(dossiers) {
-    const newDossiers = dossiers
+  loadDossiers = dossiers => {
+    var tabDossiersTaches = [];
+    dossiers.forEach(dossier => {
+      for (var i = 0; i < dossier.TAPR_LIBELLE.length; i += 1) {
+        if (
+          dossier.TAPR_LIBELLE[i] !== '[*]Non défini' &&
+          tabDossiersTaches.filter(
+            corres =>
+              corres.dossierId === dossier.DOSSIER_IDENT &&
+              corres.tacheId === dossier.TAPR_IDENT[i]
+          ).length === 0
+        ) {
+          tabDossiersTaches = tabDossiersTaches.concat([
+            {
+              dossierId: dossier.DOSSIER_IDENT,
+              dossierText: dossier.DOSSIER_LIBELLE,
+              tacheId: dossier.TAPR_IDENT[i],
+              tacheText: dossier.TAPR_LIBELLE[i] + dossier.TAPR_LIBELLE_COURT[i]
+            }
+          ]);
+        }
+        if (
+          tabDossiersTaches.filter(
+            corres => corres.dossierId === dossier.DOSSIER_IDENT
+          ).length === 0
+        ) {
+          tabDossiersTaches = tabDossiersTaches.concat([
+            {
+              dossierId: dossier.DOSSIER_IDENT,
+              dossierText: dossier.DOSSIER_LIBELLE,
+              tacheId: -1,
+              tacheText: 'Aucune'
+            }
+          ]);
+        }
+      }
+    });
+    this.setState(
+      {
+        tabDossiersTaches: tabDossiersTaches,
+        allTaches: tabDossiersTaches
+          .map(corres => ({
+            key: corres.tacheId,
+            text: corres.tacheText,
+            value: corres.tacheId
+          }))
+          .filter(value => value.key !== -1)
+      },
+      () => this.handleDossierChange(this.props.dossier)
+    );
+
+    var newDossiers = dossiers
       .filter(dossier => !(dossier.TYPE_DOSSIER_LIBELLE === 'Information'))
       .map(dossier => {
         return {
@@ -49,12 +80,59 @@ export default class DossierField extends React.Component {
           value: dossier.DOSSIER_IDENT
         };
       });
-    this.setState({ dossiers: newDossiers });
-  }
+    this.setState({ dossiers: newDossiers, optionsDossiers: newDossiers });
+  };
 
-  componentDidMount() {
-    dossierService.getAllDocs().then(res => this.loadDossiers(res));
-  }
+  handleDossierChange = codeDossier => {
+    if (codeDossier === -1) {
+      this.setState({ taches: this.state.allTaches }, () =>
+        this.props.tacheChange(
+          this.state.taches[0].key,
+          this.state.taches[0].text
+        )
+      );
+    } else {
+      this.setState(
+        {
+          taches: this.state.tabDossiersTaches
+            .filter(corres => corres.dossierId === codeDossier)
+            .map(corres => ({
+              key: corres.tacheId,
+              text: corres.tacheText,
+              value: corres.tacheId
+            }))
+        },
+        () =>
+          this.props.tacheChange(
+            this.state.taches[0].key,
+            this.state.taches[0].text
+          )
+      );
+    }
+  };
+
+  handleTacheChange = dossierSelected => {
+    this.setState({
+      optionsDossiers: this.optionsDossierField(dossierSelected)
+    });
+  };
+
+  optionsDossierField = dossierSelected => {
+    if (this.props.tache === 0) {
+      return this.state.dossiers;
+    }
+    if (dossierSelected === -1) {
+      return this.state.tabDossiersTaches
+        .filter(corres => corres.tacheId === this.props.tache)
+        .map(corres => ({
+          key: corres.dossierId,
+          value: corres.dossierId,
+          text: corres.dossierText
+        }));
+    } else {
+      return this.state.dossiers;
+    }
+  };
 
   render() {
     return (
@@ -62,25 +140,35 @@ export default class DossierField extends React.Component {
         <Form.Field
           required
           control={Select}
-          options={this.state.dossiers}
+          options={[
+            {
+              key: -1,
+              text: 'Rechercher par tâche programmée',
+              value: -1
+            }
+          ].concat(this.state.optionsDossiers)}
           label="Dossier"
-          placeholder="Dossier"
           search
           onChange={(e, data) => (
             this.props.dossierChange(data.value, e.currentTarget.innerText),
             this.handleDossierChange(data.value)
           )}
+          value={this.props.dossier}
         />
         <Form.Field
           required
           control={Select}
-          options={this.state.taches}
+          options={[
+            { key: 0, text: 'Rechercher par dossier', value: 0 }
+          ].concat(this.state.taches)}
           label="Tâche Programmée"
           placeholder="Tâche Programmée"
           search
-          onChange={(e, data) => {
-            this.props.tacheChange(data.value, e.currentTarget.innerText);
-          }}
+          onChange={(e, data) => (
+            this.props.tacheChange(data.value, e.currentTarget.innerText),
+            this.handleTacheChange(this.props.dossier)
+          )}
+          value={this.props.tache}
         />
       </Form.Group>
     );
