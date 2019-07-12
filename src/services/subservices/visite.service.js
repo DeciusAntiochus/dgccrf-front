@@ -35,13 +35,6 @@ class PouchDbVisiteService {
       query_params: { AGENT_DD_IDENT: AGENT_DD_IDENT }
     };
 
-    let filterDesignDoc = {
-      _id: '_design/filter',
-      filters: {
-        "by_user": (function (doc, req) { return doc.AGENT_DD_IDENT == req.query.AGENT_DD_IDENT })
-      }
-    }
-
     var opts_without_filter = {
       batch_size: 1000,
       live: true,
@@ -223,6 +216,12 @@ class PouchDbVisiteService {
       );
     }
     return Promise.all(promises);
+  }
+
+  async exportToSora(VISITE_IDENT) {
+    let visiteToExport = await this.newVisiteDB.find({ selector: { VISITE_IDENT: parseInt(VISITE_IDENT) } }).then(res => res.docs[0]);
+    if (visiteToExport)
+      await this.newVisiteDB.put({ ...visiteToExport, new_visite: false, toBeExported: true });
   }
 }
 

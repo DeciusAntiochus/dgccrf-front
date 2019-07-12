@@ -1,6 +1,6 @@
 import React from 'react';
 import TrameComponent from './trame';
-import { Grid, Card, Container, Icon, Button } from 'semantic-ui-react';
+import { Container, Icon, Button } from 'semantic-ui-react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { EventEmitter } from 'events';
@@ -14,8 +14,9 @@ import {
   changeActivePage
 } from '../navbar/actions';
 import { connect } from 'react-redux';
-
 import './trame/visite.css';
+import PouchdbServices from '../../services';
+let visitesService = PouchdbServices.services.visite;
 
 function mapStateToProps(state) {
   return {
@@ -44,6 +45,7 @@ class Visite extends React.Component {
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
     this.setActiveTab = this.setActiveTab.bind(this);
     this.closeEdit = this.closeEdit.bind(this);
+    this.exportToSora = this.exportToSora.bind(this);
   }
 
   componentDidMount() {
@@ -83,6 +85,14 @@ class Visite extends React.Component {
   setActiveTab = index => {
     this.setState({ activeTab: index });
   };
+
+  exportToSora = async () => {
+    if (window.confirm("Êtes-vous sur de vouloir exporter cette visite dans SORA.\n Vous ne pourrez plus modifier la visite dans SESAM et vous perdrez la trame liée à la visite.")) {
+      await visitesService.exportToSora(this.props.match.params.id);
+      this.props.history.goBack();
+    }
+  }
+
 
   render() {
     return (
@@ -135,6 +145,17 @@ class Visite extends React.Component {
                     Editer
                   </Button>
 
+
+                  <Button
+                    icon
+                    style={{ position: 'absolute', right: 10, top: 10 }}
+                    labelPosition="left"
+                    onClick={this.exportToSora}
+                  >
+                    <Icon name="pencil"></Icon>
+                    Exporter
+                  </Button>
+
                   <Tabs
                     value={this.state.activeIndex}
                     fullWidth
@@ -169,9 +190,10 @@ class Visite extends React.Component {
                 setActiveTab={this.setActiveTab}
                 visiteid={parseInt(this.props.match.params.id)}
               />
-            ) : (
-              <Documents visiteid={parseInt(this.props.match.params.id)} />
-            )}
+            ) : (<div>
+              <Documents {...this.props} visiteid={parseInt(this.props.match.params.id)} />
+            </div>
+                )}
           </Container>
           <FileNavigationComponent
             setActiveTab={this.setActiveTab}
@@ -184,6 +206,7 @@ class Visite extends React.Component {
 }
 
 Visite.propTypes = {
+  history: PropTypes.any.isRequired,
   changeNameOfPage: PropTypes.func.isRequired,
   changeBackUrl: PropTypes.func.isRequired,
   changeActivePage: PropTypes.func.isRequired,
