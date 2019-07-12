@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Form, Input, Grid } from 'semantic-ui-react';
+import { Button, Container, Card, Form, Input, Grid, GridColumn, Label, Header, GridRow } from 'semantic-ui-react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { changeAgent } from '../../services/actions';
@@ -62,19 +62,30 @@ class AuthComponent extends React.Component {
 
     render() {
         return (
-            <Container style={{ paddingTop: "2em" }}>
-                <Grid>
-                    <Form onSubmit={this.onSubmit}>
-                        <FormGroup>
-                            <Input label="Votre identifiant agent IRIS"
-                                onChange={(event, { value }) => this.setState({ idAgent: value })} />
+            <Container style={{ width: "100%", height: "100%" }}>
+                <Grid style={{ width: "100%", height: "100%" }} verticalAlign="middle" centered>
+                    <GridRow>
+                        <GridColumn width={10} centered >
+                            <Form onSubmit={this.onSubmit}
+                                style={{ minWidth: "300px", textAlign: "center", paddingBottom: "10em" }}>
+                                {/* <Header as="h1">Changer d'utilisateur</Header> */}
 
-                        </FormGroup>
+                                <FormGroup style={{ width: "100%", paddingTop: "1em", paddingBottom: "1em" }}>
+                                    <Header as="h4" style={{ textAlign: "left", marginBottom: "0" }}>Identifiant agent IRIS </Header>
+                                    <Input value={this.state.idAgent}
+                                        placeholder="Identifiant du nouvel utilisateur"
+                                        style={{ width: "100%" }}
+                                        onChange={(event, { value }) => this.setState({ idAgent: value })} />
+                                </FormGroup>
 
-                        <Button> Valider </Button>
-                    </Form>
-                </Grid>
-            </Container>
+                                <FormGroup style={{ width: "100%", textAlign: "center" }}>
+                                    <Button size="big" style={{ color: "white", backgroundColor: "#00b5ad" }}> Changer d'utilisateur </Button>
+                                </FormGroup>
+                            </Form>
+                        </GridColumn>
+                    </GridRow>
+                </Grid >
+            </Container >
         )
     }
 }
