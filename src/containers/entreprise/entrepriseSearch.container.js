@@ -113,6 +113,7 @@ class EntrepriseSearch extends React.Component {
           <Grid.Column tablet={11} mobile={16} computer={16} textAlign="center">
             <Search
               fluid
+              noResultsMessage="Aucun résultat."
               loading={isLoading}
               onResultSelect={this.handleResultSelect}
               onSearchChange={_.debounce(this.handleSearchChange, 10000, {

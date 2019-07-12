@@ -16,14 +16,12 @@ class Replication {
     });
   }
 
-    
+  stopReplication() {
+    window.clearInterval(this.interval);
+    window.localStorage.removeItem(this.storageKey);
+  }
 
-    stopReplication() {
-        window.clearInterval(this.interval);
-        window.localStorage.removeItem(this.storageKey);
-    }
-
-    async tryReplication() {
+  async tryReplication() {
     let rawNextChangeDate = localStorage.getItem(this.storageKey);
     let nextChangeDate = moment(rawNextChangeDate).format(
       'YYYY-MM-DDTHH:mm:SSS'
@@ -38,7 +36,6 @@ class Replication {
         localStorage.setItem(this.storageKey, this.getNextReplicationDate());
       } catch (err) {
         if (err.response) {
-          console.log(err);
         } // else no response received that means the user is offline (or the server is not working)
       }
     }

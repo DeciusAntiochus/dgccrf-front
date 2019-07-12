@@ -5,7 +5,6 @@ import {
   Grid,
   GridRow,
   GridColumn,
-  Icon,
   TextArea,
   Button,
   Message,
@@ -13,7 +12,6 @@ import {
   Checkbox
 } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
-import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import {
   changeNameOfPage,
@@ -51,7 +49,7 @@ class CreateVisiteComponent extends React.Component {
       ETOB_SIRET: '',
       VIS_OBSERVATIONS: '',
       trame: '',
-      trameList: ['trame 1', 'trame 2'],
+      trameList: [{ _id: 0, name: 'Aucune trame' }],
       controlesList: [],
       message: '',
       DOSSIER_IDENT: -1,
@@ -66,7 +64,7 @@ class CreateVisiteComponent extends React.Component {
       this.props.changeNameOfPage('Modification de visite');
       this.props.changeBackUrl(
         '/visite/' + this.props.match.params.visiteId.toString()
-      ); 
+      );
       this.props.changeActivePage(
         '/modify-visite/' + this.props.match.params.visiteId
       );
@@ -85,7 +83,7 @@ class CreateVisiteComponent extends React.Component {
         controlesList: controles.map(controle => ({
           ...controle,
           ident: controle.CONTROLE_IDENT,
-          exists : true
+          exists: true
         })),
         message: '',
         dossierText: dossier.DOSSIER_LIBELLE,
@@ -98,6 +96,12 @@ class CreateVisiteComponent extends React.Component {
       this.props.changeActivePage(
         '/nouvelle-visite/' + this.props.match.params.dossierId
       );
+      PouchDbServices.services.trame
+        .getAllDocs()
+        .then(res => {
+          this.setState({ trameList: this.state.trameList.concat(res) });
+        })
+        .catch(() => {});
       const dossier = await dossierService.getDossierById(
         this.props.match.params.dossierId
       );
@@ -114,34 +118,19 @@ class CreateVisiteComponent extends React.Component {
         <Form.Group style={{ margin: 0 }}>
           <Grid style={{ width: '100%', margin: 0 }} verticalAlign="bottom">
             <GridRow style={{ display: 'flex' }}>
-              <Grid.Column width={14} style={{ padding: 0 }}>
+              <Grid.Column width={16} style={{ padding: 0 }}>
                 <Form.Select
                   fluid
-                  placeholder="Trâme"
-                  label="Trâme associée"
+                  placeholder="Trame"
+                  label="Trame associée"
                   style={{ width: '100%' }}
                   options={this.state.trameList.map(trame => ({
-                    key: trame,
-                    text: trame,
+                    key: trame._id,
+                    text: trame.name,
                     value: trame
                   }))}
                   onChange={(e, { value }) => this.setState({ trame: value })}
-                  value={this.state.trame}
                 />
-              </Grid.Column>
-              <Grid.Column width={1} style={{ padding: 0 }}>
-                <Link to="/nouvelle-trame">
-                  <div
-                    style={{
-                      width: '100%',
-                      textAlign: 'center',
-                      cursor: 'pointer',
-                      paddingBottom: '0.3em'
-                    }}
-                  >
-                    <Icon name="plus" size="big" />
-                  </div>
-                </Link>
               </Grid.Column>
             </GridRow>
           </Grid>

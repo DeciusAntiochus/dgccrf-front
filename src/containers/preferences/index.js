@@ -66,7 +66,7 @@ export default class Preferences extends Component {
                     labelPosition="left"
                   >
                     <Icon name="add" />
-                    Créer une trame
+                    Créer un modèle de trame
                   </Button>
                 </Grid.Row>
                 <Grid.Row style={{ padding: '20px' }}>
@@ -84,7 +84,7 @@ export default class Preferences extends Component {
                     labelPosition="left"
                   >
                     <Icon name="edit" />
-                    Editer une trame
+                    Editer un modèle de trame
                   </Button>
                   <List
                     divided

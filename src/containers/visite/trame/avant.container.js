@@ -9,10 +9,11 @@ export default class Avant extends Component {
   }
 
   render() {
+    console.log(this.props.trame);
     return this.props.editMode ? (
       <EditComponent {...this.props}></EditComponent>
     ) : (
-      <TrameComponent {...this.props} taskList={this.props.trame.trame} />
+      <TrameComponent {...this.props} taskList={this.props.trame.trameAvant} />
     );
   }
 }

@@ -12,6 +12,9 @@ import { Tabs, Tab } from '@material-ui/core';
 
 import SwipeableViews from 'react-swipeable-views';
 
+import PouchdbServices from '../../services';
+let visitesService = PouchdbServices.services.visite;
+
 // blobs, pour chrome
 
 // function openDocument(document) {
@@ -98,6 +101,13 @@ class Documents extends Component {
     );
   }
 
+  exportToSora = async () => {
+    if (window.confirm("Êtes-vous sur de vouloir exporter cette visite dans SORA.\n Vous ne pourrez plus modifier la visite dans SESAM et vous perdrez la trame liée à la visite.")) {
+      await visitesService.exportToSora(this.props.match.params.id);
+      this.props.history.goBack();
+    }
+  }
+
   fileInputRef = React.createRef();
 
   fileChange = e => {
@@ -145,6 +155,16 @@ class Documents extends Component {
                   marginBottom: 20
                 }}
               >
+                <Button
+                  icon
+                  style={{ position: 'absolute', right: 10, marginTop: 4 }}
+                  labelPosition="left"
+                  onClick={this.exportToSora}
+                >
+                  <Icon name="pencil"></Icon>
+                  Exporter
+                </Button>
+
                 <Tabs
                   value={this.state.activeIndex}
                   fullWidth
@@ -185,7 +205,7 @@ class Documents extends Component {
           )}
 
         {documents ? (
-          <div style={{ flex: 10, overflowY:'auto' }}>
+          <div style={{ flex: 10, overflowY: 'auto' }}>
             {this.props.dossier ? (
               <DocumentsList
                 documents={documents.filter(document => {
@@ -228,6 +248,8 @@ class Documents extends Component {
 }
 
 Documents.propTypes = {
+  match: PropTypes.any.isRequired,
+  history: PropTypes.any.isRequired,
   dossierid: PropTypes.number,
   visitesList: PropTypes.array,
   dossier: PropTypes.bool,

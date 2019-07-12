@@ -10,6 +10,7 @@ import PouchDbService from '../../../services/index';
 import MyActivityIndicator from '../../../components/myActivityIndicator.component';
 
 import PropTypes from 'prop-types';
+import EditComponent from './edit';
 
 class Trame extends React.Component {
   constructor(props, context) {
@@ -50,11 +51,22 @@ class Trame extends React.Component {
 
   setStatus(newstatus, index) {
     let trame = this.state.trame;
-
-    trame.trame[index].status = newstatus;
-    this.setState({
-      trame
-    });
+    if (this.state.activeIndex === 0) {
+      trame.trameAvant[index].status = newstatus;
+      this.setState({
+        trame
+      });
+    } else if (this.state.activeIndex === 1) {
+      trame.tramePendant[index].status = newstatus;
+      this.setState({
+        trame
+      });
+    } else {
+      trame.trameAprès[index].status = newstatus;
+      this.setState({
+        trame
+      });
+    }
     PouchDbService.services.visite
       .updateTrame(this.state.visite, this.state.rev, trame)
       .then(res => {
@@ -79,13 +91,8 @@ class Trame extends React.Component {
           overflow: 'hidden'
         }}
       >
-        <SwipeableViews
-          className="hidescrollbar"
-          index={this.props.index}
-          onChangeIndex={this.props.handleChangeIndex}
-          slideClassName="hidescrollbar"
-        >
-          <Avant
+        {this.props.editMode ? (
+          <EditComponent
             visite={this.state.visite}
             setStatus={this.setStatus}
             isLoading={this.state.isLoading}
@@ -93,23 +100,40 @@ class Trame extends React.Component {
             closeEdit={this.closeEdit}
             {...this.props}
           />
-          <Pendant
-            visite={this.state.visite}
-            setStatus={this.setStatus}
-            isLoading={this.state.isLoading}
-            trame={this.state.trame}
-            closeEdit={this.closeEdit}
-            {...this.props}
-          />
-          <Apres
-            visite={this.state.visite}
-            setStatus={this.setStatus}
-            isLoading={this.state.isLoading}
-            trame={this.state.trame}
-            closeEdit={this.closeEdit}
-            {...this.props}
-          />
-        </SwipeableViews>
+        ) : (
+          <SwipeableViews
+            style={{ width: '100%' }}
+            className="hidescrollbar"
+            index={this.props.index}
+            onChangeIndex={this.props.handleChangeIndex}
+            slideClassName="hidescrollbar"
+          >
+            <Avant
+              visite={this.state.visite}
+              setStatus={this.setStatus}
+              isLoading={this.state.isLoading}
+              trame={this.state.trame}
+              closeEdit={this.closeEdit}
+              {...this.props}
+            />
+            <Pendant
+              visite={this.state.visite}
+              setStatus={this.setStatus}
+              isLoading={this.state.isLoading}
+              trame={this.state.trame}
+              closeEdit={this.closeEdit}
+              {...this.props}
+            />
+            <Apres
+              visite={this.state.visite}
+              setStatus={this.setStatus}
+              isLoading={this.state.isLoading}
+              trame={this.state.trame}
+              closeEdit={this.closeEdit}
+              {...this.props}
+            />
+          </SwipeableViews>
+        )}
       </div>
     );
   }
