@@ -52,7 +52,7 @@ export default class CodesField extends React.Component {
           label="Code DG"
           placeholder="Code DG"
           search
-          defaultValue={this.props.activite}
+          defaultValue={this.props.ACDG_IDENT}
           onChange={this.props.activiteChange}
         />
         <Form.Field
@@ -63,7 +63,7 @@ export default class CodesField extends React.Component {
           label="Code CPF"
           placeholder="Code CPF"
           search
-          defaultValue={this.props.cpf}
+          defaultValue={this.props.CPF_IDENT}
           onChange={this.props.cpfChange}
         />
       </Form.Group>
@@ -74,6 +74,6 @@ export default class CodesField extends React.Component {
 CodesField.propTypes = {
   activiteChange: PropTypes.func.isRequired,
   cpfChange: PropTypes.func.isRequired,
-  activite: PropTypes.number.isRequired,
-  cpf: PropTypes.number.isRequired
+  ACDG_IDENT: PropTypes.number.isRequired,
+  CPF_IDENT: PropTypes.number.isRequired
 };

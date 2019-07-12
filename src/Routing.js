@@ -42,6 +42,7 @@ let RoutingComponent = props =>
         path="/nouvelle-visite/:dossierId"
         component={CreateVisite}
       />
+      <Route exact path="/modify-visite/:visiteId" component={CreateVisite} />
       <Route exact path="/nouvelle-trame" component={CreateTrame} />
       <Route exact path="/authentification" component={AuthComponent} />
       <Route render={() => <Redirect to="/menu" />} />
@@ -49,7 +50,7 @@ let RoutingComponent = props =>
   );
 
 RoutingComponent.propTypes = {
-  AGENT_DD_IDENT: PropTypes.string.isRequired
+  AGENT_DD_IDENT: PropTypes.number.isRequired
 };
 
 export default connect(mapStateToProps)(RoutingComponent);

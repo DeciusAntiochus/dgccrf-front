@@ -153,6 +153,20 @@ class PouchDbVisiteService {
       .filter((value, index, self) => self.indexOf(value) === index);
   }
 
+  async getControlesByVisite(visiteID) {
+    let firstArray = await this.controleDB.find({
+      selector: { VISITE_IDENT: parseInt(visiteID) }
+    });
+    firstArray = firstArray.docs;
+    let secondArray = await this.newControleDB.find({
+      selector: { VISITE_IDENT: parseInt(visiteID) }
+    });
+    secondArray = secondArray.docs;
+    return firstArray
+      .concat(secondArray)
+      .filter((value, index, self) => self.indexOf(value) === index);
+  }
+
   async getVisitesByDossier(dossierID) {
     let controles = await this.getControlesByDossier(dossierID);
     let visitesDic = {};
@@ -205,7 +219,9 @@ class PouchDbVisiteService {
 
   postControlesByVisite(visiteInfos, controlesList) {
     let promises = [];
-    const ident = parseInt(Date.now());
+    const ident = parseInt(
+      Date.now().toString() + this.AGENT_DD_IDENT.toString()
+    );
     promises.push(
       this.newVisiteDB.post({
         ...visiteInfos,
@@ -215,15 +231,37 @@ class PouchDbVisiteService {
     for (let controle of controlesList) {
       promises.push(
         this.newControleDB.post({
-          ...visiteInfos,
-          DOSSIER_IDENT: controle.dossier,
-          CPF_CODE_PRODUIT: controle.cpf,
-          STADE_PRODUIT_IDENT: parseInt(controle.stade),
-          CONTROLE_IDENT: controle.dossier.toString() + controle.cpf.toString(),
+          AGENT_DD_IDENT: visiteInfos.AGENT_DD_IDENT,
+          ...controle,
           VISITE_IDENT: ident,
-          new_visite: true
+          new_visite: true,
+          CONTROLE_IDENT:
+            controle.DOSSIER_IDENT.toString() + controle.CPF_IDENT.toString(),
+          TAPR_IDENT: controle.TAPR_IDENT
         })
       );
+    }
+    return Promise.all(promises);
+  }
+
+  updateVisite(visiteInfos, controlesList) {
+    let promises = [];
+    promises.push(this.newVisiteDB.put(visiteInfos));
+    for (let controle of controlesList) {
+      if (controle.exists) {
+        promises.push(this.newControleDB.put(controle));
+      } else {
+        promises.push(
+          this.newControleDB.post({
+            AGENT_DD_IDENT: visiteInfos.AGENT_DD_IDENT,
+            ...controle,
+            VISITE_IDENT: ident,
+            CONTROLE_IDENT:
+              controle.DOSSIER_IDENT.toString() + controle.CPF_IDENT.toString(),
+            TAPR_IDENT: controle.TAPR_IDENT
+          })
+        );
+      }
     }
     return Promise.all(promises);
   }

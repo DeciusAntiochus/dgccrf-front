@@ -8,7 +8,6 @@ import MyLink from '../../components/visites/myLink.component';
 export default class Visite extends Component {
   render() {
     const { visite } = this.props;
-    console.log(visite);
 
     return (
       <Grid.Row style={{ padding: 10, overflow: 'auto' }}>
