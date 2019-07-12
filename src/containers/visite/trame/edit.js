@@ -1,14 +1,10 @@
 import React from 'react';
-import { Container, Button, Icon, Input, Responsive } from 'semantic-ui-react';
+import { Container, Button, Icon, Responsive } from 'semantic-ui-react';
 import { PropTypes } from 'prop-types';
-
-import TrameComponent from '../../preferences/trame/trame';
 
 import PouchDBServices from '../../../services/index';
 
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TrameList from '../../preferences/trame/trameList';
-import { Tabs, Tab } from '@material-ui/core';
 
 class EditComponent extends React.Component {
   constructor(props) {
@@ -489,6 +485,7 @@ class EditComponent extends React.Component {
                   deleteTask={this.deleteTask}
                   addDocument={this.addDocument}
                   deleteDocument={this.deleteDocument}
+                  visiteTrame={true}
                 />
               </div>
             </div>

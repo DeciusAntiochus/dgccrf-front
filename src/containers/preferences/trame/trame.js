@@ -359,22 +359,38 @@ class TrameComponent extends Component {
                           justifyContent: 'center'
                         }}
                       >
-                        <Button
-                          style={{
-                            background: '#3C4586',
-                            color: 'white'
-                          }}
-                          content="Ajouter un document"
-                          labelPosition="left"
-                          icon="file"
-                          onClick={() => this.fileInputRef.current.click()}
-                        />
-                        <input
-                          ref={this.fileInputRef}
-                          type="file"
-                          hidden
-                          onChange={e => this.fileChange(task, e)}
-                        />
+                        <Button.Group>
+                          <Button
+                            style={{
+                              background: '#3C4586',
+                              color: 'white'
+                            }}
+                            content="Ajouter un document"
+                            labelPosition="left"
+                            icon="file"
+                            onClick={() => this.fileInputRef.current.click()}
+                          />
+                          <input
+                            ref={this.fileInputRef}
+                            type="file"
+                            hidden
+                            onChange={e => this.fileChange(task, e)}
+                          />
+                          {this.props.visiteTrame && (
+                            <>
+                              <Button.Or text="ou" />
+                              <Button
+                                style={{
+                                  background: 'red',
+                                  color: 'white'
+                                }}
+                                content="Remplir un formulaire"
+                                labelPosition="right"
+                                icon="file pdf"
+                              />
+                            </>
+                          )}
+                        </Button.Group>
                       </div>
                     )}
                   </div>
