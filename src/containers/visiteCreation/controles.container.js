@@ -38,7 +38,7 @@ export default class ControleComponent extends React.Component {
           <Table.Row>
             <Table.HeaderCell>Dossier</Table.HeaderCell>
             <Table.HeaderCell>Code Action</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell float="right"></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
       );
@@ -181,28 +181,34 @@ export default class ControleComponent extends React.Component {
             />
           </Modal.Content>
         </Modal>
-        <Table celled stackable>
+        <Table stackable>
           {this.displayNoControleAlert()}
           <Table.Body>
             {this.props.controles.map(controle => (
               <Table.Row key={controle.ident}>
                 <Table.Cell>{controle.dossierText}</Table.Cell>
                 <Table.Cell>{controle.activiteText}</Table.Cell>
-                <Button
-                  icon="pencil"
-                  style={{ margin: '3px' }}
-                  onClick={() =>
-                    this.setState({
-                      modifyModalOpen: true,
-                      controleModified: controle
-                    })
-                  }
-                ></Button>
-                <Button
-                  icon="trash alternate"
-                  style={{ margin: '3px' }}
-                  onClick={() => this.deleteControle(controle.ident)}
-                ></Button>
+                <Table.Cell>
+                  <Button
+                    floated="right"
+                    color="red"
+                    icon="trash alternate"
+                    style={{ margin: '3px' }}
+                    onClick={() => this.deleteControle(controle.ident)}
+                  ></Button>
+                  <Button
+                    floated="right"
+                    icon="pencil"
+                    color="blue"
+                    style={{ margin: '3px' }}
+                    onClick={() =>
+                      this.setState({
+                        modifyModalOpen: true,
+                        controleModified: controle
+                      })
+                    }
+                  ></Button>
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

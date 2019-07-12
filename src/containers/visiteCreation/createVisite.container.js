@@ -77,14 +77,25 @@ class CreateVisiteComponent extends React.Component {
       const dossier = await dossierService.getDossierById(
         controles[0].DOSSIER_IDENT
       );
+      let controlesList = [];
+      for (let i in controles) {
+        const dossierControle = await dossierService.getDossierById(
+          controles[i].DOSSIER_IDENT
+        );
+        controlesList = controlesList.concat([
+          {
+            ...controles[i],
+            dossierText: dossierControle.DOSSIER_LIBELLE,
+            activiteText: 'Coucou',
+            ident: controles[i].CONTROLE_IDENT,
+            exists: true
+          }
+        ]);
+      }
       this.setState({
         ...visite,
         trameList: ['trame 1', 'trame 2'],
-        controlesList: controles.map(controle => ({
-          ...controle,
-          ident: controle.CONTROLE_IDENT,
-          exists: true
-        })),
+        controlesList,
         message: '',
         dossierText: dossier.DOSSIER_LIBELLE,
         visiteIdent: visite.VISITE_IDENT,

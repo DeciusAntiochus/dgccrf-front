@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Grid, Segment, Responsive, Icon, Header } from 'semantic-ui-react';
+import {
+  Grid,
+  Segment,
+  Responsive,
+  Icon,
+  Header,
+  Button
+} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -93,7 +100,7 @@ export default class Visite extends Component {
                     </div>
                   </Responsive>
                 </Grid.Column>
-                <Grid.Column width={7} textAlign="left">
+                <Grid.Column width={6} textAlign="left">
                   <Grid.Row>
                     <Header
                       as="h3"
@@ -108,7 +115,7 @@ export default class Visite extends Component {
                     </Header>
                   </Grid.Row>
                 </Grid.Column>
-                <Grid.Column width={6}>
+                <Grid.Column width={5}>
                   <Grid.Row>
                     <Header as="h6" style={{ fontWeight: 'normal' }}>
                       {/* {this.props.dossier.ACDG_LIBELLE} */}
@@ -145,6 +152,14 @@ export default class Visite extends Component {
                       ).format('DD/MM/YYYY')}
                     </Header>
                   </Grid.Row>
+                </Grid.Column>
+                <Grid.Column
+                  as={Link}
+                  to={'/modify-visite/' + visite.visiteData.VISITE_IDENT}
+                  width={1}
+                  floated="right"
+                >
+                  <Icon name="pencil"></Icon>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
