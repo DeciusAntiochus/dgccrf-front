@@ -6,7 +6,7 @@ const initialState = {
   activePages: {
     mesDossiers: '/mes-dossiers',
     etablissements: '/etablissements',
-    preferences: '/authentification'
+    preferences: '/preferences'
   }
 };
 

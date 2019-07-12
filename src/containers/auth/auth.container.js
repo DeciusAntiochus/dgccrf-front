@@ -49,7 +49,7 @@ class AuthComponent extends React.Component {
                 window.alert('Vous devez être connecté à internet pour changer d\'utilisateur.\nVérifier votre connection avant de réeesayer')
             }
             else if (err.response && err.response.status == 404) {
-                window.alert("L'utilisateur avec le code agent " + this.state.idAgent + " est introuvable")
+                window.alert("L'utilisateur avec l'identifiant " + this.state.idAgent + " est introuvable")
             }
             else if (!err.response) {
                 window.alert("Une erreur locale s'est produite.");
