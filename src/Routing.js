@@ -13,6 +13,7 @@ import AuthComponent from './containers/auth/auth.container';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import Preferences from './containers/preferences';
+import FormTest from './containers/forms/conso/FormTest';
 
 function mapStateToProps(state) {
   return {
@@ -45,6 +46,8 @@ let RoutingComponent = props =>
       <Route exact path="/modify-visite/:visiteId" component={CreateVisite} />
       <Route exact path="/nouvelle-trame" component={CreateTrame} />
       <Route exact path="/authentification" component={AuthComponent} />
+      <Route exact path="/form-test" component={FormTest} />
+
       <Route render={() => <Redirect to="/menu" />} />
     </Switch>
   );

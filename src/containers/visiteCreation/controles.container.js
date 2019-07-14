@@ -198,26 +198,28 @@ export default class ControleComponent extends React.Component {
               <Table.Row key={controle.ident}>
                 <Table.Cell>{controle.dossierText}</Table.Cell>
                 <Table.Cell>{controle.activiteText}</Table.Cell>
-                <Table.Cell>
-                  <Button
-                    floated="right"
-                    color="red"
-                    icon="trash alternate"
-                    style={{ margin: '3px' }}
-                    onClick={() => this.deleteControle(controle.ident)}
-                  ></Button>
-                  <Button
-                    floated="right"
-                    icon="pencil"
-                    color="blue"
-                    style={{ margin: '3px' }}
-                    onClick={() =>
-                      this.setState({
-                        modifyModalOpen: true,
-                        controleModified: controle
-                      })
-                    }
-                  ></Button>
+                <Table.Cell width={3}>
+                  <div style={{ height: '39px' }}>
+                    <Button
+                      floated="right"
+                      color="red"
+                      icon="trash alternate"
+                      style={{ margin: '3px' }}
+                      onClick={() => this.deleteControle(controle.ident)}
+                    ></Button>
+                    <Button
+                      floated="right"
+                      icon="pencil"
+                      color="blue"
+                      style={{ margin: '3px' }}
+                      onClick={() =>
+                        this.setState({
+                          modifyModalOpen: true,
+                          controleModified: controle
+                        })
+                      }
+                    ></Button>
+                  </div>
                 </Table.Cell>
               </Table.Row>
             ))}
