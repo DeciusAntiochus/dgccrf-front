@@ -54,7 +54,8 @@ class CreateVisiteComponent extends React.Component {
       message: '',
       DOSSIER_IDENT: -1,
       dossierText: '',
-      visiteIdent: undefined
+      visiteIdent: undefined,
+      visite: undefined
     };
   }
 
@@ -86,7 +87,7 @@ class CreateVisiteComponent extends React.Component {
           {
             ...controles[i],
             dossierText: dossierControle.DOSSIER_LIBELLE,
-            activiteText: 'Coucou',
+            activiteText: controles[i].ACDG_CODE_LIB_NIVEAU3,
             ident: controles[i].CONTROLE_IDENT,
             exists: true
           }
@@ -99,7 +100,8 @@ class CreateVisiteComponent extends React.Component {
         message: '',
         dossierText: dossier.DOSSIER_LIBELLE,
         visiteIdent: visite.VISITE_IDENT,
-        DOSSIER_IDENT: dossier.DOSSIER_IDENT
+        DOSSIER_IDENT: dossier.DOSSIER_IDENT,
+        visite
       });
     } else {
       this.props.changeNameOfPage('Création de visite');
@@ -197,8 +199,26 @@ class CreateVisiteComponent extends React.Component {
 
   onSubmit = () => {
     if (this.testEntries()) {
-      if (this.state.visiteIdent) {
-        //TODO complete function to modify visite
+      if (this.props.match.params.visiteId) {
+        visitesService
+          .updateVisite(
+            {
+              ...this.state.visite,
+              ETOB_RAISON_SOCIALE: this.state.ETOB_RAISON_SOCIALE,
+              ETOB_SIRET: this.state.ETOB_SIRET,
+              VIS_DATE: this.state.VIS_DATE,
+              VIS_OBSERVATIONS: this.state.VIS_OBSERVATIONS,
+              VIS_MUTUALISEE: this.state.VIS_MUTUALISEE,
+              VIS_CPMM: this.state.VIS_CPMM,
+              trame: this.state.trame,
+              AG_IDENT: this.props.agentIdent
+            },
+            this.state.controlesList
+          )
+          .then(() => {
+            window.alert('La visite a bien été modifiée.');
+            this.props.history.push('/dossier/' + this.state.DOSSIER_IDENT);
+          });
       } else {
         visitesService
           .postControlesByVisite(

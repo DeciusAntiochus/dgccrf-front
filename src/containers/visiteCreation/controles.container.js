@@ -59,9 +59,9 @@ export default class ControleComponent extends React.Component {
       });
     } else {
       controle.ident = this.state.countControl;
-      const codeCPF = await cpfService.getCpfById(controle.cpf);
+      const codeCPF = await cpfService.getCpfById(controle.CPF_IDENT);
       const codeActivite = await activiteService.getActiviteById(
-        controle.activite
+        controle.ACDG_IDENT
       );
       this.setState({
         countCountrol: this.state.countControl + 1,
@@ -70,7 +70,13 @@ export default class ControleComponent extends React.Component {
       });
       this.props.changeControle(
         this.props.controles.concat([
-          { ...controle, ...codeCPF, ...codeActivite }
+          {
+            ...controle,
+            ...codeCPF,
+            ...codeActivite,
+            _id: undefined,
+            _rev: undefined
+          }
         ])
       );
     }
@@ -100,7 +106,11 @@ export default class ControleComponent extends React.Component {
       this.props.changeControle(
         this.props.controles.map(cont => {
           if (cont.ident === controleId) {
-            return { ...controle, ...codeCPF, ...codeActivite };
+            return {
+              ...controle,
+              ...codeCPF,
+              ...codeActivite
+            };
           } else {
             return cont;
           }
