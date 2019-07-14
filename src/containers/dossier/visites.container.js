@@ -56,7 +56,6 @@ export default class VisitesComponent extends React.Component {
             </Link>
           </div>
         </div>
-
         <div style={{ paddingTop: 70 }}>
           {this.props.visitesList.length > 0 ? (
             this.props.visitesList.map((visite, i) => (

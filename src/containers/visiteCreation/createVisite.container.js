@@ -5,14 +5,13 @@ import {
   Grid,
   GridRow,
   GridColumn,
-  Icon,
   TextArea,
   Button,
   Message,
-  Container
+  Container,
+  Checkbox
 } from 'semantic-ui-react';
 import { DateInput } from 'semantic-ui-calendar-react';
-import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 import {
   changeNameOfPage,
@@ -35,8 +34,7 @@ function mapDispatchToProps(dispatch) {
   return {
     changeNameOfPage: newName => dispatch(changeNameOfPage(newName)),
     changeBackUrl: newBackUrl => dispatch(changeBackUrl(newBackUrl)),
-    changeActivePage: value =>
-      dispatch(changeActivePage('mesDossiers', '/nouvelle-visite/' + value))
+    changeActivePage: value => dispatch(changeActivePage('mesDossiers', value))
   };
 }
 
@@ -44,43 +42,115 @@ class CreateVisiteComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      cpmm: false,
-      mutualisee: false,
-      date: '',
-      etab: '',
-      SIRET: '',
-      observations: '',
+      VIS_CPMM: false,
+      VIS_MUTUALISEE: false,
+      VIS_DATE: '',
+      ETOB_RAISON_SOCIALE: '',
+      ETOB_SIRET: '',
+      VIS_OBSERVATIONS: '',
       trame: '',
       trameList: [{ _id: 0, name: 'Aucune trame' }],
       controlesList: [],
       message: '',
-      dossierText: ''
+      DOSSIER_IDENT: -1,
+      dossierText: '',
+      visiteIdent: undefined,
+      visite: undefined
     };
-    this.onSubmit = this.onSubmit.bind(this);
   }
 
   async componentDidMount() {
-    this.props.changeNameOfPage('Création de visite');
-    this.props.changeBackUrl('/mes-dossiers'); // TODO : change for /dossier/:idDossier
-    this.props.changeActivePage(this.props.match.params.dossierId);
-    dossierService
-      .getAllActionCode()
-      .then(actionList => this.setState({ actionList }));
-
-    PouchDbServices.services.trame
-      .getAllDocs()
-      .then(res => {
-        this.setState({ trameList: this.state.trameList.concat(res) });
-      })
-      .catch(e => {
-        //
+    if (this.props.match.params.visiteId) {
+      //Si on est sur la page de modification de visite
+      this.props.changeNameOfPage('Modification de visite');
+      this.props.changeBackUrl(
+        '/visite/' + this.props.match.params.visiteId.toString()
+      );
+      this.props.changeActivePage(
+        '/modify-visite/' + this.props.match.params.visiteId
+      );
+      const visite = await visitesService.getVisiteById(
+        this.props.match.params.visiteId
+      );
+      const controles = await visitesService.getControlesByVisite(
+        this.props.match.params.visiteId
+      );
+      const dossier = await dossierService.getDossierById(
+        controles[0].DOSSIER_IDENT
+      );
+      let controlesList = [];
+      for (let i in controles) {
+        const dossierControle = await dossierService.getDossierById(
+          controles[i].DOSSIER_IDENT
+        );
+        controlesList = controlesList.concat([
+          {
+            ...controles[i],
+            dossierText: dossierControle.DOSSIER_LIBELLE,
+            activiteText: controles[i].ACDG_CODE_LIB_NIVEAU3,
+            ident: controles[i].CONTROLE_IDENT,
+            exists: true
+          }
+        ]);
+      }
+      this.setState({
+        ...visite,
+        trameList: ['trame 1', 'trame 2'],
+        controlesList,
+        message: '',
+        dossierText: dossier.DOSSIER_LIBELLE,
+        visiteIdent: visite.VISITE_IDENT,
+        DOSSIER_IDENT: dossier.DOSSIER_IDENT,
+        visite
       });
-    const dossier = await dossierService.getDossierById(
-      this.props.match.params.dossierId
-    );
-    this.setState({ dossierText: dossier.DOSSIER_LIBELLE });
+    } else {
+      this.props.changeNameOfPage('Création de visite');
+      this.props.changeBackUrl('/dossier/' + this.props.match.params.dossierId);
+      this.props.changeActivePage(
+        '/nouvelle-visite/' + this.props.match.params.dossierId
+      );
+      PouchDbServices.services.trame
+        .getAllDocs()
+        .then(res => {
+          this.setState({ trameList: this.state.trameList.concat(res) });
+        })
+        .catch(() => {});
+      const dossier = await dossierService.getDossierById(
+        this.props.match.params.dossierId
+      );
+      this.setState({
+        dossierText: dossier.DOSSIER_LIBELLE,
+        DOSSIER_IDENT: parseInt(this.props.match.params.dossierId)
+      });
+    }
   }
 
+  displayTrame = () => {
+    if (this.props.match.params.dossierId) {
+      return (
+        <Form.Group style={{ margin: 0 }}>
+          <Grid style={{ width: '100%', margin: 0 }} verticalAlign="bottom">
+            <GridRow style={{ display: 'flex' }}>
+              <Grid.Column width={16} style={{ padding: 0 }}>
+                <Form.Select
+                  fluid
+                  placeholder="Trame"
+                  label="Trame associée"
+                  style={{ width: '100%' }}
+                  options={this.state.trameList.map(trame => ({
+                    key: trame._id,
+                    text: trame.name,
+                    value: trame
+                  }))}
+                  onChange={(e, { value }) => this.setState({ trame: value })}
+                />
+              </Grid.Column>
+            </GridRow>
+          </Grid>
+        </Form.Group>
+      );
+    }
+  };
   displayMessage = message => {
     if (message) {
       return (
@@ -100,13 +170,17 @@ class CreateVisiteComponent extends React.Component {
   };
 
   testEntries() {
-    if (!this.state.etab || !this.state.date || !this.state.trame) {
+    if (
+      !this.state.ETOB_RAISON_SOCIALE ||
+      !this.state.VIS_DATE ||
+      !this.state.trame
+    ) {
       this.setState({
         message: "Veillez renseigner l'ensemble des champs obligatoires"
       });
       return false;
     }
-    if (this.state.SIRET.length !== 14) {
+    if (this.state.ETOB_SIRET.length !== 14) {
       this.setState({
         message:
           "Le numéro SIRET renseigné n'est pas valide : il doit être composé de 14 chiffres"
@@ -123,30 +197,52 @@ class CreateVisiteComponent extends React.Component {
     return true;
   }
 
-  onSubmit() {
+  onSubmit = () => {
     if (this.testEntries()) {
-      visitesService
-        .postControlesByVisite(
-          {
-            ETOB_RAISON_SOCIALE: this.state.etab,
-            ETOB_SIRET: this.state.SIRET,
-            VIS_DATE: this.state.date,
-            VIS_OBSERVATIONS: this.state.observations,
-            VIS_MUTUALISEE: this.state.mutualisee,
-            VIS_CPMM: this.state.cpmm,
-            trame: this.state.trame._id === 0 ? null : this.state.trame,
-            AG_IDENT: this.props.agentIdent
-          },
-          this.state.controlesList
-        )
-        .then(() => {
-          window.alert('La visite a bien été ajoutée.');
-          this.props.history.push(
-            '/dossier/' + this.props.match.params.dossierId
-          );
-        });
+      if (this.props.match.params.visiteId) {
+        visitesService
+          .updateVisite(
+            {
+              ...this.state.visite,
+              ETOB_RAISON_SOCIALE: this.state.ETOB_RAISON_SOCIALE,
+              ETOB_SIRET: this.state.ETOB_SIRET,
+              VIS_DATE: this.state.VIS_DATE,
+              VIS_OBSERVATIONS: this.state.VIS_OBSERVATIONS,
+              VIS_MUTUALISEE: this.state.VIS_MUTUALISEE,
+              VIS_CPMM: this.state.VIS_CPMM,
+              trame: this.state.trame,
+              AG_IDENT: this.props.agentIdent
+            },
+            this.state.controlesList
+          )
+          .then(() => {
+            window.alert('La visite a bien été modifiée.');
+            this.props.history.push('/dossier/' + this.state.DOSSIER_IDENT);
+          });
+      } else {
+        visitesService
+          .postControlesByVisite(
+            {
+              ETOB_RAISON_SOCIALE: this.state.ETOB_RAISON_SOCIALE,
+              ETOB_SIRET: this.state.ETOB_SIRET,
+              VIS_DATE: this.state.VIS_DATE,
+              VIS_OBSERVATIONS: this.state.VIS_OBSERVATIONS,
+              VIS_MUTUALISEE: this.state.VIS_MUTUALISEE,
+              VIS_CPMM: this.state.VIS_CPMM,
+              trame: this.state.trame,
+              AG_IDENT: this.props.agentIdent
+            },
+            this.state.controlesList
+          )
+          .then(() => {
+            window.alert('La visite a bien été ajoutée.');
+            this.props.history.push(
+              '/dossier/' + this.props.match.params.dossierId
+            );
+          });
+      }
     }
-  }
+  };
 
   render() {
     return (
@@ -157,15 +253,23 @@ class CreateVisiteComponent extends React.Component {
             <GridColumn width={14}>
               <Form onSubmit={this.onSubmit}>
                 <Form.Group widths="equal">
-                  <Form.Checkbox
+                  <Form.Field
+                    control={Checkbox}
                     label="CPMM"
-                    onChange={e => this.setState({ cpmm: e.target.value })}
-                  />
-                  <Form.Checkbox
-                    label="Visite Mutualisée"
-                    onChange={e =>
-                      this.setState({ mutualisee: e.target.value })
+                    onClick={() =>
+                      this.setState({ VIS_CPMM: !this.state.VIS_CPMM })
                     }
+                    checked={this.state.VIS_CPMM}
+                  />
+                  <Form.Field
+                    control={Checkbox}
+                    label="Visite Mutualisée"
+                    onClick={() =>
+                      this.setState({
+                        VIS_MUTUALISEE: !this.state.VIS_MUTUALISEE
+                      })
+                    }
+                    checked={this.state.VIS_MUTUALISEE}
                   />
                 </Form.Group>
                 <Form.Group widths="equal">
@@ -174,10 +278,10 @@ class CreateVisiteComponent extends React.Component {
                     name="date"
                     placeholder="Date de la visite"
                     required
-                    value={this.state.date}
+                    value={this.state.VIS_DATE}
                     iconPosition="right"
                     onChange={(event, { value }) =>
-                      this.setState({ date: value })
+                      this.setState({ VIS_DATE: value })
                     }
                   />
                 </Form.Group>
@@ -187,7 +291,10 @@ class CreateVisiteComponent extends React.Component {
                     required
                     label="Etablissement"
                     placeholder="Raison Sociale"
-                    onChange={e => this.setState({ etab: e.target.value })}
+                    onChange={e =>
+                      this.setState({ ETOB_RAISON_SOCIALE: e.target.value })
+                    }
+                    value={this.state.ETOB_RAISON_SOCIALE}
                   />
 
                   <Form.Input
@@ -195,48 +302,28 @@ class CreateVisiteComponent extends React.Component {
                     required
                     label="SIRET"
                     placeholder="SIRET"
-                    onChange={e => this.setState({ SIRET: e.target.value })}
+                    onChange={e =>
+                      this.setState({ ETOB_SIRET: e.target.value })
+                    }
+                    value={this.state.ETOB_SIRET}
                   />
                 </Form.Group>
-                <Form.Group style={{ margin: 0 }}>
-                  <Grid
-                    style={{ width: '100%', margin: 0 }}
-                    verticalAlign="bottom"
-                  >
-                    <GridRow style={{ display: 'flex' }}>
-                      <Grid.Column width={16} style={{ padding: 0 }}>
-                        <Form.Select
-                          fluid
-                          placeholder="Trame"
-                          label="Trame associée"
-                          style={{ width: '100%' }}
-                          options={this.state.trameList.map(trame => ({
-                            key: trame._id,
-                            text: trame.name,
-                            value: trame
-                          }))}
-                          onChange={(e, { value }) =>
-                            this.setState({ trame: value })
-                          }
-                        />
-                      </Grid.Column>
-                    </GridRow>
-                  </Grid>
-                </Form.Group>
+                {this.displayTrame()}
                 <Form.Group>
                   <Form.Field width={16}>
                     <TextArea
                       placeholder="Observations"
                       onChange={e =>
-                        this.setState({ observations: e.target.value })
+                        this.setState({ VIS_OBSERVATIONS: e.target.value })
                       }
+                      value={this.state.VIS_OBSERVATIONS}
                     />
                   </Form.Field>
                 </Form.Group>
               </Form>
               <ControleComponent
                 dossier={{
-                  id: this.props.match.params.dossierId,
+                  id: this.state.DOSSIER_IDENT,
                   text: this.state.dossierText
                 }}
                 controles={this.state.controlesList}
@@ -259,11 +346,12 @@ CreateVisiteComponent.propTypes = {
   changeNameOfPage: PropTypes.func.isRequired,
   changeBackUrl: PropTypes.func.isRequired,
   changeActivePage: PropTypes.func.isRequired,
-  agentIdent: PropTypes.string.isRequired,
+  agentIdent: PropTypes.number.isRequired,
   history: PropTypes.any,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      dossierId: PropTypes.string
+      dossierId: PropTypes.string,
+      visiteId: PropTypes.string
     })
   })
 };

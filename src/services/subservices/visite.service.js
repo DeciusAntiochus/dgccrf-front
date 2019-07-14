@@ -54,16 +54,12 @@ class PouchDbVisiteService {
       .changes({ since: 'now', live: true })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
-
     this.newControleDB = new PouchDB('new-controles');
     this.newControleDB.replicate.to(
       config.couchDb.url_new_controles,
       opts_without_filter
     );
-    this.newControleDB.replicate.from(
-      config.couchDb.url_new_controles,
-      opts
-    );
+    this.newControleDB.replicate.from(config.couchDb.url_new_controles, opts);
     this.newControleDB.createIndex({ index: { fields: ['DOSSIER_IDENT'] } });
     this.newControleDB.createIndex({ index: { fields: ['VISITE_IDENT'] } });
     this.newControleDB
@@ -86,16 +82,12 @@ class PouchDbVisiteService {
       })
       .on('change', () => this.changesCallbacks.map(cb => cb()));
 
-
     this.newVisiteDB = new PouchDB('new-visites');
     this.newVisiteDB.replicate.to(
       config.couchDb.url_new_visites,
       opts_without_filter
     );
-    this.newVisiteDB.replicate.from(
-      config.couchDb.url_new_visites,
-      opts
-    );
+    this.newVisiteDB.replicate.from(config.couchDb.url_new_visites, opts);
     this.newVisiteDB.createIndex({
       index: { fields: ['VISITE_IDENT'] }
     });
@@ -134,6 +126,20 @@ class PouchDbVisiteService {
     firstArray = firstArray.docs;
     let secondArray = await this.newControleDB.find({
       selector: { DOSSIER_IDENT: parseInt(dossierID) }
+    });
+    secondArray = secondArray.docs;
+    return firstArray
+      .concat(secondArray)
+      .filter((value, index, self) => self.indexOf(value) === index);
+  }
+
+  async getControlesByVisite(visiteID) {
+    let firstArray = await this.controleDB.find({
+      selector: { VISITE_IDENT: parseInt(visiteID) }
+    });
+    firstArray = firstArray.docs;
+    let secondArray = await this.newControleDB.find({
+      selector: { VISITE_IDENT: parseInt(visiteID) }
     });
     secondArray = secondArray.docs;
     return firstArray
@@ -193,7 +199,9 @@ class PouchDbVisiteService {
 
   postControlesByVisite(visiteInfos, controlesList) {
     let promises = [];
-    const ident = parseInt(Date.now().toString() + this.AGENT_DD_IDENT.toString());
+    const ident = parseInt(
+      Date.now().toString() + this.AGENT_DD_IDENT.toString()
+    );
     promises.push(
       this.newVisiteDB.post({
         ...visiteInfos,
@@ -205,23 +213,50 @@ class PouchDbVisiteService {
     for (let controle of controlesList) {
       promises.push(
         this.newControleDB.post({
-          ...visiteInfos,
-          DOSSIER_IDENT: controle.dossier,
-          CPF_CODE_PRODUIT: controle.cpf,
-          STADE_PRODUIT_IDENT: parseInt(controle.stade),
-          CONTROLE_IDENT: controle.dossier.toString() + controle.cpf.toString(),
+          AGENT_DD_IDENT: visiteInfos.AGENT_DD_IDENT,
+          ...controle,
           VISITE_IDENT: ident,
-          AGENT_DD_IDENT: this.AGENT_DD_IDENT
+          new_visite: true,
+          CONTROLE_IDENT:
+            controle.DOSSIER_IDENT.toString() + controle.CPF_IDENT.toString(),
+          TAPR_IDENT: controle.TAPR_IDENT
         })
       );
     }
     return Promise.all(promises);
   }
 
+  updateVisite(visiteInfos, controlesList) {
+    let promises = [];
+    promises.push(this.newVisiteDB.put(visiteInfos));
+    for (let controle of controlesList) {
+      if (controle.exists) {
+        promises.push(this.newControleDB.put(controle));
+      } else {
+        promises.push(
+          this.newControleDB.post({
+            AGENT_DD_IDENT: visiteInfos.AGENT_DD_IDENT,
+            ...controle,
+            VISITE_IDENT: ident,
+            CONTROLE_IDENT:
+              controle.DOSSIER_IDENT.toString() + controle.CPF_IDENT.toString(),
+            TAPR_IDENT: controle.TAPR_IDENT
+          })
+        );
+      }
+    }
+    return Promise.all(promises);
+  }
   async exportToSora(VISITE_IDENT) {
-    let visiteToExport = await this.newVisiteDB.find({ selector: { VISITE_IDENT: parseInt(VISITE_IDENT) } }).then(res => res.docs[0]);
+    let visiteToExport = await this.newVisiteDB
+      .find({ selector: { VISITE_IDENT: parseInt(VISITE_IDENT) } })
+      .then(res => res.docs[0]);
     if (visiteToExport)
-      await this.newVisiteDB.put({ ...visiteToExport, new_visite: false, toBeExported: true });
+      await this.newVisiteDB.put({
+        ...visiteToExport,
+        new_visite: false,
+        toBeExported: true
+      });
   }
 }
 
