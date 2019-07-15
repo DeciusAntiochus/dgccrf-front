@@ -24,11 +24,13 @@ export default class ControleComponent extends React.Component {
   displayNoControleAlert = () => {
     if (this.props.controles.length === 0) {
       return (
-        <Table.Row>
-          <Table.Cell>
-            {"Aucun contrôle n'a été renseigné pour l'instant."}
-          </Table.Cell>
-        </Table.Row>
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>
+              {"Aucun contrôle n'a été renseigné pour l'instant."}
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
       );
     } else {
       return (
@@ -36,7 +38,7 @@ export default class ControleComponent extends React.Component {
           <Table.Row>
             <Table.HeaderCell>Dossier</Table.HeaderCell>
             <Table.HeaderCell>Code Action</Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            <Table.HeaderCell float="right"></Table.HeaderCell>
           </Table.Row>
         </Table.Header>
       );
@@ -45,11 +47,11 @@ export default class ControleComponent extends React.Component {
 
   async submitAddControle(controle) {
     if (
-      !controle.dossier ||
-      !controle.tache ||
-      !controle.activite ||
-      !controle.cpf ||
-      !controle.stade
+      !controle.DOSSIER_IDENT ||
+      !controle.TAPR_IDENT ||
+      !controle.ACDG_IDENT ||
+      !controle.CPF_IDENT ||
+      !controle.STADE_PRODUIT_IDENT
     ) {
       this.setState({
         addModalErrorMessage:
@@ -57,9 +59,9 @@ export default class ControleComponent extends React.Component {
       });
     } else {
       controle.ident = this.state.countControl;
-      const codeCPF = await cpfService.getCpfById(controle.cpf);
+      const codeCPF = await cpfService.getCpfById(controle.CPF_IDENT);
       const codeActivite = await activiteService.getActiviteById(
-        controle.activite
+        controle.ACDG_IDENT
       );
       this.setState({
         countCountrol: this.state.countControl + 1,
@@ -68,7 +70,13 @@ export default class ControleComponent extends React.Component {
       });
       this.props.changeControle(
         this.props.controles.concat([
-          { ...controle, ...codeCPF, ...codeActivite }
+          {
+            ...controle,
+            ...codeCPF,
+            ...codeActivite,
+            _id: undefined,
+            _rev: undefined
+          }
         ])
       );
     }
@@ -76,20 +84,20 @@ export default class ControleComponent extends React.Component {
 
   async submitModifyControle(controle, controleId) {
     if (
-      !controle.dossier ||
-      !controle.tache ||
-      !controle.activite ||
-      !controle.cpf ||
-      !controle.stade
+      !controle.DOSSIER_IDENT ||
+      !controle.TAPR_IDENT ||
+      !controle.ACDG_IDENT ||
+      !controle.CPF_IDENT ||
+      !controle.STADE_PRODUIT_IDENT
     ) {
       this.setState({
         modifyModalErrorMessage:
           'Veuillez renseigner tous les champs obligatoires.'
       });
     } else {
-      const codeCPF = await cpfService.getCpfById(controle.cpf);
+      const codeCPF = await cpfService.getCpfById(controle.CPF_IDENT);
       const codeActivite = await activiteService.getActiviteById(
-        controle.activite
+        controle.ACDG_IDENT
       );
       this.setState({
         modifyModalOpen: false,
@@ -98,7 +106,11 @@ export default class ControleComponent extends React.Component {
       this.props.changeControle(
         this.props.controles.map(cont => {
           if (cont.ident === controleId) {
-            return { ...controle, ...codeCPF, ...codeActivite };
+            return {
+              ...controle,
+              ...codeCPF,
+              ...codeActivite
+            };
           } else {
             return cont;
           }
@@ -173,34 +185,42 @@ export default class ControleComponent extends React.Component {
               }
               controle={this.state.controleModified}
               dossier={{
-                id: this.state.controleModified.dossier,
+                id: this.state.controleModified.DOSSIER_IDENT,
                 text: this.state.controleModified.dossierText
               }}
             />
           </Modal.Content>
         </Modal>
-        <Table celled stackable>
+        <Table stackable>
           {this.displayNoControleAlert()}
           <Table.Body>
             {this.props.controles.map(controle => (
               <Table.Row key={controle.ident}>
                 <Table.Cell>{controle.dossierText}</Table.Cell>
-                <Table.Cell>{controle.ACDG_CODE_LIB_NIVEAU3}</Table.Cell>
-                <Button
-                  icon="pencil"
-                  style={{ margin: '3px' }}
-                  onClick={() =>
-                    this.setState({
-                      modifyModalOpen: true,
-                      controleModified: controle
-                    })
-                  }
-                ></Button>
-                <Button
-                  icon="trash alternate"
-                  style={{ margin: '3px' }}
-                  onClick={() => this.deleteControle(controle.ident)}
-                ></Button>
+                <Table.Cell>{controle.activiteText}</Table.Cell>
+                <Table.Cell width={3}>
+                  <div style={{ height: '39px' }}>
+                    <Button
+                      floated="right"
+                      color="red"
+                      icon="trash alternate"
+                      style={{ margin: '3px' }}
+                      onClick={() => this.deleteControle(controle.ident)}
+                    ></Button>
+                    <Button
+                      floated="right"
+                      icon="pencil"
+                      color="blue"
+                      style={{ margin: '3px' }}
+                      onClick={() =>
+                        this.setState({
+                          modifyModalOpen: true,
+                          controleModified: controle
+                        })
+                      }
+                    ></Button>
+                  </div>
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
@@ -214,7 +234,7 @@ ControleComponent.propTypes = {
   changeControle: PropTypes.func.isRequired,
   controles: PropTypes.array.isRequired,
   dossier: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired
   })
 };

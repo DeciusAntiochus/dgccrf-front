@@ -11,28 +11,29 @@ export default class SingleControleComponent extends React.Component {
     if (props.controle) {
       this.state = {
         controle: {
-          dossier: props.controle.dossier,
+          ...props.controle,
+          DOSSIER_IDENT: props.controle.DOSSIER_IDENT,
           dossierText: props.controle.dossierText,
-          tache: props.controle.tache,
+          TAPR_IDENT: props.controle.TAPR_IDENT,
           tacheText: props.controle.tacheText,
-          activite: props.controle.ACDG_IDENT,
+          ACDG_IDENT: props.controle.ACDG_IDENT,
           activiteText: props.controle.ACDG_CODE_LIB_NIVEAU3,
-          cpf: props.controle.CPF_IDENT,
-          stade: props.controle.stade,
+          CPF_IDENT: props.controle.CPF_IDENT,
+          STADE_PRODUIT_IDENT: props.controle.STADE_PRODUIT_IDENT,
           ident: props.controle.ident
         }
       };
     } else {
       this.state = {
         controle: {
-          dossier: parseInt(this.props.dossier.id),
+          DOSSIER_IDENT: parseInt(this.props.dossier.id),
           dossierText: this.props.dossier.text,
-          tache: 0,
+          TAPR_IDENT: 0,
           tacheText: '',
-          activite: 0,
+          ACDG_IDENT: 0,
           activiteText: '',
-          cpf: 0,
-          stade: ''
+          CPF_IDENT: 0,
+          STADE_PRODUIT_IDENT: -1
         }
       };
     }
@@ -46,7 +47,7 @@ export default class SingleControleComponent extends React.Component {
             this.setState({
               controle: {
                 ...this.state.controle,
-                dossier: value,
+                DOSSIER_IDENT: value,
                 dossierText: text
               }
             })
@@ -55,20 +56,20 @@ export default class SingleControleComponent extends React.Component {
             this.setState({
               controle: {
                 ...this.state.controle,
-                tache: value,
+                TAPR_IDENT: value,
                 tacheText: text
               }
             })
           }
-          dossier={this.state.controle.dossier}
-          tache={this.state.controle.tache}
+          DOSSIER_IDENT={this.state.controle.DOSSIER_IDENT}
+          TAPR_IDENT={this.state.controle.TAPR_IDENT}
         />
         <CodesField
           activiteChange={(e, data) =>
             this.setState({
               controle: {
                 ...this.state.controle,
-                activite: data.value,
+                ACDG_IDENT: data.value,
                 activiteText: e.currentTarget.innerText
               }
             })
@@ -77,20 +78,23 @@ export default class SingleControleComponent extends React.Component {
             this.setState({
               controle: {
                 ...this.state.controle,
-                cpf: data.value
+                CPF_IDENT: data.value
               }
             });
           }}
-          activite={this.state.controle.activite}
-          cpf={this.state.controle.cpf}
+          ACDG_IDENT={this.state.controle.ACDG_IDENT}
+          CPF_IDENT={this.state.controle.CPF_IDENT}
         />
         <StadeField
           onChange={(e, data) =>
             this.setState({
-              controle: { ...this.state.controle, stade: data.value }
+              controle: {
+                ...this.state.controle,
+                STADE_PRODUIT_IDENT: data.value
+              }
             })
           }
-          stade={this.state.controle.stade}
+          STADE_PRODUIT_IDENT={this.state.controle.STADE_PRODUIT_IDENT}
         />
         <Form.Button onClick={() => this.props.onSubmit(this.state.controle)}>
           Valider
@@ -103,7 +107,7 @@ export default class SingleControleComponent extends React.Component {
 SingleControleComponent.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   dossier: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     text: PropTypes.string
   }),
   controle: PropTypes.any

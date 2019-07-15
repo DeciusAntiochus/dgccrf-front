@@ -68,7 +68,7 @@ export default class DossierField extends React.Component {
           }))
           .filter(value => value.key !== -1)
       },
-      () => this.handleDossierChange(this.props.dossier)
+      () => this.handleDossierChange(this.props.DOSSIER_IDENT)
     );
 
     var newDossiers = dossiers
@@ -118,12 +118,12 @@ export default class DossierField extends React.Component {
   };
 
   optionsDossierField = dossierSelected => {
-    if (this.props.tache === 0) {
+    if (this.props.TAPR_IDENT === 0) {
       return this.state.dossiers;
     }
     if (dossierSelected === -1) {
       return this.state.tabDossiersTaches
-        .filter(corres => corres.tacheId === this.props.tache)
+        .filter(corres => corres.tacheId === this.props.TAPR_IDENT)
         .map(corres => ({
           key: corres.dossierId,
           value: corres.dossierId,
@@ -153,7 +153,7 @@ export default class DossierField extends React.Component {
             this.props.dossierChange(data.value, e.currentTarget.innerText),
             this.handleDossierChange(data.value)
           )}
-          value={this.props.dossier}
+          value={this.props.DOSSIER_IDENT}
         />
         <Form.Field
           required
@@ -166,9 +166,9 @@ export default class DossierField extends React.Component {
           search
           onChange={(e, data) => (
             this.props.tacheChange(data.value, e.currentTarget.innerText),
-            this.handleTacheChange(this.props.dossier)
+            this.handleTacheChange(this.props.DOSSIER_IDENT)
           )}
-          value={this.props.tache}
+          value={this.props.TAPR_IDENT}
         />
       </Form.Group>
     );
@@ -178,6 +178,6 @@ export default class DossierField extends React.Component {
 DossierField.propTypes = {
   dossierChange: PropTypes.func.isRequired,
   tacheChange: PropTypes.func.isRequired,
-  dossier: PropTypes.number.isRequired,
-  tache: PropTypes.number.isRequired
+  DOSSIER_IDENT: PropTypes.number.isRequired,
+  TAPR_IDENT: PropTypes.number.isRequired
 };
