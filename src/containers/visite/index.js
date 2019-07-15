@@ -152,7 +152,7 @@ class Visite extends React.Component {
                     labelPosition="left"
                     onClick={this.exportToSora}
                   >
-                    <Icon name="pencil"></Icon>
+                    <Icon name="share square"></Icon>
                     Exporter
                   </Button>
 

@@ -1,32 +1,41 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   Grid,
   Segment,
   Responsive,
   Icon,
-  Header,
-  Button
+  Header
 } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import MyLink from '../../components/visites/myLink.component';
+import { DisplayAction } from './visiteActions';
+
 
 export default class Visite extends Component {
-  render() {
-    const { visite } = this.props;
 
-    return (
+  constructor(props) {
+    super(props);
+    this.state = {
+      showControles: false
+    }
+  }
+
+  render() {
+    console.log(this.props.visite.controles[0])
+    const { visite } = this.props;
+    return (<Fragment style={{ margin: "0.5em" }}>
       <Grid.Row style={{ padding: 10, overflow: 'auto' }}>
         <Segment
           style={{ width: '100%' }}
-          // to={this.props.link}
-          // icon
-          // basic
-          // fluid
-          // className="menubutton"
-          // color={this.props.color}
-          // size="massive"
+        // to={this.props.link}
+        // icon
+        // basic
+        // fluid
+        // className="menubutton"
+        // color={this.props.color}
+        // size="massive"
         >
           <MyLink {...this.props} trames={this.props.trames} visite={visite}>
             <Grid>
@@ -48,7 +57,8 @@ export default class Visite extends Component {
                   }}
                 >
                   <Responsive minWidth={600}>
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}
+                      onClick={() => this.setState({ showControles: !this.state.showControles })}>
                       {!visite.visiteData.new_visite && (
                         <Icon name="lock" color="grey" size="large"></Icon>
                       )}
@@ -168,11 +178,14 @@ export default class Visite extends Component {
           </MyLink>
         </Segment>
       </Grid.Row>
+      {this.state.showControles && <DisplayAction controles={visite.controles} />}
+    </Fragment>
     );
   }
 }
 
 Visite.propTypes = {
+  trames: PropTypes.array,
   visite: PropTypes.shape({
     visiteData: PropTypes.shape({
       ETOB_RAISON_SOCIALE: PropTypes.string,

@@ -11,7 +11,8 @@ import { Button } from '@material-ui/core';
 import Jimp from 'jimp';
 import { Buffer } from 'buffer';
 import { PropTypes } from 'prop-types';
-import documentsService from '../../../services/subservices/documents.service';
+import PouchdbServices from '../../../services';
+let documentsService = PouchdbServices.services.documents;
 
 class Photo extends Component {
   constructor(props, context) {
@@ -89,7 +90,6 @@ class Photo extends Component {
         document: img,
         name: Date.now() + '.jpeg',
         type: 'image/jpeg',
-        author: 4445,
         visite: [this.props.visiteid],
         date: Date.now(),
         dossier: null,

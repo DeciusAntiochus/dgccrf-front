@@ -5,31 +5,42 @@ import config from '../../config';
 PouchDB.plugin(PouchDBFind);
 
 class pouchDbDocumentsService {
-  constructor() {
+  constructor(AGENT_DD_IDENT) {
+    this.changesCallbacks = [];
+    this.initDb(AGENT_DD_IDENT);
+  }
+
+  async initDb(AGENT_DD_IDENT) {
+    this.AGENT_DD_IDENT = AGENT_DD_IDENT;
     this.documentsDB = new PouchDB('documents');
     var opts = {
       live: true,
-      retry: true
+      retry: true,
+      filter: 'filters/by_user',
+      query_params: { AGENT_DD_IDENT: AGENT_DD_IDENT }
     };
-    this.documentsDB.replicate.to(config.couchDb.url_documents, {
-      live: true,
-      retry: true
-    });
+
+    this.documentsDB.replicate.to(config.couchDb.url_documents, { live: true, retry: true });
     this.documentsDB.replicate.from(config.couchDb.url_documents, opts);
+
+    this.documentsDB.changes({
+      since: 0,
+      live: true
+    }).on('change', () => this.changesCallbacks.map(cb => cb()));
 
     this.documentsDB.createIndex({
       index: { fields: ['visite'] }
     });
   }
 
+  async resetDb(AGENT_DD_IDENT) {
+    await this.documentsDB.destroy();
+    await this.initDb(AGENT_DD_IDENT);
+  }
+
   //call the callback on db changes
   onChanges(cb) {
-    this.documentsDB
-      .changes({
-        since: 'now',
-        live: true
-      })
-      .on('change', cb);
+    this.changesCallbacks.push(cb);
   }
 
   //getAllDocsOfTheDB
@@ -66,6 +77,7 @@ class pouchDbDocumentsService {
   async postDocument(document) {
     return new Promise(async (resolve, reject) => {
       try {
+        document["author"] = this.AGENT_DD_IDENT;
         await this.documentsDB.post(document);
         resolve();
       } catch (e) {
@@ -90,4 +102,4 @@ class pouchDbDocumentsService {
   }
 }
 
-export default new pouchDbDocumentsService();
+export default pouchDbDocumentsService;
