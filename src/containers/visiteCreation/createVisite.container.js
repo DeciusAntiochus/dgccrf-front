@@ -21,8 +21,10 @@ import {
 import { connect } from 'react-redux';
 import PouchDbServices from '../../services';
 import ControleComponent from './controles.container';
+import EntrepriseField from '../../components/fields/entrepriseField.component';
 let visitesService = PouchDbServices.services.visite;
 let dossierService = PouchDbServices.services.dossier;
+const moment = require('moment');
 
 function mapStateToProps(state) {
   return {
@@ -44,24 +46,24 @@ class CreateVisiteComponent extends React.Component {
     this.state = {
       VIS_CPMM: false,
       VIS_MUTUALISEE: false,
-      VIS_DATE: '',
+      VIS_DATE: moment().format('DD-MM-YYYY'),
       ETOB_RAISON_SOCIALE: '',
       ETOB_SIRET: '',
       VIS_OBSERVATIONS: '',
       trame: '',
       trameList: [{ _id: 0, name: 'Aucune trame' }],
       controlesList: [],
-      message: '',
+      message: '', //Message d'erreur si il y en a
       DOSSIER_IDENT: -1,
       dossierText: '',
-      visiteIdent: undefined,
-      visite: undefined
+      visiteIdent: undefined, //Identifiant de la visite dans le cas de modification
+      visite: undefined //Visite dans le cas de modification
     };
   }
 
   async componentDidMount() {
     if (this.props.match.params.visiteId) {
-      //Si on est sur la page de modification de visite
+      //Si on est sur une page de modification de visite
       this.props.changeNameOfPage('Modification de visite');
       this.props.changeBackUrl(
         '/visite/' + this.props.match.params.visiteId.toString()
@@ -69,6 +71,7 @@ class CreateVisiteComponent extends React.Component {
       this.props.changeActivePage(
         '/modify-visite/' + this.props.match.params.visiteId
       );
+      // On charge la visite et les controles correspondant
       const visite = await visitesService.getVisiteById(
         this.props.match.params.visiteId
       );
@@ -77,25 +80,25 @@ class CreateVisiteComponent extends React.Component {
       );
       const dossier = await dossierService.getDossierById(
         controles[0].DOSSIER_IDENT
-      );
+      ); //Dossier correspondant au premier contrôle (pour régler le dossier par défaut dans la création de controle)
       let controlesList = [];
       for (let i in controles) {
+        // On recrée la liste des controles de la visite
         const dossierControle = await dossierService.getDossierById(
           controles[i].DOSSIER_IDENT
-        );
+        ); //Dossier correspondant à la visite
         controlesList = controlesList.concat([
           {
             ...controles[i],
             dossierText: dossierControle.DOSSIER_LIBELLE,
             activiteText: controles[i].ACDG_CODE_LIB_NIVEAU3,
             ident: controles[i].CONTROLE_IDENT,
-            exists: true
+            exists: true //indique que le contrôle existe déjà dans la base de données
           }
         ]);
       }
       this.setState({
         ...visite,
-        trameList: ['trame 1', 'trame 2'],
         controlesList,
         message: '',
         dossierText: dossier.DOSSIER_LIBELLE,
@@ -104,6 +107,7 @@ class CreateVisiteComponent extends React.Component {
         visite
       });
     } else {
+      //Si on est en création de visite
       this.props.changeNameOfPage('Création de visite');
       this.props.changeBackUrl('/dossier/' + this.props.match.params.dossierId);
       this.props.changeActivePage(
@@ -285,29 +289,14 @@ class CreateVisiteComponent extends React.Component {
                     }
                   />
                 </Form.Group>
-                <Form.Group widths="equal">
-                  <Form.Input
-                    fluid
-                    required
-                    label="Etablissement"
-                    placeholder="Raison Sociale"
-                    onChange={e =>
-                      this.setState({ ETOB_RAISON_SOCIALE: e.target.value })
-                    }
-                    value={this.state.ETOB_RAISON_SOCIALE}
-                  />
-
-                  <Form.Input
-                    fluid
-                    required
-                    label="SIRET"
-                    placeholder="SIRET"
-                    onChange={e =>
-                      this.setState({ ETOB_SIRET: e.target.value })
-                    }
-                    value={this.state.ETOB_SIRET}
-                  />
-                </Form.Group>
+                <EntrepriseField
+                  ETOB_SIRET={this.state.ETOB_SIRET}
+                  ETOB_RAISON_SOCIALE={this.state.ETOB_RAISON_SOCIALE}
+                  changeSiretValue={ETOB_SIRET => this.setState({ ETOB_SIRET })}
+                  changeRaisonSocialeValue={ETOB_RAISON_SOCIALE =>
+                    this.setState({ ETOB_RAISON_SOCIALE })
+                  }
+                />
                 {this.displayTrame()}
                 <Form.Group>
                   <Form.Field width={16}>

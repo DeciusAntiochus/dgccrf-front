@@ -213,7 +213,7 @@ class PouchDbVisiteService {
     for (let controle of controlesList) {
       promises.push(
         this.newControleDB.post({
-          AGENT_DD_IDENT: visiteInfos.AGENT_DD_IDENT,
+          AGENT_DD_IDENT: this.AGENT_DD_IDENT,
           ...controle,
           VISITE_IDENT: ident,
           new_visite: true,
