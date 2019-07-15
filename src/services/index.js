@@ -3,6 +3,7 @@ import DossierService from './subservices/dossier.service';
 import VisiteService from './subservices/visite.service';
 import ActiviteService from './subservices/activite.service';
 import CpfService from './subservices/cpf.service';
+import DocumentsService from './subservices/documents.service';
 
 import TrameService from './trame.service';
 
@@ -14,7 +15,8 @@ class PouchDbServices {
       visite: new VisiteService(this.AGENT_DD_IDENT),
       activite: new ActiviteService(),
       trame: new TrameService(),
-      cpf: new CpfService()
+      cpf: new CpfService(),
+      documents: new DocumentsService(this.AGENT_DD_IDENT)
     };
     this.ChangeAgent = this.ChangeAgent.bind(this);
   }

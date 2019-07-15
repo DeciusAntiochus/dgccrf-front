@@ -70,9 +70,10 @@ class AuthComponent extends React.Component {
                                 style={{ minWidth: "300px", textAlign: "center", paddingBottom: "10em" }}>
                                 {/* <Header as="h1">Changer d'utilisateur</Header> */}
 
-                                <FormGroup style={{ width: "100%", paddingTop: "1em", paddingBottom: "1em" }}>
-                                    <Header as="h4" style={{ textAlign: "left", marginBottom: "0" }}>Identifiant agent IRIS </Header>
+                                <FormGroup style={{ width: "100%", paddingBottom: "1.5em" }}>
+                                    <Header as="h3" style={{ textAlign: "left", marginBottom: "0", marginLeft: "0.3em" }}>Identifiant agent IRIS </Header>
                                     <Input value={this.state.idAgent}
+                                        size="big"
                                         placeholder="Identifiant du nouvel utilisateur"
                                         style={{ width: "100%" }}
                                         onChange={(event, { value }) => this.setState({ idAgent: value })} />

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Header, Icon, Input } from 'semantic-ui-react';
-import documentsService from '../../services/subservices/documents.service';
 import DocumentModal from './documentModal.component';
+
+import PouchdbServices from '../../services';
+let documentsService = PouchdbServices.services.documents;
+
 
 function removeExtension(documentname) {
   const split = documentname.split('.');
@@ -157,17 +160,17 @@ export default class documentsList extends Component {
                       style={{ maxWidth: '8em', maxHeight: '8em' }}
                     ></img>
                   ) : (
-                    <Icon
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        fontSize: '4em',
-                        margin: 0
-                      }}
-                      name={this.getColor(document.type)[1]}
-                    ></Icon>
-                  )}
+                      <Icon
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          fontSize: '4em',
+                          margin: 0
+                        }}
+                        name={this.getColor(document.type)[1]}
+                      ></Icon>
+                    )}
                   <Icon
                     style={{
                       position: 'absolute',
