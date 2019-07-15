@@ -121,7 +121,6 @@ class Documents extends Component {
           document: file64,
           name: file.name,
           type: file.type,
-          author: 4447,
           visite: this.props.dossier
             ? this.props.visitesList.map(visite => {
               return visite.visiteData.VISITE_IDENT;

@@ -77,6 +77,7 @@ class pouchDbDocumentsService {
   async postDocument(document) {
     return new Promise(async (resolve, reject) => {
       try {
+        document["author"] = this.AGENT_DD_IDENT;
         await this.documentsDB.post(document);
         resolve();
       } catch (e) {

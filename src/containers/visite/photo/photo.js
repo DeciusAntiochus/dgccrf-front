@@ -90,7 +90,6 @@ class Photo extends Component {
         document: img,
         name: Date.now() + '.jpeg',
         type: 'image/jpeg',
-        author: 4445,
         visite: [this.props.visiteid],
         date: Date.now(),
         dossier: null,
