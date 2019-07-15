@@ -153,14 +153,16 @@ export default class Visite extends Component {
                     </Header>
                   </Grid.Row>
                 </Grid.Column>
-                <Grid.Column
-                  as={Link}
-                  to={'/modify-visite/' + visite.visiteData.VISITE_IDENT}
-                  width={1}
-                  floated="right"
-                >
-                  <Icon name="pencil"></Icon>
-                </Grid.Column>
+                {visite.visiteData.new_visite && (
+                  <Grid.Column
+                    as={Link}
+                    to={'/modify-visite/' + visite.visiteData.VISITE_IDENT}
+                    width={1}
+                    floated="right"
+                  >
+                    <Icon name="pencil"></Icon>
+                  </Grid.Column>
+                )}
               </Grid.Row>
             </Grid>
           </MyLink>
