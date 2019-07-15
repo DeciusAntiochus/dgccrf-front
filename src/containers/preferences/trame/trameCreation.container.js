@@ -1,5 +1,12 @@
 import React from 'react';
-import { Container, Button, Icon, Input, Responsive } from 'semantic-ui-react';
+import {
+  Container,
+  Button,
+  Icon,
+  Input,
+  Responsive,
+  Popup
+} from 'semantic-ui-react';
 import { PropTypes } from 'prop-types';
 import {
   changeNameOfPage,
@@ -80,6 +87,7 @@ class TrameCreationComponent extends React.Component {
                 _rev: this.state._rev
               }
         );
+        this.props.history.push('/preferences');
         console.log('trame saved!');
       } catch (e) {
         console.log(e);
@@ -536,9 +544,19 @@ class TrameCreationComponent extends React.Component {
                       }}
                     >
                       {this.state.locked ? (
-                        <Icon name="lock" style={{ color: 'white' }}></Icon>
+                        <Popup
+                          trigger={
+                            <Icon name="lock" style={{ color: 'white' }}></Icon>
+                          }
+                          position="bottom center"
+                          content="La liste est verrouillée. Vous ne pouvez pas balayer celle-ci entre les différentes étapes, en revanche vous pouvez déplacer les items de la trame à votre convenance avec la souris ou votre doigt."
+                        ></Popup>
                       ) : (
-                        <Icon name="unlock" color="grey"></Icon>
+                        <Popup
+                          trigger={<Icon name="unlock" color="grey"></Icon>}
+                          position="bottom center"
+                          content="La liste est déverrouillée. Vous ne pouvez plus réorganiser les items de la liste, vous pouvez en revanche balayer celle-ci entre les différentes étapes."
+                        ></Popup>
                       )}
                     </Button>
                   </div>

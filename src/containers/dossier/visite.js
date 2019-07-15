@@ -171,6 +171,7 @@ export default class Visite extends Component {
 }
 
 Visite.propTypes = {
+  trames: PropTypes.array,
   visite: PropTypes.shape({
     visiteData: PropTypes.shape({
       ETOB_RAISON_SOCIALE: PropTypes.string,

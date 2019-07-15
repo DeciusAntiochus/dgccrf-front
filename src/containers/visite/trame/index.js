@@ -25,6 +25,8 @@ class Trame extends React.Component {
     this.getActiveIndex = this.getActiveIndex.bind(this);
     this.setStatus = this.setStatus.bind(this);
     this.closeEdit = this.closeEdit.bind(this);
+    this.setText = this.setText.bind(this);
+    this.sendText = this.sendText.bind(this);
   }
 
   async getTrame() {
@@ -47,6 +49,34 @@ class Trame extends React.Component {
   async closeEdit() {
     await this.getTrame();
     this.props.close();
+  }
+
+  sendText() {
+    PouchDbService.services.visite
+      .updateTrame(this.state.visite, this.state.rev, this.state.trame)
+      .then(res => {
+        this.setState({ rev: res.rev });
+      });
+  }
+
+  setText(newtext, index) {
+    let trame = this.state.trame;
+    if (this.state.activeIndex === 0) {
+      trame.trameAvant[index].innerContent = newtext;
+      this.setState({
+        trame
+      });
+    } else if (this.state.activeIndex === 1) {
+      trame.tramePendant[index].innerContent = newtext;
+      this.setState({
+        trame
+      });
+    } else {
+      trame.trameAprès[index].innerContent = newtext;
+      this.setState({
+        trame
+      });
+    }
   }
 
   setStatus(newstatus, index) {
@@ -111,6 +141,8 @@ class Trame extends React.Component {
             <Avant
               visite={this.state.visite}
               setStatus={this.setStatus}
+              setText={this.setText}
+              sendText={this.sendText}
               isLoading={this.state.isLoading}
               trame={this.state.trame}
               closeEdit={this.closeEdit}
@@ -119,6 +151,8 @@ class Trame extends React.Component {
             <Pendant
               visite={this.state.visite}
               setStatus={this.setStatus}
+              setText={this.setText}
+              sendText={this.sendText}
               isLoading={this.state.isLoading}
               trame={this.state.trame}
               closeEdit={this.closeEdit}
@@ -127,6 +161,8 @@ class Trame extends React.Component {
             <Apres
               visite={this.state.visite}
               setStatus={this.setStatus}
+              sendText={this.sendText}
+              setText={this.setText}
               isLoading={this.state.isLoading}
               trame={this.state.trame}
               closeEdit={this.closeEdit}

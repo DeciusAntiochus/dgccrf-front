@@ -12,7 +12,7 @@ export default function MyLink(props) {
 
   return !props.visite.visiteData.new_visite ? (
     <div>{props.children}</div>
-  ) : props.visite.visiteData.trame ? (
+  ) : props.visite.visiteData.trame._id != 0 ? (
     <Link to={'/visite/' + props.visite.visiteData.VISITE_IDENT}>
       {props.children}
     </Link>

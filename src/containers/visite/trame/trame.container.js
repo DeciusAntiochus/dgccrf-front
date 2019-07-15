@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, Icon, Button } from 'semantic-ui-react';
+import { List, Icon, Button, TextArea, Form } from 'semantic-ui-react';
 
 import './visite.css';
 
@@ -8,7 +8,8 @@ export default class DossierComponent extends React.Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.state = {
-      activeDropdowns: []
+      activeDropdowns: [],
+      textModified: null
     };
   }
 
@@ -24,6 +25,21 @@ export default class DossierComponent extends React.Component {
     } else {
       return ['grey', 'file'];
     }
+  }
+
+  handleTextChange(e, data, i) {
+    this.props.setText(data.value, i);
+  }
+
+  modifyText(i) {
+    this.state.textModified
+      ? this.setState({ textModified: null })
+      : this.setState({ textModified: i });
+  }
+
+  saveText() {
+    this.props.sendText();
+    this.setState({ textModified: null });
   }
 
   handleClick(index) {
@@ -155,7 +171,47 @@ export default class DossierComponent extends React.Component {
             <List.Item>
               {this.state.activeDropdowns.includes(i) &&
                 (task.type === 'text' ? (
-                  <div style={{ padding: 15 }}>{task.innerContent}</div>
+                  <div style={{ padding: 15 }}>
+                    <div style={{ display: 'flex' }}>
+                      <div style={{ flex: 10, marginRight: 10 }}>
+                        {this.state.textModified ? (
+                          <Form>
+                            <TextArea
+                              value={task.innerContent}
+                              onChange={(e, data) =>
+                                this.handleTextChange(e, data, i)
+                              }
+                            />
+                            <div
+                              style={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                marginTop: 10
+                              }}
+                            ></div>
+                          </Form>
+                        ) : (
+                          task.innerContent
+                        )}
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        {this.state.textModified ? (
+                          <Icon
+                            style={{ cursor: 'pointer', color: '#4286f4' }}
+                            name="check"
+                            onClick={() => this.saveText()}
+                          ></Icon>
+                        ) : (
+                          <Icon
+                            style={{ cursor: 'pointer', color: '#4286f4' }}
+                            name="pencil"
+                            onClick={() => this.modifyText(i)}
+                          ></Icon>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 ) : (
                   <div
                     style={{
