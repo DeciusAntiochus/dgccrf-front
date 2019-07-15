@@ -213,7 +213,7 @@ class PouchDbVisiteService {
     for (let controle of controlesList) {
       promises.push(
         this.newControleDB.post({
-          AGENT_DD_IDENT: visiteInfos.AGENT_DD_IDENT,
+          AGENT_DD_IDENT: this.AGENT_DD_IDENT,
           ...controle,
           VISITE_IDENT: ident,
           new_visite: true,
@@ -237,7 +237,7 @@ class PouchDbVisiteService {
           this.newControleDB.post({
             AGENT_DD_IDENT: visiteInfos.AGENT_DD_IDENT,
             ...controle,
-            VISITE_IDENT: ident,
+            VISITE_IDENT: visiteInfos.VISITE_IDENT,
             CONTROLE_IDENT:
               controle.DOSSIER_IDENT.toString() + controle.CPF_IDENT.toString(),
             TAPR_IDENT: controle.TAPR_IDENT
@@ -247,6 +247,7 @@ class PouchDbVisiteService {
     }
     return Promise.all(promises);
   }
+
   async exportToSora(VISITE_IDENT) {
     let visiteToExport = await this.newVisiteDB
       .find({ selector: { VISITE_IDENT: parseInt(VISITE_IDENT) } })

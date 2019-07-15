@@ -106,11 +106,17 @@ export default class ControleComponent extends React.Component {
       this.props.changeControle(
         this.props.controles.map(cont => {
           if (cont.ident === controleId) {
-            return {
-              ...controle,
-              ...codeCPF,
-              ...codeActivite
-            };
+            if (controle._id) {
+              return {
+                ...controle,
+                ...codeCPF,
+                ...codeActivite,
+                _id: controle._id,
+                _rev: controle._rev
+              };
+            } else {
+              return { ...controle, ...codeCPF, ...codeActivite };
+            }
           } else {
             return cont;
           }
@@ -121,7 +127,9 @@ export default class ControleComponent extends React.Component {
 
   deleteControle = controleId => {
     this.props.changeControle(
-      this.props.controles.filter(cont => cont.ident !== controleId)
+      this.props.controles.map(cont =>
+        cont.ident === controleId ? { ...cont, _deleted: true } : cont
+      )
     );
   };
 
@@ -194,35 +202,37 @@ export default class ControleComponent extends React.Component {
         <Table stackable>
           {this.displayNoControleAlert()}
           <Table.Body>
-            {this.props.controles.map(controle => (
-              <Table.Row key={controle.ident}>
-                <Table.Cell>{controle.dossierText}</Table.Cell>
-                <Table.Cell>{controle.activiteText}</Table.Cell>
-                <Table.Cell width={3}>
-                  <div style={{ height: '39px' }}>
-                    <Button
-                      floated="right"
-                      color="red"
-                      icon="trash alternate"
-                      style={{ margin: '3px' }}
-                      onClick={() => this.deleteControle(controle.ident)}
-                    ></Button>
-                    <Button
-                      floated="right"
-                      icon="pencil"
-                      color="blue"
-                      style={{ margin: '3px' }}
-                      onClick={() =>
-                        this.setState({
-                          modifyModalOpen: true,
-                          controleModified: controle
-                        })
-                      }
-                    ></Button>
-                  </div>
-                </Table.Cell>
-              </Table.Row>
-            ))}
+            {this.props.controles
+              .filter(controle => controle._deleted !== true)
+              .map(controle => (
+                <Table.Row key={controle.ident}>
+                  <Table.Cell>{controle.dossierText}</Table.Cell>
+                  <Table.Cell>{controle.activiteText}</Table.Cell>
+                  <Table.Cell width={3}>
+                    <div style={{ height: '39px' }}>
+                      <Button
+                        floated="right"
+                        color="red"
+                        icon="trash alternate"
+                        style={{ margin: '3px' }}
+                        onClick={() => this.deleteControle(controle.ident)}
+                      ></Button>
+                      <Button
+                        floated="right"
+                        icon="pencil"
+                        color="blue"
+                        style={{ margin: '3px' }}
+                        onClick={() =>
+                          this.setState({
+                            modifyModalOpen: true,
+                            controleModified: controle
+                          })
+                        }
+                      ></Button>
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
           </Table.Body>
         </Table>
       </Container>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Icon, Header, Modal, Input } from 'semantic-ui-react';
-import documentsService from '../../services/subservices/documents.service';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
 import DocumentModal from './documentModal.component';
 
@@ -14,6 +13,8 @@ import SwipeableViews from 'react-swipeable-views';
 
 import PouchdbServices from '../../services';
 let visitesService = PouchdbServices.services.visite;
+let documentsService = PouchdbServices.services.documents;
+
 
 // blobs, pour chrome
 
@@ -161,7 +162,7 @@ class Documents extends Component {
                   labelPosition="left"
                   onClick={this.exportToSora}
                 >
-                  <Icon name="pencil"></Icon>
+                  <Icon name="share square"></Icon>
                   Exporter
                 </Button>
 
