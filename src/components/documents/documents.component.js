@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Button, Icon, Header, Modal, Input } from 'semantic-ui-react';
+import {
+  Button,
+  Icon,
+  Header,
+  Modal,
+  Input,
+  Responsive
+} from 'semantic-ui-react';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
 import DocumentModal from './documentModal.component';
 
@@ -164,7 +171,7 @@ class Documents extends Component {
                   onClick={this.exportToSora}
                 >
                   <Icon name="share square"></Icon>
-                  Exporter
+                  <Responsive minWidth={540}>Exporter</Responsive>
                 </Button>
 
                 <Tabs

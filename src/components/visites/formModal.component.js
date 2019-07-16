@@ -33,7 +33,7 @@ function FormModal(props) {
 
   const [informationForm, setinformationForm] = useState({
     documents: [],
-    date: moment().format('DD-MM-YYYY hh:mm')
+    date: moment().format('DD-MM-YYYY HH:mm')
   });
 
   function setStep1(pv) {
@@ -296,13 +296,12 @@ function FormModal(props) {
                 <PVGenerator
                   width={width}
                   height={height}
-                  date={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
+                  date={moment(informationForm.date, 'DD-MM-YYYY HH:mm').format(
                     'LL'
                   )}
-                  hour={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
+                  hour={moment(informationForm.date, 'DD-MM-YYYY HH:mm').format(
                     'LT'
                   )}
-                  visiteid={props.visite.VISITE_IDENT}
                   name={informationForm.name}
                   lieu={informationForm.place}
                   quality={informationForm.quality}
@@ -328,6 +327,7 @@ function FormModal(props) {
                 hour={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
                   'LT'
                 )}
+                visiteid={props.visite.VISITE_IDENT}
                 pv={pv}
                 name={informationForm.name}
                 lieu={informationForm.place}

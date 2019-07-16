@@ -5,7 +5,8 @@ import {
   Dropdown,
   TextArea,
   Form,
-  Button
+  Button,
+  Responsive
 } from 'semantic-ui-react';
 
 import { Draggable } from 'react-beautiful-dnd';
@@ -390,7 +391,11 @@ class TrameComponent extends Component {
                                 background: '#3C4586',
                                 color: 'white'
                               }}
-                              content="Ajouter un document"
+                              content={
+                                <Responsive minWidth={540}>
+                                  Ajouter un document
+                                </Responsive>
+                              }
                               labelPosition="left"
                               icon="file"
                               onClick={() => this.fileInputRef.current.click()}
@@ -410,7 +415,11 @@ class TrameComponent extends Component {
                                     color: 'white'
                                   }}
                                   onClick={() => this.showFormModal()}
-                                  content="Remplir un formulaire"
+                                  content={
+                                    <Responsive minWidth={540}>
+                                      Remplir un formulaire
+                                    </Responsive>
+                                  }
                                   labelPosition="right"
                                   icon="file pdf"
                                 />
