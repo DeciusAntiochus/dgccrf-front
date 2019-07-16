@@ -1,41 +1,7 @@
 import React, { Component } from 'react';
 
-import SignatureCanvas from 'react-signature-canvas';
-import { Card, Container, Header } from 'semantic-ui-react';
-
-import moment from 'moment';
-
-import 'moment/locale/fr';
-
-export default class FormTest extends Component {
-  lieu = 'PARIS 15E ARRONDISSEMENT';
-  date = '23 mai 2015';
-  hour = ' 15:03 ';
-  quality = 'Responsable qualité';
-
-  name = 'Delphine PIERSON';
-
-  nameResponsible = 'Antoine AWAIDA';
-
-  declaration =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
-
-  documents = [
-    'Papier Canson 100g',
-    'Imprimante 3D',
-    'Papier Canson 100g',
-    'Imprimante 3D',
-    'Papier Canson 100g',
-    'Imprimante 3D',
-    'Papier Canson 100g',
-    'Imprimante 3D'
-  ];
-
+export default class PVGenerator extends Component {
   render() {
-    const date = moment('16-07-2019 11:51', 'DD-MM-YYYY hh:mm');
-
-    console.log(date.format('LT'));
-
     return (
       <div>
         <title />
@@ -50,7 +16,23 @@ export default class FormTest extends Component {
         />
         <div
           id="page1-div"
-          style={{ position: 'relative', width: '892px', height: '1263px' }}
+          style={{
+            position: 'relative',
+            width: '892px',
+            height:
+              this.props.width < 900
+                ? this.props.width < 470
+                  ? 1263 / 3
+                  : 1263 / 2
+                : '1263px',
+            transform:
+              this.props.width < 900
+                ? this.props.width < 470
+                  ? 'scale(0.3, 0.3)'
+                  : 'scale(0.5, 0.5)'
+                : '',
+            transformOrigin: 'top'
+          }}
         >
           <img
             width={892}
@@ -417,7 +399,7 @@ export default class FormTest extends Component {
             className="ft111"
           >
             Nous,&nbsp;soussigné(e)&nbsp; &nbsp;
-            {this.name}
+            {this.props.name}
             <br />
             &nbsp;
             <br />
@@ -438,7 +420,7 @@ export default class FormTest extends Component {
             &nbsp;
             <br />
             le&nbsp;&nbsp;
-            {this.date}
+            {this.props.date}
           </p>
           <p
             style={{
@@ -450,7 +432,7 @@ export default class FormTest extends Component {
             className="ft10"
           >
             à&nbsp;&nbsp;
-            {this.hour}
+            {this.props.hour}
           </p>
           <p
             style={{
@@ -475,7 +457,7 @@ export default class FormTest extends Component {
             &nbsp;
             <br />
             à&nbsp;[lieu]&nbsp; &nbsp;
-            {this.lieu}
+            {this.props.lieu}
             <br />
             &nbsp;
           </p>
@@ -523,7 +505,7 @@ export default class FormTest extends Component {
           >
             entendons&nbsp;M.&nbsp;&nbsp;en&nbsp;sa&nbsp;qualité&nbsp;de&nbsp;
             &nbsp;
-            {this.quality}
+            {this.props.quality}
           </p>
           <p
             style={{
@@ -568,7 +550,7 @@ export default class FormTest extends Component {
           >
             <br />
             &nbsp;
-            {this.declaration}
+            {this.props.declaration}
             &nbsp;
             <br />
             &nbsp;
@@ -725,7 +707,23 @@ export default class FormTest extends Component {
         </div>
         <div
           id="page2-div"
-          style={{ position: 'relative', width: '892px', height: '1263px' }}
+          style={{
+            position: 'relative',
+            width: '892px',
+            height:
+              this.props.width < 900
+                ? this.props.width < 470
+                  ? 1263 / 3
+                  : 1263 / 2
+                : '1263px',
+            transform:
+              this.props.width < 900
+                ? this.props.width < 470
+                  ? 'scale(0.33, 0.33)'
+                  : 'scale(0.5, 0.5)'
+                : '',
+            transformOrigin: 'top'
+          }}
         >
           <img
             width={892}
@@ -872,14 +870,14 @@ export default class FormTest extends Component {
           >
             avons&nbsp;demandé&nbsp;communication&nbsp;des&nbsp;documents&nbsp;énumérés&nbsp;ci-après&nbsp;à&nbsp;M.&nbsp;
             &nbsp;
-            {this.nameResponsible}
+            {this.props.nameResponsible}
             <br />
             pour&nbsp;en&nbsp;prendre&nbsp;copie&nbsp;:&nbsp;
             <br />
             &nbsp;
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <ul>
-                {this.documents.map((document, i) => (
+                {this.props.documents.map((document, i) => (
                   <li key={i}>{document}</li>
                 ))}
               </ul>
@@ -1043,6 +1041,11 @@ export default class FormTest extends Component {
             className="ft13"
           >
             Signature&nbsp;de&nbsp;(des)&nbsp;l'auteur(s)&nbsp;
+            <br />
+            <br />
+            <br />
+            <br />
+            {this.props.signature && <img src={this.props.signature}></img>}
           </p>
           <p
             style={{
@@ -1065,6 +1068,13 @@ export default class FormTest extends Component {
             className="ft13"
           >
             Signature&nbsp;de&nbsp;l'intéressé,&nbsp;
+            <br />
+            <br />
+            <br />
+            <br />
+            {this.props.signatureInteresse && (
+              <img src={this.props.signatureInteresse}></img>
+            )}
           </p>
           <p
             style={{

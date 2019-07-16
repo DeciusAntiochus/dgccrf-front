@@ -15,7 +15,6 @@ import PouchdbServices from '../../services';
 let visitesService = PouchdbServices.services.visite;
 let documentsService = PouchdbServices.services.documents;
 
-
 // blobs, pour chrome
 
 // function openDocument(document) {
@@ -83,31 +82,35 @@ class Documents extends Component {
   componentDidMount() {
     this.props.dossier
       ? documentsService.getDocsByDossierId(this.props.dossierid).then(res => {
-        this.loadDocuments(res);
-      })
+          this.loadDocuments(res);
+        })
       : documentsService.getDocsByVisiteId(this.props.visiteid).then(res => {
-        this.loadDocuments(res);
-      });
+          this.loadDocuments(res);
+        });
 
     documentsService.onChanges(() =>
       this.props.dossier
         ? documentsService
-          .getDocsByDossierId(this.props.dossierid)
-          .then(res => {
+            .getDocsByDossierId(this.props.dossierid)
+            .then(res => {
+              this.loadDocuments(res);
+            })
+        : documentsService.getDocsByVisiteId(this.props.visiteid).then(res => {
             this.loadDocuments(res);
           })
-        : documentsService.getDocsByVisiteId(this.props.visiteid).then(res => {
-          this.loadDocuments(res);
-        })
     );
   }
 
   exportToSora = async () => {
-    if (window.confirm("Êtes-vous sur de vouloir exporter cette visite dans SORA.\n Vous ne pourrez plus modifier la visite dans SESAM et vous perdrez la trame liée à la visite.")) {
+    if (
+      window.confirm(
+        'Êtes-vous sur de vouloir exporter cette visite dans SORA.\n Vous ne pourrez plus modifier la visite dans SESAM et vous perdrez la trame liée à la visite.'
+      )
+    ) {
       await visitesService.exportToSora(this.props.match.params.id);
       this.props.history.goBack();
     }
-  }
+  };
 
   fileInputRef = React.createRef();
 
@@ -123,8 +126,8 @@ class Documents extends Component {
           type: file.type,
           visite: this.props.dossier
             ? this.props.visitesList.map(visite => {
-              return visite.visiteData.VISITE_IDENT;
-            })
+                return visite.visiteData.VISITE_IDENT;
+              })
             : [this.props.visiteid],
           date: Date.now(),
           dossier: this.props.dossier ? this.props.dossierid : null,
@@ -140,7 +143,6 @@ class Documents extends Component {
 
   render() {
     const { documents } = this.state;
-    console.log(this.props.dossier);
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -201,8 +203,8 @@ class Documents extends Component {
             )}
           </div>
         ) : (
-            <MyActivityIndicator />
-          )}
+          <MyActivityIndicator />
+        )}
 
         {documents ? (
           <div style={{ flex: 10, overflowY: 'auto' }}>
@@ -213,35 +215,35 @@ class Documents extends Component {
                 })}
               />
             ) : (
-                <SwipeableViews
-                  style={{ height: '100%' }}
-                  slideStyle={{ height: '100%', overflow: 'auto' }}
-                  slideClassName="hidescrollbar"
-                  index={this.state.activeIndex}
-                  onChangeIndex={this.handleChangeIndex}
-                >
-                  <DocumentsList
-                    documents={documents.filter(document => {
-                      return document.categorie === 'support';
-                    })}
-                  />
+              <SwipeableViews
+                style={{ height: '100%' }}
+                slideStyle={{ height: '100%', overflow: 'auto' }}
+                slideClassName="hidescrollbar"
+                index={this.state.activeIndex}
+                onChangeIndex={this.handleChangeIndex}
+              >
+                <DocumentsList
+                  documents={documents.filter(document => {
+                    return document.categorie === 'support';
+                  })}
+                />
 
-                  <DocumentsList
-                    documents={documents.filter(document => {
-                      return document.categorie === 'joint';
-                    })}
-                  />
-                  <DocumentsList
-                    documents={documents.filter(document => {
-                      return document.categorie === 'photo';
-                    })}
-                  />
-                </SwipeableViews>
-              )}
+                <DocumentsList
+                  documents={documents.filter(document => {
+                    return document.categorie === 'joint';
+                  })}
+                />
+                <DocumentsList
+                  documents={documents.filter(document => {
+                    return document.categorie === 'photo';
+                  })}
+                />
+              </SwipeableViews>
+            )}
           </div>
         ) : (
-            <MyActivityIndicator />
-          )}
+          <MyActivityIndicator />
+        )}
       </div>
     );
   }

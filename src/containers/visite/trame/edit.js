@@ -472,6 +472,7 @@ class EditComponent extends React.Component {
                 className="hidescrollbar"
               >
                 <TrameList
+                  visite={this.props.visite}
                   locked={this.state.locked}
                   activeIndex={this.props.index}
                   handleChangeIndex={this.props.handleChangeIndex}
