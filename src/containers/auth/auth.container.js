@@ -7,6 +7,7 @@ import { FormGroup } from '@material-ui/core';
 import axios from 'axios';
 import config from '../../config';
 import PouchDBServices from '../../services';
+import MyActivityIndicator from '../../components/myActivityIndicator.component';
 
 
 function mapStateToProps(state) {
@@ -28,7 +29,8 @@ class AuthComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            idAgent: ""
+            idAgent: "",
+            isLoading: false
         }
         this.onSubmit = this.onSubmit.bind(this);
     }
@@ -38,10 +40,12 @@ class AuthComponent extends React.Component {
         try {
             let res = await axios.get(config.backend.base_url + '/agent/' + this.state.idAgent);
             if (window.confirm("Etes vous sur de vouloir changer d'utilisateur pour " + res.data.AGENT_DD_LIBELLE + ".\n Vous perdrez toutes les données actuelles pour télécharger les données du nounvel utilisateur.")) {
+                this.setState({ isLoading: true })
                 await this.props.changeAgent(res.data.AGENT_DD_IDENT);
                 if (this.props.location && this.props.location.pathname == "/authentification") {
                     this.props.history.push('/mes-dossiers')
                 }
+                this.setState({ isLoading: true })
             }
         } catch (err) {
             console.log(err)
@@ -61,6 +65,8 @@ class AuthComponent extends React.Component {
     }
 
     render() {
+        if (this.state.isLoading)
+            return <MyActivityIndicator />
         return (
             <Container style={{ width: "100%", height: "100%" }}>
                 <Grid style={{ width: "100%", height: "100%" }} verticalAlign="middle" centered>

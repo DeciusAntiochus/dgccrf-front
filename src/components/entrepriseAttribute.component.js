@@ -5,7 +5,7 @@ import propTypes from 'prop-types';
 class EntrepriseAttribute extends React.Component {
   render() {
     return (
-      <Grid.Row>
+      <Grid.Row style={this.props.style}>
         <Grid.Column verticalAlign="middle" mobile={3} tablet={1} computer={1}>
           <Icon
             circular
@@ -13,6 +13,7 @@ class EntrepriseAttribute extends React.Component {
             className="mybutton"
             style={{
               marginRight: '10px',
+              marginTop: '10px',
               color: 'white',
               backgroundColor: '#3C4586'
             }}
@@ -46,7 +47,8 @@ class EntrepriseAttribute extends React.Component {
 EntrepriseAttribute.propTypes = {
   icon: propTypes.string.isRequired,
   name: propTypes.string.isRequired,
-  value: propTypes.element.isRequired
+  value: propTypes.element.isRequired,
+  style: propTypes.element
 };
 
 export default EntrepriseAttribute;
