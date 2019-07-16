@@ -97,7 +97,6 @@ class TrameComponent extends Component {
   }
 
   handleClick(index) {
-    console.log(this.state.activeDropdowns);
     const i = this.state.activeDropdowns.indexOf(index);
     i === -1
       ? this.setState({
@@ -127,7 +126,11 @@ class TrameComponent extends Component {
   render() {
     return (
       <>
-        <FormModal opened={this.state.opened} close={() => this.closeModal()} />
+        <FormModal
+          {...this.props}
+          opened={this.state.opened}
+          close={() => this.closeModal()}
+        />
 
         <List
           className="responsivepadding"
