@@ -545,8 +545,8 @@ export default class PDFGenerator extends Component {
                 }}
                 className="ft10"
               >
-                entendons&nbsp;M.&nbsp;&nbsp;en&nbsp;sa&nbsp;qualité&nbsp;de&nbsp;
-                &nbsp;
+                entendons&nbsp;M.&nbsp; {this.props.nameResponsible}
+                &nbsp;en&nbsp;sa&nbsp;qualité&nbsp;de&nbsp; &nbsp;
                 {this.props.quality}
               </p>
               <p

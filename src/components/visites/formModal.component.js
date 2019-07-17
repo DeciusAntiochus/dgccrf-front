@@ -33,6 +33,8 @@ function FormModal(props) {
 
   const [informationForm, setinformationForm] = useState({
     documents: [],
+    lieu: '', // à remplir automatiquement
+    nameResponsible: '', //à remplir automatiquement
     date: moment().format('DD-MM-YYYY HH:mm')
   });
 
@@ -174,7 +176,7 @@ function FormModal(props) {
             ) : step === 2 ? (
               <Form>
                 <Form.Field required>
-                  <label>Nom de l'enquêteur</label>
+                  <label>Nom et grade de l'enquêteur</label>
                   <input
                     value={informationForm.name}
                     onChange={e =>
