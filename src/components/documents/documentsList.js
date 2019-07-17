@@ -130,16 +130,7 @@ export default class documentsList extends Component {
               }}
             >
               <Button
-                as="a"
-                href={
-                  !document.type.includes('image')
-                    ? document.document
-                    : undefined
-                }
-                download={document.name}
-                onClick={() => {
-                  document.type.includes('image') && this.showModal(document);
-                }}
+
                 style={{
                   margin: '1em',
                   marginBottom: '1em',
@@ -154,23 +145,38 @@ export default class documentsList extends Component {
                 color={this.getColor(document.type)[0]}
               >
                 <>
-                  {document.type.includes('image') ? (
-                    <img
-                      src={document.document}
-                      style={{ maxWidth: '8em', maxHeight: '8em' }}
-                    ></img>
-                  ) : (
-                      <Icon
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          fontSize: '4em',
-                          margin: 0
-                        }}
-                        name={this.getColor(document.type)[1]}
-                      ></Icon>
-                    )}
+                  <Button as="a"
+                    color={this.getColor(document.type)[0]}
+                    style={{ background: 'none' }}
+                    icon
+                    href={
+                      !document.type.includes('image')
+                        ? document.document
+                        : undefined
+                    }
+                    download={document.name}
+                    onClick={() => {
+                      document.type.includes('image') && this.showModal(document);
+                    }}>
+                    {document.type.includes('image') ? (
+                      <img
+                        src={document.document}
+                        style={{ maxWidth: '8em', maxHeight: '8em' }}
+                      ></img>
+                    ) : (
+                        <Icon
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            fontSize: '4em',
+                            margin: 0,
+                            color: this.getColor(document.type)[0]
+                          }}
+                          name={this.getColor(document.type)[1]}
+                        ></Icon>
+                      )}
+                  </Button>
                   <Icon
                     style={{
                       position: 'absolute',
