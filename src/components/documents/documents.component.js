@@ -150,6 +150,7 @@ class Documents extends Component {
 
   render() {
     const { documents } = this.state;
+    console.log(documents);
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

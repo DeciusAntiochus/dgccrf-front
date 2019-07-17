@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 
 import { DateTimeInput } from 'semantic-ui-calendar-react';
 
-import PropTypes from 'prop-types';
+import PropTypes, { array } from 'prop-types';
 import PVGenerator from './Forms/PVGenerator';
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -67,6 +67,15 @@ function FormModal(props) {
       documents: [...informationForm.documents, document]
     });
     setdocument('');
+  }
+
+  function removeDocument(i) {
+    setinformationForm({
+      ...informationForm,
+      documents: informationForm.documents.filter((item, index) => {
+        return index !== i;
+      })
+    });
   }
 
   return (
@@ -247,8 +256,16 @@ function FormModal(props) {
                   <List as="ul">
                     {informationForm.documents.length > 0 &&
                       informationForm.documents.map((document, i) => (
-                        <List.Item as="li" key={i}>
+                        <List.Item key={i}>
                           {document}
+
+                          <List.Content
+                            onClick={() => removeDocument(i)}
+                            verticalAlign="middle"
+                            floated="right"
+                          >
+                            <Icon color="red" name="times circle"></Icon>
+                          </List.Content>
                         </List.Item>
                       ))}
                   </List>
