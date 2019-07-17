@@ -2,6 +2,7 @@ import React from 'react';
 import { List, Icon, Button, TextArea, Form } from 'semantic-ui-react';
 
 import './visite.css';
+import FormModal from '../../../components/visites/formModal.component';
 
 export default class DossierComponent extends React.Component {
   constructor(props) {
@@ -9,8 +10,17 @@ export default class DossierComponent extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.state = {
       activeDropdowns: [],
-      textModified: null
+      textModified: null,
+      opened: false
     };
+  }
+
+  showFormModal() {
+    this.setState({ opened: true });
+  }
+
+  closeModal() {
+    this.setState({ opened: !this.state.opened });
   }
 
   getColor(type) {
@@ -106,157 +116,173 @@ export default class DossierComponent extends React.Component {
 
   render() {
     return (
-      <List
-        className="responsivepadding"
-        relaxed
-        style={{
-          textAlign: 'left'
-        }}
-      >
-        {this.props.taskList.map((task, i) => (
-          <div
-            key={i}
-            style={{
-              borderRadius: 3,
-              borderBottom: '3px solid #c0c1c4',
-
-              margin: 15,
-              boxShadow: '6px 1px 12px 2px #cfcfcf'
-            }}
-          >
-            <List.Item
+      <>
+        <FormModal
+          {...this.props}
+          opened={this.state.opened}
+          close={() => this.closeModal()}
+        />
+        <List
+          className="responsivepadding"
+          relaxed
+          style={{
+            textAlign: 'left'
+          }}
+        >
+          {this.props.taskList.map((task, i) => (
+            <div
+              key={i}
               style={{
-                borderTopLeftRadius: 3,
-                borderTopRightRadius: 3,
-                padding: 15,
-                backgroundColor: '#4286f4',
-                cursor: task.innerContent && 'pointer'
+                borderRadius: 3,
+                borderBottom: '3px solid #c0c1c4',
+
+                margin: 15,
+                boxShadow: '6px 1px 12px 2px #cfcfcf'
               }}
-              key={task.title}
-              onClick={() => task.innerContent && this.handleClick(i)}
             >
-              <div
+              <List.Item
                 style={{
-                  display: 'flex',
-                  width: '100%'
+                  borderTopLeftRadius: 3,
+                  borderTopRightRadius: 3,
+                  padding: 15,
+                  backgroundColor: '#4286f4',
+                  cursor: task.innerContent && 'pointer'
                 }}
+                key={task.title}
+                onClick={() => task.innerContent && this.handleClick(i)}
               >
-                <div style={{ flex: 1 }}>
-                  {this.getIconFromStatus(task.status, i)}
-                </div>
-                <div style={{ flex: 8, color: 'white' }}>
-                  {task.title.toUpperCase()}
-                </div>
                 <div
                   style={{
-                    flex: 1,
-                    textAlign: 'right'
+                    display: 'flex',
+                    width: '100%'
                   }}
                 >
-                  {task.innerContent &&
-                    (this.state.activeDropdowns.includes(i) ? (
-                      <List.Icon
-                        name="caret up"
-                        style={{ color: 'white' }}
-                      ></List.Icon>
-                    ) : (
-                      <List.Icon
-                        name="caret down"
-                        style={{ color: 'white' }}
-                      ></List.Icon>
-                    ))}
-                </div>
-              </div>
-            </List.Item>
-            <List.Item>
-              {this.state.activeDropdowns.includes(i) &&
-                (task.type === 'text' ? (
-                  <div style={{ padding: 15 }}>
-                    <div style={{ display: 'flex' }}>
-                      <div style={{ flex: 10, marginRight: 10 }}>
-                        {this.state.textModified ? (
-                          <Form>
-                            <TextArea
-                              value={task.innerContent}
-                              onChange={(e, data) =>
-                                this.handleTextChange(e, data, i)
-                              }
-                            />
-                            <div
-                              style={{
-                                width: '100%',
-                                display: 'flex',
-                                justifyContent: 'flex-end',
-                                marginTop: 10
-                              }}
-                            ></div>
-                          </Form>
-                        ) : (
-                          task.innerContent
-                        )}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        {this.state.textModified ? (
-                          <Icon
-                            style={{ cursor: 'pointer', color: '#4286f4' }}
-                            name="check"
-                            onClick={() => this.saveText()}
-                          ></Icon>
-                        ) : (
-                          <Icon
-                            style={{ cursor: 'pointer', color: '#4286f4' }}
-                            name="pencil"
-                            onClick={() => this.modifyText(i)}
-                          ></Icon>
-                        )}
-                      </div>
-                    </div>
+                  <div style={{ flex: 1 }}>
+                    {this.getIconFromStatus(task.status, i)}
                   </div>
-                ) : (
+                  <div style={{ flex: 8, color: 'white' }}>
+                    {task.title.toUpperCase()}
+                  </div>
                   <div
                     style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      padding: 15
+                      flex: 1,
+                      textAlign: 'right'
                     }}
                   >
-                    {!task.innerContent.type.includes('image') ? (
-                      <Button
-                        as="a"
-                        href={
-                          !task.innerContent.type.includes('image')
-                            ? task.innerContent.document
-                            : undefined
-                        }
-                        download={task.innerContent.name}
-                        onClick={() => {
-                          task.innerContent.type.includes('image') &&
-                            this.showModal(document);
-                        }}
-                        icon
-                        labelPosition="right"
-                        color={this.getColor(task.innerContent.type)[0]}
-                        basic
-                      >
-                        {task.innerContent.name}
-                        <Icon
-                          style={{ background: 'none' }}
-                          name={this.getColor(task.innerContent.type)[1]}
-                        ></Icon>
-                      </Button>
-                    ) : (
-                      <img
-                        style={{ maxHeight: 200, maxWidth: '100%' }}
-                        src={task.innerContent.document}
-                      ></img>
-                    )}
+                    {task.innerContent &&
+                      (this.state.activeDropdowns.includes(i) ? (
+                        <List.Icon
+                          name="caret up"
+                          style={{ color: 'white' }}
+                        ></List.Icon>
+                      ) : (
+                        <List.Icon
+                          name="caret down"
+                          style={{ color: 'white' }}
+                        ></List.Icon>
+                      ))}
                   </div>
-                ))}
-            </List.Item>
-          </div>
-        ))}
-      </List>
+                </div>
+              </List.Item>
+              <List.Item>
+                {this.state.activeDropdowns.includes(i) &&
+                  (task.type === 'text' ? (
+                    <div style={{ padding: 15 }}>
+                      <div style={{ display: 'flex' }}>
+                        <div style={{ flex: 10, marginRight: 10 }}>
+                          {this.state.textModified ? (
+                            <Form>
+                              <TextArea
+                                value={task.innerContent}
+                                onChange={(e, data) =>
+                                  this.handleTextChange(e, data, i)
+                                }
+                              />
+                              <div
+                                style={{
+                                  width: '100%',
+                                  display: 'flex',
+                                  justifyContent: 'flex-end',
+                                  marginTop: 10
+                                }}
+                              ></div>
+                            </Form>
+                          ) : (
+                            task.innerContent
+                          )}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          {this.state.textModified ? (
+                            <Icon
+                              style={{ cursor: 'pointer', color: '#4286f4' }}
+                              name="check"
+                              onClick={() => this.saveText()}
+                            ></Icon>
+                          ) : (
+                            <Icon
+                              style={{ cursor: 'pointer', color: '#4286f4' }}
+                              name="pencil"
+                              onClick={() => this.modifyText(i)}
+                            ></Icon>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: 15
+                      }}
+                    >
+                      {task.innerContent === 'form1&9' ? (
+                        <Button
+                          color="red"
+                          labelPosition="right"
+                          icon
+                          onClick={() => this.showFormModal()}
+                        >
+                          Remplir un formulaire <Icon name="file pdf"></Icon>
+                        </Button>
+                      ) : !task.innerContent.type.includes('image') ? (
+                        <Button
+                          as="a"
+                          href={
+                            !task.innerContent.type.includes('image')
+                              ? task.innerContent.document
+                              : undefined
+                          }
+                          download={task.innerContent.name}
+                          onClick={() => {
+                            task.innerContent.type.includes('image') &&
+                              this.showModal(document);
+                          }}
+                          icon
+                          labelPosition="right"
+                          color={this.getColor(task.innerContent.type)[0]}
+                          basic
+                        >
+                          {task.innerContent.name}
+                          <Icon
+                            style={{ background: 'none' }}
+                            name={this.getColor(task.innerContent.type)[1]}
+                          ></Icon>
+                        </Button>
+                      ) : (
+                        <img
+                          style={{ maxHeight: 200, maxWidth: '100%' }}
+                          src={task.innerContent.document}
+                        ></img>
+                      )}
+                    </div>
+                  ))}
+              </List.Item>
+            </div>
+          ))}
+        </List>
+      </>
     );
   }
 }

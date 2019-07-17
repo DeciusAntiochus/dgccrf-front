@@ -63,6 +63,7 @@ class TrameCreationComponent extends React.Component {
     this.addDocument = this.addDocument.bind(this);
     this.deleteDocument = this.deleteDocument.bind(this);
     this.saveTrame = this.saveTrame.bind(this);
+    this.addForm = this.addForm.bind(this);
   }
 
   async saveTrame() {
@@ -71,19 +72,19 @@ class TrameCreationComponent extends React.Component {
         await PouchDBServices.services.trame.postDocument(
           !this.state._id
             ? {
-              name: this.state.trameName,
-              trameAvant: this.state.taskListAvant,
-              tramePendant: this.state.taskListPendant,
-              trameAprès: this.state.taskListAprès,
-            }
+                name: this.state.trameName,
+                trameAvant: this.state.taskListAvant,
+                tramePendant: this.state.taskListPendant,
+                trameAprès: this.state.taskListAprès
+              }
             : {
-              name: this.state.trameName,
-              trameAvant: this.state.taskListAvant,
-              tramePendant: this.state.taskListPendant,
-              trameAprès: this.state.taskListAprès,
-              _id: this.state._id,
-              _rev: this.state._rev
-            }
+                name: this.state.trameName,
+                trameAvant: this.state.taskListAvant,
+                tramePendant: this.state.taskListPendant,
+                trameAprès: this.state.taskListAprès,
+                _id: this.state._id,
+                _rev: this.state._rev
+              }
         );
         this.props.history.push('/preferences');
         console.log('trame saved!');
@@ -131,38 +132,38 @@ class TrameCreationComponent extends React.Component {
         index:
           Math.max.apply(
             Math,
-            trame.trameAvant.map(function (o) {
+            trame.trameAvant.map(function(o) {
               return o.index;
             })
           ) +
           Math.max.apply(
             Math,
-            trame.tramePendant.map(function (o) {
+            trame.tramePendant.map(function(o) {
               return o.index;
             })
           ) +
           Math.max.apply(
             Math,
-            trame.trameAprès.map(function (o) {
+            trame.trameAprès.map(function(o) {
               return o.index;
             })
           ),
         id:
           Math.max.apply(
             Math,
-            trame.trameAvant.map(function (o) {
+            trame.trameAvant.map(function(o) {
               return o.id;
             })
           ) +
           Math.max.apply(
             Math,
-            trame.tramePendant.map(function (o) {
+            trame.tramePendant.map(function(o) {
               return o.id;
             })
           ) +
           Math.max.apply(
             Math,
-            trame.trameAprès.map(function (o) {
+            trame.trameAprès.map(function(o) {
               return o.id;
             })
           ),
@@ -177,17 +178,17 @@ class TrameCreationComponent extends React.Component {
   deleteTask(task) {
     this.state.activeIndex === 0
       ? this.setState({
-        taskListAvant: this.state.taskListAvant.filter(t => {
-          return t != task;
+          taskListAvant: this.state.taskListAvant.filter(t => {
+            return t != task;
+          })
         })
-      })
       : this.state.activeIndex === 1
-        ? this.setState({
+      ? this.setState({
           taskListPendant: this.state.taskListPendant.filter(t => {
             return t != task;
           })
         })
-        : this.setState({
+      : this.setState({
           taskListAprès: this.state.taskListAprès.filter(t => {
             return t != task;
           })
@@ -197,15 +198,15 @@ class TrameCreationComponent extends React.Component {
   addDocument(task, file) {
     this.state.activeIndex === 0
       ? this.setState({
-        taskListAvant: this.state.taskListAvant.filter(t => {
-          if (t == task) {
-            t.innerContent = file;
-          }
-          return t;
+          taskListAvant: this.state.taskListAvant.filter(t => {
+            if (t == task) {
+              t.innerContent = file;
+            }
+            return t;
+          })
         })
-      })
       : this.state.activeIndex === 1
-        ? this.setState({
+      ? this.setState({
           taskListPendant: this.state.taskListPendant.filter(t => {
             if (t == task) {
               t.innerContent = file;
@@ -213,7 +214,7 @@ class TrameCreationComponent extends React.Component {
             return t;
           })
         })
-        : this.setState({
+      : this.setState({
           taskListAprès: this.state.taskListAprès.filter(t => {
             if (t == task) {
               t.innerContent = file;
@@ -226,15 +227,15 @@ class TrameCreationComponent extends React.Component {
   deleteDocument(task) {
     this.state.activeIndex === 0
       ? this.setState({
-        taskListAvant: this.state.taskListAvant.filter(t => {
-          if (t == task) {
-            t.innerContent = '';
-          }
-          return t;
+          taskListAvant: this.state.taskListAvant.filter(t => {
+            if (t == task) {
+              t.innerContent = '';
+            }
+            return t;
+          })
         })
-      })
       : this.state.activeIndex === 1
-        ? this.setState({
+      ? this.setState({
           taskListPendant: this.state.taskListPendant.filter(t => {
             if (t == task) {
               t.innerContent = '';
@@ -242,7 +243,7 @@ class TrameCreationComponent extends React.Component {
             return t;
           })
         })
-        : this.setState({
+      : this.setState({
           taskListAprès: this.state.taskListAprès.filter(t => {
             if (t == task) {
               t.innerContent = '';
@@ -255,16 +256,16 @@ class TrameCreationComponent extends React.Component {
   validateName(task, name) {
     this.state.activeIndex === 0
       ? this.setState({
-        taskListAvant: this.state.taskListAvant.filter(t => {
-          if (t == task) {
-            t.title = name;
-          }
+          taskListAvant: this.state.taskListAvant.filter(t => {
+            if (t == task) {
+              t.title = name;
+            }
 
-          return t;
+            return t;
+          })
         })
-      })
       : this.state.activeIndex === 1
-        ? this.setState({
+      ? this.setState({
           taskListPendant: this.state.taskListPendant.filter(t => {
             if (t == task) {
               t.title = name;
@@ -273,7 +274,7 @@ class TrameCreationComponent extends React.Component {
             return t;
           })
         })
-        : this.setState({
+      : this.setState({
           taskListAprès: this.state.taskListAprès.filter(t => {
             if (t == task) {
               t.title = name;
@@ -288,19 +289,51 @@ class TrameCreationComponent extends React.Component {
     this.setState({ trameName: data.value });
   }
 
+  addForm(task) {
+    this.state.activeIndex === 0
+      ? this.setState({
+          taskListAvant: this.state.taskListAvant.filter(t => {
+            if (t == task) {
+              t.innerContent = 'form1&9';
+            }
+
+            return t;
+          })
+        })
+      : this.state.activeIndex === 1
+      ? this.setState({
+          taskListPendant: this.state.taskListPendant.filter(t => {
+            if (t == task) {
+              t.innerContent = 'form1&9';
+            }
+
+            return t;
+          })
+        })
+      : this.setState({
+          taskListAprès: this.state.taskListAprès.filter(t => {
+            if (t == task) {
+              t.innerContent = 'form1&9';
+            }
+
+            return t;
+          })
+        });
+  }
+
   handleTextChange(task, text) {
     this.state.activeIndex === 0
       ? this.setState({
-        taskListAvant: this.state.taskListAvant.filter(t => {
-          if (t == task) {
-            t.innerContent = text;
-          }
+          taskListAvant: this.state.taskListAvant.filter(t => {
+            if (t == task) {
+              t.innerContent = text;
+            }
 
-          return t;
+            return t;
+          })
         })
-      })
       : this.state.activeIndex === 1
-        ? this.setState({
+      ? this.setState({
           taskListPendant: this.state.taskListPendant.filter(t => {
             if (t == task) {
               t.innerContent = text;
@@ -309,7 +342,7 @@ class TrameCreationComponent extends React.Component {
             return t;
           })
         })
-        : this.setState({
+      : this.setState({
           taskListAprès: this.state.taskListAprès.filter(t => {
             if (t == task) {
               t.innerContent = text;
@@ -323,16 +356,16 @@ class TrameCreationComponent extends React.Component {
   changeType(task, type) {
     this.state.activeIndex === 0
       ? this.setState({
-        taskListAvant: this.state.taskListAvant.filter(t => {
-          if (t == task) {
-            t.type = type;
-          }
+          taskListAvant: this.state.taskListAvant.filter(t => {
+            if (t == task) {
+              t.type = type;
+            }
 
-          return t;
+            return t;
+          })
         })
-      })
       : this.state.activeIndex === 1
-        ? this.setState({
+      ? this.setState({
           taskListPendant: this.state.taskListPendant.filter(t => {
             if (t == task) {
               t.type = type;
@@ -341,7 +374,7 @@ class TrameCreationComponent extends React.Component {
             return t;
           })
         })
-        : this.setState({
+      : this.setState({
           taskListAprès: this.state.taskListAprès.filter(t => {
             if (t == task) {
               t.type = type;
@@ -357,21 +390,21 @@ class TrameCreationComponent extends React.Component {
 
     this.state.activeIndex === 0
       ? this.setState({
-        taskListAvant: [
-          ...this.state.taskListAvant,
-          {
-            title: 'Nouvelle tâche' + this.state.index,
-            type: 'basic',
-            innerContent: '',
-            index: this.state.index,
-            id: this.state.id
-          }
-        ],
-        index: this.state.index + 1,
-        id: this.state.id + 1
-      })
+          taskListAvant: [
+            ...this.state.taskListAvant,
+            {
+              title: 'Nouvelle tâche' + this.state.index,
+              type: 'basic',
+              innerContent: '',
+              index: this.state.index,
+              id: this.state.id
+            }
+          ],
+          index: this.state.index + 1,
+          id: this.state.id + 1
+        })
       : this.state.activeIndex === 1
-        ? this.setState({
+      ? this.setState({
           taskListPendant: [
             ...this.state.taskListPendant,
             {
@@ -385,7 +418,7 @@ class TrameCreationComponent extends React.Component {
           index: this.state.index + 1,
           id: this.state.id + 1
         })
-        : this.setState({
+      : this.setState({
           taskListAprès: [
             ...this.state.taskListAprès,
             {
@@ -419,8 +452,8 @@ class TrameCreationComponent extends React.Component {
     this.state.activeIndex === 0
       ? (taskList = this.state.taskListAvant)
       : this.state.activeIndex === 1
-        ? (taskList = this.state.taskListPendant)
-        : (taskList = this.state.taskListAprès);
+      ? (taskList = this.state.taskListPendant)
+      : (taskList = this.state.taskListAprès);
 
     const res = Array.from(taskList);
 
@@ -430,8 +463,8 @@ class TrameCreationComponent extends React.Component {
     this.state.activeIndex === 0
       ? this.setState({ taskListAvant: res })
       : this.state.activeIndex === 1
-        ? this.setState({ taskListPendant: res })
-        : this.setState({ taskListAprès: res });
+      ? this.setState({ taskListPendant: res })
+      : this.setState({ taskListAprès: res });
   };
 
   render() {
@@ -458,136 +491,137 @@ class TrameCreationComponent extends React.Component {
             {this.state.isLoading ? (
               <MyActivityIndicator />
             ) : (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  overflow: 'hidden',
+                  height: '100%'
+                }}
+              >
                 <div
                   style={{
+                    position: 'fixed',
+                    zIndex: 10,
+                    width: '100%',
+                    backgroundColor: '#f2f2f2',
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center',
-                    overflow: 'hidden',
-                    height: '100%'
+
+                    padding: 20
                   }}
                 >
-                  <div
-                    style={{
-                      position: 'fixed',
-                      zIndex: 10,
-                      width: '100%',
-                      backgroundColor: '#f2f2f2',
-                      display: 'flex',
-                      flexDirection: 'column',
-
-                      padding: 20
-                    }}
-                  >
-                    <div style={{ display: 'flex', flexDirection: 'row' }}>
-                      <Responsive minWidth={400}>
-                        <div style={{ flex: 0.3 }}></div>
-                      </Responsive>
-                      <div style={{ flex: 1 }}>
-                        <Input
-                          style={{ width: 150 }}
-                          placeholder="Nom de la trame..."
-                          value={this.state.trameName}
-                          onChange={this.handleNameChange}
-                        ></Input>
-                        <Button
-                          style={{ marginLeft: 5 }}
-                          color="teal"
-                          icon
-                          onClick={() => this.addTask()}
-                        >
-                          <Icon name="plus" color="white"></Icon>
-                        </Button>
-                      </div>
-                      <div
-                        style={{
-                          flex: 0.3,
-                          justifyContent: 'flex-end',
-                          display: 'flex'
-                        }}
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <Responsive minWidth={400}>
+                      <div style={{ flex: 0.3 }}></div>
+                    </Responsive>
+                    <div style={{ flex: 1 }}>
+                      <Input
+                        style={{ width: 150 }}
+                        placeholder="Nom de la trame..."
+                        value={this.state.trameName}
+                        onChange={this.handleNameChange}
+                      ></Input>
+                      <Button
+                        style={{ marginLeft: 5 }}
+                        color="teal"
+                        icon
+                        onClick={() => this.addTask()}
                       >
-                        <Button
-                          onClick={this.saveTrame}
-                          color="red"
-                          disabled={
-                            this.state.trameName.length === 0 ||
-                            this.state.taskListAvant.length +
+                        <Icon name="plus" color="white"></Icon>
+                      </Button>
+                    </div>
+                    <div
+                      style={{
+                        flex: 0.3,
+                        justifyContent: 'flex-end',
+                        display: 'flex'
+                      }}
+                    >
+                      <Button
+                        onClick={this.saveTrame}
+                        color="red"
+                        disabled={
+                          this.state.trameName.length === 0 ||
+                          this.state.taskListAvant.length +
                             this.state.taskListPendant.length +
                             this.state.taskListAprès.length ===
                             0
-                          }
-                          icon
-                        >
-                          <Icon name="save" color="white"></Icon>
-                        </Button>
-                      </div>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
-                      <Tabs
-                        value={this.state.activeIndex}
-                        fullWidth
-                        onChange={this.handleChange}
-                      >
-                        <Tab label="Avant" />
-                        <Tab label="Pendant" />
-                        <Tab label="Après" />
-                      </Tabs>
-                      <Button
-                        icon
-                        onClick={() =>
-                          this.setState({ locked: !this.state.locked })
                         }
-                        style={{
-                          backgroundColor: this.state.locked ? 'grey' : null
-                        }}
+                        icon
                       >
-                        {this.state.locked ? (
-                          <Popup
-                            trigger={
-                              <Icon name="lock" style={{ color: 'white' }}></Icon>
-                            }
-                            position="bottom center"
-                            content="La liste est verrouillée. Vous ne pouvez pas balayer celle-ci entre les différentes étapes, en revanche vous pouvez déplacer les items de la trame à votre convenance avec la souris ou votre doigt."
-                          ></Popup>
-                        ) : (
-                            <Popup
-                              trigger={<Icon name="unlock" color="grey"></Icon>}
-                              position="bottom center"
-                              content="La liste est déverrouillée. Vous ne pouvez plus réorganiser les items de la liste, vous pouvez en revanche balayer celle-ci entre les différentes étapes."
-                            ></Popup>
-                          )}
+                        <Icon name="save" color="white"></Icon>
                       </Button>
                     </div>
                   </div>
-
-                  <div
-                    style={{
-                      flex: 10,
-                      overflowY: 'auto',
-                      marginTop: 120,
-
-                      width: '100%'
-                    }}
-                    className="hidescrollbar"
-                  >
-                    <TrameList
-                      locked={this.state.locked}
-                      activeIndex={this.state.activeIndex}
-                      handleChangeIndex={this.handleChangeIndex}
-                      onDragEnd={this.onDragEnd}
-                      validateName={this.validateName}
-                      taskListAvant={this.state.taskListAvant}
-                      taskListPendant={this.state.taskListPendant}
-                      taskListAprès={this.state.taskListAprès}
-                      changeType={this.changeType}
-                      handleTextChange={this.handleTextChange}
-                      deleteTask={this.deleteTask}
-                      addDocument={this.addDocument}
-                      deleteDocument={this.deleteDocument}
-                    />
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Tabs
+                      value={this.state.activeIndex}
+                      fullWidth
+                      onChange={this.handleChange}
+                    >
+                      <Tab label="Avant" />
+                      <Tab label="Pendant" />
+                      <Tab label="Après" />
+                    </Tabs>
+                    <Button
+                      icon
+                      onClick={() =>
+                        this.setState({ locked: !this.state.locked })
+                      }
+                      style={{
+                        backgroundColor: this.state.locked ? 'grey' : null
+                      }}
+                    >
+                      {this.state.locked ? (
+                        <Popup
+                          trigger={
+                            <Icon name="lock" style={{ color: 'white' }}></Icon>
+                          }
+                          position="bottom center"
+                          content="La liste est verrouillée. Vous ne pouvez pas balayer celle-ci entre les différentes étapes, en revanche vous pouvez déplacer les items de la trame à votre convenance avec la souris ou votre doigt."
+                        ></Popup>
+                      ) : (
+                        <Popup
+                          trigger={<Icon name="unlock" color="grey"></Icon>}
+                          position="bottom center"
+                          content="La liste est déverrouillée. Vous ne pouvez plus réorganiser les items de la liste, vous pouvez en revanche balayer celle-ci entre les différentes étapes."
+                        ></Popup>
+                      )}
+                    </Button>
                   </div>
                 </div>
-              )}
+
+                <div
+                  style={{
+                    flex: 10,
+                    overflowY: 'auto',
+                    marginTop: 120,
+
+                    width: '100%'
+                  }}
+                  className="hidescrollbar"
+                >
+                  <TrameList
+                    locked={this.state.locked}
+                    activeIndex={this.state.activeIndex}
+                    handleChangeIndex={this.handleChangeIndex}
+                    onDragEnd={this.onDragEnd}
+                    validateName={this.validateName}
+                    taskListAvant={this.state.taskListAvant}
+                    taskListPendant={this.state.taskListPendant}
+                    taskListAprès={this.state.taskListAprès}
+                    changeType={this.changeType}
+                    handleTextChange={this.handleTextChange}
+                    deleteTask={this.deleteTask}
+                    addForm={this.addForm}
+                    addDocument={this.addDocument}
+                    deleteDocument={this.deleteDocument}
+                  />
+                </div>
+              </div>
+            )}
           </Container>
         </div>
       </div>
