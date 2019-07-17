@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import {
   List,
   Icon,
-  Dropdown,
   TextArea,
   Form,
   Button,
-  Responsive
+  Responsive,
+  Popup
 } from 'semantic-ui-react';
-
-import { Draggable } from 'react-beautiful-dnd';
 
 import PropTypes from 'prop-types';
 import MyDraggable from './draggable';
@@ -45,8 +43,8 @@ class TrameComponent extends Component {
     this.props.handleTextChange(task, data.value);
   }
 
-  showFormModal() {
-    this.setState({ opened: true });
+  addForm(task) {
+    this.props.addForm(task);
   }
 
   handleDoubleClick = document => {
@@ -335,7 +333,22 @@ class TrameComponent extends Component {
                               justifyContent: 'center'
                             }}
                           >
-                            {!task.innerContent.type.includes('image') ? (
+                            {task.innerContent === 'form1&9' ? (
+                              <Popup
+                                trigger={
+                                  <Button
+                                    color="red"
+                                    labelPosition="right"
+                                    icon
+                                  >
+                                    Formulaire à remplir{' '}
+                                    <Icon name="file pdf"></Icon>
+                                  </Button>
+                                }
+                                position="bottom center"
+                                content="Ce formulaire sera à remplir dans la trame de la visite."
+                              ></Popup>
+                            ) : !task.innerContent.type.includes('image') ? (
                               <Button
                                 as="a"
                                 href={
@@ -406,25 +419,22 @@ class TrameComponent extends Component {
                               hidden
                               onChange={e => this.fileChange(task, e)}
                             />
-                            {this.props.visiteTrame && (
-                              <>
-                                <Button.Or text="ou" />
-                                <Button
-                                  style={{
-                                    background: 'red',
-                                    color: 'white'
-                                  }}
-                                  onClick={() => this.showFormModal()}
-                                  content={
-                                    <Responsive minWidth={540}>
-                                      Remplir un formulaire
-                                    </Responsive>
-                                  }
-                                  labelPosition="right"
-                                  icon="file pdf"
-                                />
-                              </>
-                            )}
+
+                            <Button.Or text="ou" />
+                            <Button
+                              style={{
+                                background: 'red',
+                                color: 'white'
+                              }}
+                              onClick={() => this.addForm(task)}
+                              content={
+                                <Responsive minWidth={540}>
+                                  Formulaire à remplir
+                                </Responsive>
+                              }
+                              labelPosition="right"
+                              icon="file pdf"
+                            />
                           </Button.Group>
                         </div>
                       )}
