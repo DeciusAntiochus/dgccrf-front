@@ -13,7 +13,6 @@ class EntrepriseAttribute extends React.Component {
             className="mybutton"
             style={{
               marginRight: '10px',
-              marginTop: '10px',
               color: 'white',
               backgroundColor: '#3C4586'
             }}
