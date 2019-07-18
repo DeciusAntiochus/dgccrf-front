@@ -22,7 +22,7 @@ export default class EntrepriseField extends React.Component {
       this.setState({
         searchResults: data.map(etab => ({
           key: etab.ETOB_SIRET,
-          value: etab.ETOB_SIRET,
+          value: [etab.ETOB_SIRET, etab.ETOB_IDENT],
           text: etab.ETOB_RAISON_SOCIALE
         }))
       });
@@ -41,7 +41,7 @@ export default class EntrepriseField extends React.Component {
           options={this.state.searchResults.concat([
             {
               key: this.props.ETOB_SIRET,
-              value: this.props.ETOB_SIRET,
+              value: [this.props.ETOB_SIRET, this.props.ETOB_IDENT],
               text: this.props.ETOB_RAISON_SOCIALE
             }
           ])}
@@ -54,11 +54,11 @@ export default class EntrepriseField extends React.Component {
           }}
           onChange={(e, data) => {
             this.props.changeRaisonSocialeValue(e.currentTarget.innerText);
-            this.props.changeSiretValue(data.value);
+            this.props.changeSiretValue(data.value[0]);
+            this.props.changeEtabIdentValue(data.value[1]);
           }}
-          value={this.props.ETOB_SIRET}
+          value={[this.props.ETOB_SIRET, this.props.ETOB_IDENT]}
         />
-
         <Form.Input
           fluid
           required
@@ -75,6 +75,8 @@ export default class EntrepriseField extends React.Component {
 EntrepriseField.propTypes = {
   ETOB_RAISON_SOCIALE: PropTypes.string.isRequired,
   ETOB_SIRET: PropTypes.string.isRequired,
+  ETOB_IDENT: PropTypes.string.isRequired,
   changeSiretValue: PropTypes.func.isRequired,
-  changeRaisonSocialeValue: PropTypes.func.isRequired
+  changeRaisonSocialeValue: PropTypes.func.isRequired,
+  changeEtabIdentValue: PropTypes.func.isRequired
 };
