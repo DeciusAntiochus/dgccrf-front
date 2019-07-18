@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import {
   List,
   Icon,
-  Dropdown,
   TextArea,
   Form,
-  Button
+  Button,
+  Responsive,
+  Popup
 } from 'semantic-ui-react';
-
-import { Draggable } from 'react-beautiful-dnd';
 
 import PropTypes from 'prop-types';
 import MyDraggable from './draggable';
@@ -44,8 +43,8 @@ class TrameComponent extends Component {
     this.props.handleTextChange(task, data.value);
   }
 
-  showFormModal() {
-    this.setState({ opened: true });
+  addForm(task) {
+    this.props.addForm(task);
   }
 
   handleDoubleClick = document => {
@@ -97,7 +96,6 @@ class TrameComponent extends Component {
   }
 
   handleClick(index) {
-    console.log(this.state.activeDropdowns);
     const i = this.state.activeDropdowns.indexOf(index);
     i === -1
       ? this.setState({
@@ -127,7 +125,11 @@ class TrameComponent extends Component {
   render() {
     return (
       <>
-        <FormModal opened={this.state.opened} close={() => this.closeModal()} />
+        <FormModal
+          {...this.props}
+          opened={this.state.opened}
+          close={() => this.closeModal()}
+        />
 
         <List
           className="responsivepadding"
@@ -331,7 +333,22 @@ class TrameComponent extends Component {
                               justifyContent: 'center'
                             }}
                           >
-                            {!task.innerContent.type.includes('image') ? (
+                            {task.innerContent === 'form1&9' ? (
+                              <Popup
+                                trigger={
+                                  <Button
+                                    color="red"
+                                    labelPosition="right"
+                                    icon
+                                  >
+                                    Formulaire à remplir{' '}
+                                    <Icon name="file pdf"></Icon>
+                                  </Button>
+                                }
+                                position="bottom center"
+                                content="Ce formulaire sera à remplir dans la trame de la visite."
+                              ></Popup>
+                            ) : !task.innerContent.type.includes('image') ? (
                               <Button
                                 as="a"
                                 href={
@@ -387,7 +404,11 @@ class TrameComponent extends Component {
                                 background: '#3C4586',
                                 color: 'white'
                               }}
-                              content="Ajouter un document"
+                              content={
+                                <Responsive minWidth={540}>
+                                  Ajouter un document
+                                </Responsive>
+                              }
                               labelPosition="left"
                               icon="file"
                               onClick={() => this.fileInputRef.current.click()}
@@ -398,21 +419,22 @@ class TrameComponent extends Component {
                               hidden
                               onChange={e => this.fileChange(task, e)}
                             />
-                            {this.props.visiteTrame && (
-                              <>
-                                <Button.Or text="ou" />
-                                <Button
-                                  style={{
-                                    background: 'red',
-                                    color: 'white'
-                                  }}
-                                  onClick={() => this.showFormModal()}
-                                  content="Remplir un formulaire"
-                                  labelPosition="right"
-                                  icon="file pdf"
-                                />
-                              </>
-                            )}
+
+                            <Button.Or text="ou" />
+                            <Button
+                              style={{
+                                background: 'red',
+                                color: 'white'
+                              }}
+                              onClick={() => this.addForm(task)}
+                              content={
+                                <Responsive minWidth={540}>
+                                  Formulaire à remplir
+                                </Responsive>
+                              }
+                              labelPosition="right"
+                              icon="file pdf"
+                            />
                           </Button.Group>
                         </div>
                       )}

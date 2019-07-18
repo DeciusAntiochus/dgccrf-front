@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, Fragment } from 'react';
 
 import { Link } from 'react-router-dom';
 import TrameSelectionModal from './trameSelectionModal';
@@ -9,25 +9,24 @@ export default function MyLink(props) {
   function close() {
     setModal(!modal);
   }
-
   return !props.visite.visiteData.new_visite ? (
-    <div>{props.children}</div>
+    <>{props.children}</>
   ) : props.visite.visiteData.trame._id != 0 ? (
-    <Link to={'/visite/' + props.visite.visiteData.VISITE_IDENT}>
+    <Link as={Fragment} to={'/visite/' + props.visite.visiteData.VISITE_IDENT}>
       {props.children}
     </Link>
   ) : (
-    <>
-      <TrameSelectionModal
-        {...props}
-        visite={props.visite}
-        trames={props.trames}
-        opened={modal}
-        close={() => close()}
-      />
-      <a onClick={() => setModal(!modal)} style={{ cursor: 'pointer' }}>
-        {props.children}
-      </a>
-    </>
-  );
+        <>
+          <TrameSelectionModal
+            {...props}
+            visite={props.visite}
+            trames={props.trames}
+            opened={modal}
+            close={() => close()}
+          />
+          <Fragment onClick={() => setModal(!modal)} style={{ cursor: 'pointer' }}>
+            {props.children}
+          </Fragment>
+        </>
+      );
 }

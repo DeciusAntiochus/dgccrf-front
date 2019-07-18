@@ -1,6 +1,6 @@
 import React from 'react';
 import TrameComponent from './trame';
-import { Container, Icon, Button } from 'semantic-ui-react';
+import { Container, Icon, Button, Responsive } from 'semantic-ui-react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { EventEmitter } from 'events';
@@ -87,12 +87,15 @@ class Visite extends React.Component {
   };
 
   exportToSora = async () => {
-    if (window.confirm("Êtes-vous sur de vouloir exporter cette visite dans SORA.\n Vous ne pourrez plus modifier la visite dans SESAM et vous perdrez la trame liée à la visite.")) {
+    if (
+      window.confirm(
+        'Êtes-vous sur de vouloir exporter cette visite dans SORA.\n Vous ne pourrez plus modifier la visite dans SESAM et vous perdrez la trame liée à la visite.'
+      )
+    ) {
       await visitesService.exportToSora(this.props.match.params.id);
       this.props.history.goBack();
     }
-  }
-
+  };
 
   render() {
     return (
@@ -134,27 +137,58 @@ class Visite extends React.Component {
                     justifyContent: 'center'
                   }}
                 >
-                  <Button
+                  <Responsive minWidth={540}>
+                    <Button
+                      icon
+                      style={{ position: 'absolute', left: 10, top: 10 }}
+                      labelPosition="left"
+                      onClick={() => this.setState({ editMode: true })}
+                    >
+                      <Icon name="pencil"></Icon>
+                      Editer
+                    </Button>
+                  </Responsive>
+                  <Responsive maxWidth={539}>
+                    <Button
+                      icon
+                      disabled={this.state.editMode}
+                      style={{ position: 'absolute', left: 10, top: 10 }}
+                      onClick={() => this.setState({ editMode: true })}
+                    >
+                      <Icon name="pencil"></Icon>
+                    </Button>
+                  </Responsive>
+
+                  {/* <Button
                     icon
                     disabled={this.state.editMode}
                     style={{ position: 'absolute', left: 10, top: 10 }}
                     labelPosition="left"
+                    content={<Responsive minWidth={540}>Editer</Responsive>}
                     onClick={() => this.setState({ editMode: true })}
                   >
                     <Icon name="pencil"></Icon>
-                    Editer
-                  </Button>
-
-
-                  <Button
-                    icon
-                    style={{ position: 'absolute', right: 10, top: 10 }}
-                    labelPosition="left"
-                    onClick={this.exportToSora}
-                  >
-                    <Icon name="share square"></Icon>
-                    Exporter
-                  </Button>
+                  </Button> */}
+                  <Responsive minWidth={540}>
+                    <Button
+                      icon
+                      style={{ position: 'absolute', right: 10, top: 10 }}
+                      labelPosition="left"
+                      onClick={this.exportToSora}
+                    >
+                      <Icon name="share square"></Icon>
+                      Exporter
+                    </Button>
+                  </Responsive>
+                  <Responsive maxWidth={539}>
+                    <Button
+                      icon
+                      style={{ position: 'absolute', right: 10, top: 10 }}
+                      onClick={this.exportToSora}
+                    >
+                      <Icon name="share square"></Icon>
+                    </Button>
+                  </Responsive>
 
                   <Tabs
                     value={this.state.activeIndex}
@@ -190,10 +224,14 @@ class Visite extends React.Component {
                 setActiveTab={this.setActiveTab}
                 visiteid={parseInt(this.props.match.params.id)}
               />
-            ) : (<div>
-              <Documents {...this.props} visiteid={parseInt(this.props.match.params.id)} />
-            </div>
-                )}
+            ) : (
+              <div>
+                <Documents
+                  {...this.props}
+                  visiteid={parseInt(this.props.match.params.id)}
+                />
+              </div>
+            )}
           </Container>
           <FileNavigationComponent
             setActiveTab={this.setActiveTab}

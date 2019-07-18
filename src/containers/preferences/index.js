@@ -29,7 +29,6 @@ export default class Preferences extends Component {
       });
   }
   render() {
-    console.log(this.state.trameSelected);
     return (
       <Container style={{ width: '100%', height: '100%' }}>
         {!this.state.isLoading ? (

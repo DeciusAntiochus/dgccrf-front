@@ -28,6 +28,7 @@ class EditComponent extends React.Component {
     this.deleteTask = this.deleteTask.bind(this);
     this.addDocument = this.addDocument.bind(this);
     this.deleteDocument = this.deleteDocument.bind(this);
+    this.addForm = this.addForm.bind(this);
   }
 
   async saveTrame() {
@@ -49,6 +50,38 @@ class EditComponent extends React.Component {
         console.log(e);
       }
     }
+  }
+
+  addForm(task) {
+    this.state.activeIndex === 0
+      ? this.setState({
+          taskListAvant: this.state.taskListAvant.filter(t => {
+            if (t == task) {
+              t.innerContent = 'form1&9';
+            }
+
+            return t;
+          })
+        })
+      : this.state.activeIndex === 1
+      ? this.setState({
+          taskListPendant: this.state.taskListPendant.filter(t => {
+            if (t == task) {
+              t.innerContent = 'form1&9';
+            }
+
+            return t;
+          })
+        })
+      : this.setState({
+          taskListAprès: this.state.taskListAprès.filter(t => {
+            if (t == task) {
+              t.innerContent = 'form1&9';
+            }
+
+            return t;
+          })
+        });
   }
 
   calculateIndex() {
@@ -472,6 +505,7 @@ class EditComponent extends React.Component {
                 className="hidescrollbar"
               >
                 <TrameList
+                  visite={this.props.visite}
                   locked={this.state.locked}
                   activeIndex={this.props.index}
                   handleChangeIndex={this.props.handleChangeIndex}
@@ -486,6 +520,7 @@ class EditComponent extends React.Component {
                   addDocument={this.addDocument}
                   deleteDocument={this.deleteDocument}
                   visiteTrame={true}
+                  addForm={this.addForm}
                 />
               </div>
             </div>
