@@ -285,6 +285,7 @@ class EditComponent extends React.Component {
           taskListAvant: this.state.taskListAvant.filter(t => {
             if (t == task) {
               t.type = type;
+              t.innerContent = '';
             }
 
             return t;
@@ -295,6 +296,7 @@ class EditComponent extends React.Component {
           taskListPendant: this.state.taskListPendant.filter(t => {
             if (t == task) {
               t.type = type;
+              t.innerContent = '';
             }
 
             return t;
@@ -304,6 +306,7 @@ class EditComponent extends React.Component {
           taskListAprès: this.state.taskListAprès.filter(t => {
             if (t == task) {
               t.type = type;
+              t.innerContent = '';
             }
 
             return t;
