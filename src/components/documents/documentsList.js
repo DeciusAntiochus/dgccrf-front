@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Header, Icon, Input } from 'semantic-ui-react';
 import DocumentModal from './documentModal.component';
-
 import PouchdbServices from '../../services';
 let documentsService = PouchdbServices.services.documents;
+
+// Liste des documents au sein de la page documents
 
 function removeExtension(documentname) {
   const split = documentname.split('.');
