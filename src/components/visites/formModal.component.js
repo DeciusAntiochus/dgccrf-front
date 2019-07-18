@@ -30,11 +30,15 @@ function FormModal(props) {
   const [signature, setsignature] = useState(null);
 
   const [signatureinteresse, setsignatureinteresse] = useState(null);
-
   const [informationForm, setinformationForm] = useState({
     documents: [],
-    lieu: '', // à remplir automatiquement
-    nameResponsible: '', //à remplir automatiquement
+    place:
+      props.visite.ETOB_ADR1 +
+      ' ' +
+      props.visite.ETOB_ADRCP +
+      ' ' +
+      props.visite.ETOB_ADRVILLE,
+    nameResponsible: props.visite.ETOB_NOM_RESPONSABLE,
     date: moment().format('DD-MM-YYYY HH:mm')
   });
 
