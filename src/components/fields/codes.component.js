@@ -5,6 +5,8 @@ import PouchDbServices from '../../services';
 let activiteService = PouchDbServices.services.activite;
 let cpfService = PouchDbServices.services.cpf;
 
+// Champs permettant de rentrer les codes dans une création ou modification de visite
+
 export default class CodesField extends React.Component {
   constructor(props) {
     super(props);

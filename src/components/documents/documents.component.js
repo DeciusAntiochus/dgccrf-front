@@ -2,25 +2,19 @@ import React, { Component } from 'react';
 import {
   Button,
   Icon,
-  Header,
-  Modal,
-  Input,
   Responsive
 } from 'semantic-ui-react';
 import MyActivityIndicator from '../../components/myActivityIndicator.component';
-import DocumentModal from './documentModal.component';
-
 import './documents.css';
-
 import PropTypes from 'prop-types';
 import DocumentsList from './documentsList';
 import { Tabs, Tab } from '@material-ui/core';
-
 import SwipeableViews from 'react-swipeable-views';
-
 import PouchdbServices from '../../services';
 let visitesService = PouchdbServices.services.visite;
 let documentsService = PouchdbServices.services.documents;
+
+// Documents joints à une visite
 
 // blobs, pour chrome
 
