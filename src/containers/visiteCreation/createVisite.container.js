@@ -242,7 +242,9 @@ class CreateVisiteComponent extends React.Component {
           )
           .then(() => {
             window.alert('La visite a bien été modifiée.');
-            this.props.history.push('/dossier/' + this.state.DOSSIER_IDENT);
+            this.props.history.push(
+              '/visite/' + this.state.visite.VISITE_IDENT
+            );
           });
       } else {
         visitesService
