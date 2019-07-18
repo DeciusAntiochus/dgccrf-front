@@ -8,7 +8,10 @@ import {
   List,
   Icon
 } from 'semantic-ui-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import config from '../../config';
+import axios from 'axios';
 
 import { DateTimeInput } from 'semantic-ui-calendar-react';
 
@@ -32,15 +35,39 @@ function FormModal(props) {
   const [signatureinteresse, setsignatureinteresse] = useState(null);
   const [informationForm, setinformationForm] = useState({
     documents: [],
-    place:
-      props.visite.ETOB_ADR1 +
+    etob: false,
+    place: !props.etob ? '' :
+      props.etob.ETOB_ADR1 + '\n' +
+      props.etob.ETOB_ADR2 + '\n' +
+      props.etob.ETOB_ADR3 + '\n' +
       ' ' +
-      props.visite.ETOB_ADRCP +
+      props.etob.ETOB_ADRCP +
       ' ' +
-      props.visite.ETOB_ADRVILLE,
-    nameResponsible: props.visite.ETOB_NOM_RESPONSABLE,
+      props.etob.ETOB_ADRVILLE,
+    nameResponsible: !props.etob ? '' : props.etob.ETOB_NOM_RESPONSABLE,
     date: moment().format('DD-MM-YYYY HH:mm')
   });
+  // var informationForm, setinformationForm;
+  // axios.get(config.backend.base_url + '/entreprise/' + props.visite.ETOB_SIRET + "?siret=true")
+  //   .then(data => data.data)
+  //   .catch(err => undefined)
+  //   .then(etob => {
+  //     [informationForm, setinformationForm] = useState({
+  //       documents: [],
+  //       place: !etob ? '' :
+  //         etob.ETOB_ADR1 + '\n' +
+  //         etob.ETOB_ADR2 + '\n' +
+  //         etob.ETOB_ADR3 + '\n' +
+  //         ' ' +
+  //         etob.ETOB_ADRCP +
+  //         ' ' +
+  //         etob.ETOB_ADRVILLE,
+  //       nameResponsible: !etob ? '' : etob.ETOB_NOM_RESPONSABLE,
+  //       date: moment().format('DD-MM-YYYY HH:mm')
+  //     })
+  //   })
+
+
 
   function setStep1(pv) {
     setpv(pv);
@@ -341,27 +368,27 @@ function FormModal(props) {
             ) : step === 4 ? (
               <Signature setStep4={setStep4} />
             ) : (
-              <PDFGenerator
-                width={width}
-                height={height}
-                date={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
-                  'LL'
-                )}
-                hour={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
-                  'LT'
-                )}
-                visiteid={props.visite.VISITE_IDENT}
-                pv={pv}
-                name={informationForm.name}
-                lieu={informationForm.place}
-                quality={informationForm.quality}
-                nameResponsible={informationForm.nameResponsible}
-                declaration={informationForm.declaration}
-                documents={informationForm.documents}
-                signature={signature}
-                signatureInteresse={signatureinteresse}
-              />
-            )}
+                      <PDFGenerator
+                        width={width}
+                        height={height}
+                        date={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
+                          'LL'
+                        )}
+                        hour={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
+                          'LT'
+                        )}
+                        visiteid={props.visite.VISITE_IDENT}
+                        pv={pv}
+                        name={informationForm.name}
+                        lieu={informationForm.place}
+                        quality={informationForm.quality}
+                        nameResponsible={informationForm.nameResponsible}
+                        declaration={informationForm.declaration}
+                        documents={informationForm.documents}
+                        signature={signature}
+                        signatureInteresse={signatureinteresse}
+                      />
+                    )}
           </div>
         </Container>
       </Modal.Content>
