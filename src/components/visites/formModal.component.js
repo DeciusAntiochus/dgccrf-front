@@ -9,16 +9,15 @@ import {
   Icon
 } from 'semantic-ui-react';
 import React, { useState } from 'react';
-
 import { DateTimeInput } from 'semantic-ui-calendar-react';
-
-import PropTypes, { array } from 'prop-types';
+import PropTypes from 'prop-types';
 import PVGenerator from './Forms/PVGenerator';
 import moment from 'moment';
 import 'moment/locale/fr';
 import Signature from './Forms/Signature';
 import useWindowDimensions from '../useWindowDimensions';
 import PDFGenerator from './Forms/PDFGenerator';
+
 function FormModal(props) {
   const { height, width } = useWindowDimensions();
   const [step, setstep] = useState(1);
@@ -31,14 +30,15 @@ function FormModal(props) {
 
   const [signatureinteresse, setsignatureinteresse] = useState(null);
   const [informationForm, setinformationForm] = useState({
-    documents: [],
-    place:
-      props.visite.ETOB_ADR1 +
-      ' ' +
-      props.visite.ETOB_ADRCP +
-      ' ' +
-      props.visite.ETOB_ADRVILLE,
-    nameResponsible: props.visite.ETOB_NOM_RESPONSABLE,
+    documents: [], // Remplissage de certaines informations automatiquement
+    place: !props.visite
+      ? ''
+      : props.visite.ETOB_ADR1 +
+        ' ' +
+        props.visite.ETOB_ADRCP +
+        ' ' +
+        props.visite.ETOB_ADRVILLE,
+    nameResponsible: !props.visite ? '' : props.visite.ETOB_NOM_RESPONSABLE,
     date: moment().format('DD-MM-YYYY HH:mm')
   });
 
@@ -161,14 +161,6 @@ function FormModal(props) {
           >
             {step === 1 ? (
               <Button.Group>
-                <Button
-                  style={{ padding: 20 }}
-                  onClick={() => setStep1('audition')}
-                  color="blue"
-                >
-                  PV d'audition
-                </Button>
-
                 <Button
                   style={{ padding: 20 }}
                   onClick={() => setStep1('déclaration')}
@@ -350,6 +342,8 @@ function FormModal(props) {
                 hour={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
                   'LT'
                 )}
+                signatureDate={moment().format('LT')}
+                signatureHour={moment().format('LT')}
                 visiteid={props.visite.VISITE_IDENT}
                 pv={pv}
                 name={informationForm.name}
