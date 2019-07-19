@@ -8,7 +8,9 @@ import {
   List,
   Icon
 } from 'semantic-ui-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import config from '../../config';
+import axios from 'axios';
 import { DateTimeInput } from 'semantic-ui-calendar-react';
 import PropTypes from 'prop-types';
 import PVGenerator from './Forms/PVGenerator';
@@ -41,6 +43,27 @@ function FormModal(props) {
     nameResponsible: !props.visite ? '' : props.visite.ETOB_NOM_RESPONSABLE,
     date: moment().format('DD-MM-YYYY HH:mm')
   });
+  // var informationForm, setinformationForm;
+  // axios.get(config.backend.base_url + '/entreprise/' + props.visite.ETOB_SIRET + "?siret=true")
+  //   .then(data => data.data)
+  //   .catch(err => undefined)
+  //   .then(etob => {
+  //     [informationForm, setinformationForm] = useState({
+  //       documents: [],
+  //       place: !etob ? '' :
+  //         etob.ETOB_ADR1 + '\n' +
+  //         etob.ETOB_ADR2 + '\n' +
+  //         etob.ETOB_ADR3 + '\n' +
+  //         ' ' +
+  //         etob.ETOB_ADRCP +
+  //         ' ' +
+  //         etob.ETOB_ADRVILLE,
+  //       nameResponsible: !etob ? '' : etob.ETOB_NOM_RESPONSABLE,
+  //       date: moment().format('DD-MM-YYYY HH:mm')
+  //     })
+  //   })
+
+
 
   function setStep1(pv) {
     setpv(pv);
