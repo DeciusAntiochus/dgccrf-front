@@ -208,6 +208,7 @@ class CreateVisiteComponent extends React.Component {
   async onSubmit() {
     if (this.testEntries()) {
       try {
+        // si connecté à internet, on récupère des informations sur l'établissement
         const etablissement = await axios.get(
           config.backend.base_url + '/entreprise/' + this.state.ETOB_IDENT
         );
@@ -224,6 +225,7 @@ class CreateVisiteComponent extends React.Component {
         etablissementInfos = {};
       }
       if (this.props.match.params.visiteId) {
+        // Si on est dans le cas d'une modification de visite
         visitesService
           .updateVisite(
             {
@@ -247,10 +249,16 @@ class CreateVisiteComponent extends React.Component {
             );
           });
       } else {
+        // Si on est dans le cas d'une création de visite
+        const ident = parseInt(
+          // On ajoute un identifiant à la visite
+          Date.now().toString() + this.props.agentIdent.toString()
+        );
         visitesService
           .postControlesByVisite(
             {
               ...etablissementInfos,
+              VISITE_IDENT: ident,
               ETOB_RAISON_SOCIALE: this.state.ETOB_RAISON_SOCIALE,
               ETOB_SIRET: this.state.ETOB_SIRET,
               VIS_DATE: this.state.VIS_DATE,
@@ -264,9 +272,7 @@ class CreateVisiteComponent extends React.Component {
           )
           .then(() => {
             window.alert('La visite a bien été ajoutée.');
-            this.props.history.push(
-              '/dossier/' + this.props.match.params.dossierId
-            );
+            this.props.history.push('/visite/' + ident);
           });
       }
     }

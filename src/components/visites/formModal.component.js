@@ -9,19 +9,17 @@ import {
   Icon
 } from 'semantic-ui-react';
 import React, { useState, useEffect } from 'react';
-
 import config from '../../config';
 import axios from 'axios';
-
 import { DateTimeInput } from 'semantic-ui-calendar-react';
-
-import PropTypes, { array } from 'prop-types';
+import PropTypes from 'prop-types';
 import PVGenerator from './Forms/PVGenerator';
 import moment from 'moment';
 import 'moment/locale/fr';
 import Signature from './Forms/Signature';
 import useWindowDimensions from '../useWindowDimensions';
 import PDFGenerator from './Forms/PDFGenerator';
+
 function FormModal(props) {
   const { height, width } = useWindowDimensions();
   const [step, setstep] = useState(1);
@@ -34,17 +32,15 @@ function FormModal(props) {
 
   const [signatureinteresse, setsignatureinteresse] = useState(null);
   const [informationForm, setinformationForm] = useState({
-    documents: [],
-    etob: false,
-    place: !props.etob ? '' :
-      props.etob.ETOB_ADR1 + '\n' +
-      props.etob.ETOB_ADR2 + '\n' +
-      props.etob.ETOB_ADR3 + '\n' +
-      ' ' +
-      props.etob.ETOB_ADRCP +
-      ' ' +
-      props.etob.ETOB_ADRVILLE,
-    nameResponsible: !props.etob ? '' : props.etob.ETOB_NOM_RESPONSABLE,
+    documents: [], // Remplissage de certaines informations automatiquement
+    place: !props.visite
+      ? ''
+      : props.visite.ETOB_ADR1 +
+        ' ' +
+        props.visite.ETOB_ADRCP +
+        ' ' +
+        props.visite.ETOB_ADRVILLE,
+    nameResponsible: !props.visite ? '' : props.visite.ETOB_NOM_RESPONSABLE,
     date: moment().format('DD-MM-YYYY HH:mm')
   });
   // var informationForm, setinformationForm;
@@ -188,14 +184,6 @@ function FormModal(props) {
           >
             {step === 1 ? (
               <Button.Group>
-                <Button
-                  style={{ padding: 20 }}
-                  onClick={() => setStep1('audition')}
-                  color="blue"
-                >
-                  PV d'audition
-                </Button>
-
                 <Button
                   style={{ padding: 20 }}
                   onClick={() => setStep1('déclaration')}
@@ -368,27 +356,29 @@ function FormModal(props) {
             ) : step === 4 ? (
               <Signature setStep4={setStep4} />
             ) : (
-                      <PDFGenerator
-                        width={width}
-                        height={height}
-                        date={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
-                          'LL'
-                        )}
-                        hour={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
-                          'LT'
-                        )}
-                        visiteid={props.visite.VISITE_IDENT}
-                        pv={pv}
-                        name={informationForm.name}
-                        lieu={informationForm.place}
-                        quality={informationForm.quality}
-                        nameResponsible={informationForm.nameResponsible}
-                        declaration={informationForm.declaration}
-                        documents={informationForm.documents}
-                        signature={signature}
-                        signatureInteresse={signatureinteresse}
-                      />
-                    )}
+              <PDFGenerator
+                width={width}
+                height={height}
+                date={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
+                  'LL'
+                )}
+                hour={moment(informationForm.date, 'DD-MM-YYYY hh:mm').format(
+                  'LT'
+                )}
+                signatureDate={moment().format('LT')}
+                signatureHour={moment().format('LT')}
+                visiteid={props.visite.VISITE_IDENT}
+                pv={pv}
+                name={informationForm.name}
+                lieu={informationForm.place}
+                quality={informationForm.quality}
+                nameResponsible={informationForm.nameResponsible}
+                declaration={informationForm.declaration}
+                documents={informationForm.documents}
+                signature={signature}
+                signatureInteresse={signatureinteresse}
+              />
+            )}
           </div>
         </Container>
       </Modal.Content>
